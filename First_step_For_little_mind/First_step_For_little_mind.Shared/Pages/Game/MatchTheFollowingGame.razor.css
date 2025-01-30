@@ -1,0 +1,12 @@
+﻿.col-6 {
+    border: 1px solid red;
+}
+
+    .col-6 img {
+        display: block;
+    }
+
+.matching-img-container img {
+    width: 75px;
+    height: 75px;
+}
