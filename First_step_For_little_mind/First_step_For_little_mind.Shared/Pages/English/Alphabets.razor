@@ -1,9 +1,22 @@
 ﻿@page "/alphabets"
+@inject IJSRuntime JS
 
 
-    <canvas id="myCanvas" class="my" width="500" height="500"></canvas>
+<canvas id="myCanvas" class="container-fluid"></canvas>
+<audio id="myAudio" autoplay>
+    <source src="_content/First_step_For_little_mind.Shared/voice/A.mp3" type="audio/mpeg">
+</audio>
 
-    <script src="_content/First_step_For_little_mind.Shared/js/Alphabets.js"></script>
+<script src="_content/First_step_For_little_mind.Shared/js/Alphabets.js"></script> 
+
+
+
+@code{
+    protected override async Task OnInitializedAsync() {
+
+        // await JS.InvokeAsync<string>("animate");
+    }
+}
 
 
 
