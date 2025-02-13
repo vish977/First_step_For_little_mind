@@ -14,18 +14,17 @@ var speed = 1;
 var moveSpeed = 2.5;
 var expanding = true;
 var paused = false;
+var animate2Started = false;
 
 var img = new Image();
 var img1 = new Image();
-img.src = "_content/First_step_For_little_mind.Shared/Image/English/A.png"; 
+img.src = "_content/First_step_For_little_mind.Shared/Image/English/A.png";
 img1.src = "_content/First_step_For_little_mind.Shared/Image/English/Apple.png";
 
 img.onload = function () {
-    // Start animation only after image loads
     animate1();
+    playAudio();
 };
-
-
 
 function animate1() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -33,14 +32,7 @@ function animate1() {
     var newX = x - width / 2;
     var newY = y - height / 2;
 
-    // Draw Rectangle
-    //ctx.fillStyle = "blue";
-    //ctx.fillRect(newX, newY, width, height);
-
-    // Ensure the image is loaded before drawing
-    if (img.complete) {
-        ctx.drawImage(img, newX, newY, width, height);
-    }
+    ctx.drawImage(img, newX, newY, width, height);
 
     if (expanding) {
         if (width < maxWidth && height < maxHeight) {
@@ -58,38 +50,49 @@ function animate1() {
             width -= speed;
             height -= speed;
             x -= moveSpeed;
-            // y -= moveSpeed;
-
-        }  
+        } else {
+            if (!animate2Started) {
+                animate2Started = true; // Ensure animate2 is called only once
+                requestAnimationFrame(animate2);
+            }
+            return;
+        }
     }
-   
 
     requestAnimationFrame(animate1);
 }
-//animate2();
-
 
 function animate2() {
     var width1 = 10;
     var height1 = 10;
-    var maxwidth1 = 200;
-    var maxHeight1 = 200;
+    var maxWidth1 = 100;
+    var maxHeight1 = 100;
     var x1 = 150;
     var y1 = 70;
     var speed1 = 1;
 
-    var newX = x1 - width1 / 2;
-    var newY = y1 - height1 / 2;
-    //ctx.fillRect(newX, newY, width, height);
-    ctx.drawImage(img1, newX, newY, width1, height1);
-    //ctx.strokeStyle = "red";
-    //ctx.lineWidth = 1;
-    //ctx.strokeRect(newX, newY, width, height);
-    if (height1 < maxHeight || width1 < maxwidth) {
-        width1 += speed1;
-        height1 += speed1;
+    function grow() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Redraw first image at its final position
+        var newX = x - width / 2;
+        var newY = y - height / 2;
+        ctx.drawImage(img, newX, newY, width, height);
+
+        // Draw second image
+        var newX1 = x1 - width1 / 2;
+        var newY1 = y1 - height1 / 2;
+        ctx.drawImage(img1, newX1, newY1, width1, height1);
+
+        if (width1 < maxWidth1 && height1 < maxHeight1) {
+            width1 += speed1;
+            height1 += speed1;
+            requestAnimationFrame(grow);
+        }
     }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img1, newX, newY, width, height);
-    requestAnimationFrame(animate2);
+
+    grow();
+}
+function playAudio() {
+    audio.play();
 }
