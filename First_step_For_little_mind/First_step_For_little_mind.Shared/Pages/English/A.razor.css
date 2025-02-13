@@ -1,0 +1,16 @@
+﻿.container-fluid {
+   
+    background-image: url('Image/English/BackImg.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+}
+.main {
+    background-image: url('Image/English/leaf_fall_1.gif');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+}
+#myCanvas {
+/*    border: 1px solid red;*/
+}
