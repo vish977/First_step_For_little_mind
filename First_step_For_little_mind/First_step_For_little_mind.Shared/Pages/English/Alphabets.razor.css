@@ -1,7 +1,27 @@
-﻿.container-fluid {
-    border: 1px solid red;
+﻿.practiceBox {
+    border: 2px solid blue;
+    margin: 130px 117px 0px 131px
 }
-.check{
-    height:576px;
+.first {
+    background-image: url('Image/BackgroundImages/img.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+}
 
+.main {
+    background-image: url('Image/BackgroundImages/leaf_fall_1.gif');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+}
+
+.second {
+    
+    border: 2px solid green;
+    background-image: url('Image/BackgroundImages/garden.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+    margin-left:130px;
 }

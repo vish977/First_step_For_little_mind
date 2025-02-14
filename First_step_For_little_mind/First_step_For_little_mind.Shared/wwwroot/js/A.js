@@ -1,4 +1,8 @@
 ﻿var canvas = document.getElementById("myCanvas");
+
+var audio1 = document.getElementById("Audio1");
+var audio2 = document.getElementById("Audio2");
+
 var ctx = canvas.getContext("2d");
 
 var startX = 150;
@@ -68,7 +72,7 @@ function animate2() {
     var maxWidth1 = 100;
     var maxHeight1 = 100;
     var x1 = 150;
-    var y1 = 70;
+    var y1 = 80;
     var speed1 = 1;
 
     function grow() {
@@ -94,5 +98,9 @@ function animate2() {
     grow();
 }
 function playAudio() {
-    audio.play();
+    Audio1.play();
+
+    Audio2.onended = function () {
+        Audio2.play();
+    };
 }
