@@ -1,13 +1,33 @@
-﻿.container-fluid {
-   
+﻿
+.practiceBox {
+    /*    border: 2px solid blue;*/
+    margin: 130px 117px 0px 131px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.first {
     background-image: url('Image/BackgroundImages/img.jpg');
     background-size: cover;
     background-position: center;
     height: 91.4vh;
 }
+
 .main {
     background-image: url('Image/BackgroundImages/leaf_fall_1.gif');
     background-size: cover;
     background-position: center;
     height: 91.4vh;
+}
+
+.second {
+    /*    border: 2px solid green;*/
+    background-image: url('Image/BackgroundImages/garden.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+    /*    margin-left:130px;*/
+}
+
+.check {
+    /*    border: 2px solid red;*/
 }

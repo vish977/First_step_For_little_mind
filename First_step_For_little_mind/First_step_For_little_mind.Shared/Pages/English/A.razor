@@ -1,23 +1,41 @@
 ﻿@page "/A"
-@inject IJSRuntime JS
 
-<PageTitle>A</PageTitle>
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active  first">
+            <div class="container main d-flex justify-content-center">
+                <canvas id="myCanvas"></canvas>
+                <audio id="Audio1">
+                    <source src="_content/First_step_For_little_mind.Shared/voice/A.mp3" type="audio/mpeg">
+                </audio>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" onclick="playAudio2()">
+                    <span><img src="_content/First_step_For_little_mind.Shared/Image/BackgroundImages/button.png" height="100" width="100" alt="Alternate Text" /></span>
+                </button>
+            </div>
+        </div>
+
+        <div class=" carousel-item second">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" )">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <div class="container check">
+                <canvas class="practiceBox" height="300" width="300"></canvas>
+                <canvas class="practiceBox" height="300" width="300"></canvas>
+                <audio id="audio">
+                    <source src="_content/First_step_For_little_mind.Shared/voice/aa.mp3" type="audio/mpeg">
+                </audio>
+            </div>
 
 
-<div class="container-fluid d-flex justify-content-end">
-	<div class="container main d-flex justify-content-center">
-		<canvas id="myCanvas"></canvas>
-		<audio id="Audio1">
-			<source src="_content/First_step_For_little_mind.Shared/voice/A.mp3" type="audio/mpeg">
-		</audio>
-		<audio id="Audio2" class="">
-			<source src="_content/First_step_For_little_mind.Shared/voice/aa.mp3" type="audio/mpeg">
-
-		</audio>
-	</div>
+        </div>
+    </div>
 </div>
+<script src="_content/First_step_For_little_mind.Shared/js/A.js"></script>
+<script src="_content/First_step_For_little_mind.Shared/bootstrap/bootstrap.bundle.min.js"></script>
 
-<script src="_content/First_step_For_little_mind.Shared/js/A.js"></script> 
+
+
+
 
 
 
