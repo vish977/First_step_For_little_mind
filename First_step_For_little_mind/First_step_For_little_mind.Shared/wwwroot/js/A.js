@@ -1,7 +1,7 @@
 ﻿var canvas = document.getElementById("myCanvas");
 
-var audio1 = document.getElementById("Audio1");
-var audio2 = document.getElementById("Audio2");
+
+
 
 var ctx = canvas.getContext("2d");
 
@@ -97,10 +97,15 @@ function animate2() {
 
     grow();
 }
-function playAudio() {
-    Audio1.play();
 
-    Audio2.onended = function () {
-        Audio2.play();
-    };
+var audio1 = document.getElementById("Audio1");
+function playAudio() {
+    audio1.play();
+
+}
+
+var audio = document.getElementById("audio");
+
+function playAudio2() {
+    audio.play();
 }
