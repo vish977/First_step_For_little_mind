@@ -5,6 +5,10 @@
 }
 
 .infographic-container {
+    background-image: url('Image/BackgroundImages/back.jpg');
+    background-size: cover;
+    background-position: center;
+    height:100%;
     display: flex;
     flex-direction: column; /* Arrange items vertically */
     gap: 20px; /* Spacing between items */
