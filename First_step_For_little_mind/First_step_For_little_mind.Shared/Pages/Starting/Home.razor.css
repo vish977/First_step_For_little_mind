@@ -1,4 +1,12 @@
-﻿footer {
+﻿.maindiv {
+    border: 1px solid red;
+    background-image: url('Image/BackgroundImages/img.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 91.4vh;
+}
+
+footer {
     margin-top: 0.5rem;
     height: 30vh;
 }

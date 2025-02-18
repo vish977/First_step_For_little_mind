@@ -1,41 +1,157 @@
-﻿@page "/alphabets"
+﻿@page "/Test"
 
-<div id="carouselExample" class="carousel slide" >
-    <div class="carousel-inner">
-        <div class="carousel-item active  first">
-            <div class="container main d-flex justify-content-center">
-                <canvas id="myCanvas"></canvas>
-                <audio id="Audio1">
-                    <source src="_content/First_step_For_little_mind.Shared/voice/A.mp3" type="audio/mpeg">
-                </audio>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" onclick="playAudio2()">
-                    <span><img src="_content/First_step_For_little_mind.Shared/Image/BackgroundImages/button.png" height="100" width="100" alt="Alternate Text" /></span>
-                </button>
-            </div>
-        </div>
 
-        <div class=" carousel-item second">
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev")">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <div class="container check">
-                <canvas class="practiceBox" height="300" width="300"></canvas>
-                <canvas class="practiceBox" height="300" width="300"></canvas>
-                <audio id="audio">
-                    <source src="_content/First_step_For_little_mind.Shared/voice/aa.mp3" type="audio/mpeg">
-                </audio>
-            </div>
-           
+    @* <style> *@
+    @*     body { *@
+    @*         margin: 0; *@
+    @*     } *@
 
-        </div>
+    @*     canvas { *@
+    @*         display: block; *@
+    @*     } *@
+      
+    @* </style> *@
+
+
+    @* <canvas id="myCanvas" width="500" height="300"></canvas> *@
+
+    @* <script> *@
+    @*     const canvas = document.getElementById('myCanvas'); *@
+    @*     const ctx = canvas.getContext('2d'); *@
+
+    @*     let isDrawing = false; *@
+    @*     let lastX = 0; *@
+    @*     let lastY = 0; *@
+
+    @*     // "A" Path Data (Adjust these for your desired "A" shape) *@
+    @*     const aPath = [ *@
+    @*       { x: 100, y: 50 },  // Top left *@
+    @*       { x: 150, y: 150 }, // Bottom middle *@
+    @*       { x: 200, y: 50 },  // Top right *@
+    @*       { x: 150, y: 80 }   // Crossbar start *@
+    @*     ]; *@
+
+    @*     // Function to draw the "A" *@
+    @*     function drawA() { *@
+    @*       ctx.beginPath(); *@
+    @*       ctx.moveTo(aPath[0].x, aPath[0].y); *@
+    @*       for (let i = 1; i < aPath.length; i++) { *@
+    @*         ctx.lineTo(aPath[i].x, aPath[i].y); *@
+    @*       } *@
+    @*       ctx.closePath(); // Close the path to complete the shape *@
+    @*       ctx.strokeStyle = 'black'; // Outline color *@
+    @*       ctx.lineWidth = 3;       // Outline thickness *@
+    @*       ctx.stroke();           // Draw the outline *@
+    @*     } *@
+
+    @*     // Draw the initial "A" *@
+    @*     drawA(); *@
+
+    @*     // Mouse Event Listeners *@
+    @*     canvas.addEventListener('mousedown', (e) => { *@
+    @*       isDrawing = true; *@
+    @*       lastX = e.offsetX; *@
+    @*       lastY = e.offsetY; *@
+    @*     }); *@
+
+    @*     canvas.addEventListener('mousemove', drawTrace); *@
+
+    @*     canvas.addEventListener('mouseup', () => isDrawing = false); *@
+    @*     canvas.addEventListener('mouseout', () => isDrawing = false); *@
+
+    @*     function drawTrace(e) { *@
+    @*       if (!isDrawing) return; *@
+
+    @*       ctx.beginPath(); *@
+    @*       ctx.moveTo(lastX, lastY); *@
+    @*       ctx.lineTo(e.offsetX, e.offsetY); *@
+    @*       ctx.strokeStyle = 'red'; // Trace color *@
+    @*       ctx.lineWidth = 2; *@
+    @*       ctx.stroke(); *@
+
+    @*       lastX = e.offsetX; *@
+    @*       lastY = e.offsetY; *@
+
+    @*       // Check if mouse is inside the "A" to fill color *@
+    @*       if (ctx.isPointInPath(lastX, lastY)) { *@
+    @*         ctx.fillStyle = 'lightblue'; // Fill color *@
+    @*         ctx.fill(); // Fill the "A" if mouse is inside *@
+    @*         // Redraw the outline to keep it on top *@
+    @*         ctx.strokeStyle = 'black'; *@
+    @*         ctx.lineWidth = 3; *@
+    @*         ctx.stroke(); *@
+    @*       } *@
+    @*     } *@
+
+
+    @* </script> *@
+
+
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            border: 2px solid black;
+            cursor: crosshair;
+        }
+
+        .controls {
+            margin: 10px;
+        }
+    </style>
+
+
+    <h1>Simple Paint App</h1>
+    <div class="controls">
+        <label>Color: <input type="color" id="color"></label>
+        <label>Brush Size: <input type="range" id="size" min="1" max="10" value="5"></label>
+        <button onclick="clearCanvas()">Clear</button>
     </div>
-</div>
-<script src="_content/First_step_For_little_mind.Shared/js/A.js"></script>
-<script src="_content/First_step_For_little_mind.Shared/bootstrap/bootstrap.bundle.min.js"></script>
+    <canvas id="paintCanvas" width="800" height="500"></canvas>
 
+    <script>
+        const canvas = document.getElementById("paintCanvas");
+        const ctx = canvas.getContext("2d");
 
+        let painting = false;
+        let colorPicker = document.getElementById("color");
+        let brushSize = document.getElementById("size");
 
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
 
+        function endPosition() {
+            painting = false;
+            ctx.beginPath();
+        }
 
+        function draw(e) {
+            if (!painting) return;
+
+            ctx.lineWidth = brushSize.value;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = colorPicker.value;
+
+            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        canvas.addEventListener("mousedown", startPosition);
+        canvas.addEventListener("mouseup", endPosition);
+        canvas.addEventListener("mousemove", draw);
+
+    </script>
 
 

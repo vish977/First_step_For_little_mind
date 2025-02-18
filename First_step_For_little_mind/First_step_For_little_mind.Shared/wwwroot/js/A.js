@@ -1,8 +1,5 @@
 ﻿var canvas = document.getElementById("myCanvas");
 
-
-
-
 var ctx = canvas.getContext("2d");
 
 var startX = 150;
@@ -109,3 +106,18 @@ var audio = document.getElementById("audio");
 function playAudio2() {
     audio.play();
 }
+
+
+  //voice on hovering on divcard.
+function cardAudioPlay(audioId) {
+    var cardAudio = document.getElementById(audioId);
+    cardAudio.currentTime = 0; // Restart audio from the beginning
+    cardAudio.play();
+}
+
+function cardpauseAudio(audioId) {
+    var cardAudio = document.getElementById(audioId);
+    cardAudio.pause();
+    cardAudio.currentTime = 0; // Reset audio to start when mouse leaves
+}
+

@@ -19,7 +19,7 @@
     height: 91.4vh;
 }
 
-.second {
+.third {
     /*    border: 2px solid green;*/
     background-image: url('Image/BackgroundImages/garden.jpg');
     background-size: cover;
@@ -29,5 +29,24 @@
 }
 
 .check {
-    /*    border: 2px solid red;*/
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    padding-top:5px;
+}
+
+.cardContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card-hover:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card {
+    height: 200px;
+    width: 250.11px;
+    background-size: cover;
+    background-position: center;
 }
