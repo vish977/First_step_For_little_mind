@@ -1,7 +1,7 @@
 ﻿
-/*.practiceBox {*/
+.practiceBox {
     /*    border: 2px solid blue;*/
-    /*margin: 130px 117px 0px 131px;
+    margin: 130px 117px 0px 131px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -19,18 +19,18 @@
     height: 91.4vh;
 }
 
-.third {*/
+.third {
     /*    border: 2px solid green;*/
-    /*background-image: url('Image/BackgroundImages/garden.jpg');
+    background-image: url('Image/BackgroundImages/garden.jpg');
     background-size: cover;
     background-position: center;
-    height: 91.4vh;*/
+    height: 91.4vh;
     /*    margin-left:130px;*/
-/*}
+}
 
 .check {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    padding-top:5px;
+    padding-top: 5px;
 }
 
 .cardContainer {
@@ -49,4 +49,4 @@
     width: 250.11px;
     background-size: cover;
     background-position: center;
-}*/
+}

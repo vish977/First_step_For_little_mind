@@ -1,0 +1,26 @@
+﻿@page "/B"
+@inject IJSRuntime JSRuntime
+
+<Carousal />
+
+@code {
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		try
+		{
+			await JSRuntime.InvokeAsync<object>("learningAnimation", "myCanvas", "Bka.jpg", "Ball.png");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+}
+
+
+
+
+
+
+

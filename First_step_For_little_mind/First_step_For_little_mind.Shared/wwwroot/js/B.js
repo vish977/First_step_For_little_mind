@@ -4,10 +4,13 @@
         console.log("Canvas element not found!");
         return;
     }
+    console.log("hello ji");
+    console.log(Img);
+    console.log(letterImg);
     console.log(canvas);
-    
     var ctx = canvas.getContext("2d");
-    
+    debugger;
+
 
     var startX = 150;
     var x = startX;
@@ -27,8 +30,8 @@
     var img = new Image();
     var img1 = new Image();
 
-    img.src = `_content/First_step_For_little_mind.Shared/Image/English/Letter/${letterImg}`;
-    img1.src = `_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/${Img}`;
+    img.src = `_content/First_step_For_little_mind.Shared/Image/English/${letterImg}`;
+    img1.src = `_content/First_step_For_little_mind.Shared/Image/English/${Img}`;
 
 
 
@@ -77,7 +80,7 @@
         function grow() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-
+         
             var newX = x - width / 2;
             var newY = y - height / 2;
             ctx.drawImage(img, newX, newY, width, height);
@@ -105,23 +108,17 @@
         }
     }
 
-    animate1();
-    playAudio();
-
+        animate1();
+        playAudio();
+    
 }
 
 
 
-  //voice on hovering on divcard.
-function cardAudioPlay(audioId) {
-    var cardAudio = document.getElementById(audioId);
-    cardAudio.currentTime = 0; // Restart audio from the beginning
-    cardAudio.play();
-}
 
-function cardpauseAudio(audioId) {
-    var cardAudio = document.getElementById(audioId);
-    cardAudio.pause();
-    cardAudio.currentTime = 0; // Reset audio to start when mouse leaves
-}
-
+//window.addEventListener("load", function () {
+//    console.log("DOM is fully loaded");
+//    setTimeout(() => {
+//        learningAnimation("myCanvas", "A.png", "Apple.png");
+//    }, 500)
+//});
