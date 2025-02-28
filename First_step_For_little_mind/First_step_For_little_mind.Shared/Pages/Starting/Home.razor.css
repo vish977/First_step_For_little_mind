@@ -1,12 +1,50 @@
 ﻿.maindiv {
     border: 1px solid red;
-    background-image: url('Image/BackgroundImages/img.jpg');
+    background-image: url('Image/BackgroundImages/bgm.jpg');
     background-size: cover;
     background-position: center;
     height: 91.4vh;
 }
 
 footer {
-    margin-top: 0.5rem;
+    margin-top: 20rem;
     height: 30vh;
+}
+.typing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    background-color: transparent;
+}
+
+.typing-text {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff5733;
+    border-right: 3px solid black; /* Cursor effect */
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    animation: typing 2s steps(20, end) forwards, blink 0.9s infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 350px;
+    }
+    /* Adjust width as per text length */
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+.fslm{
+    color: darkgreen;
 }

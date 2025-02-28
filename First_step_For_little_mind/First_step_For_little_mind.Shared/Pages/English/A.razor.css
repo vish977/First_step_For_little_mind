@@ -6,7 +6,7 @@
 }
 
 .first {
-    background-image: url('Image/BackgroundImages/img.jpg');
+    background-image: url('Image/BackgroundImages/bgm.jpg');
     background-size: cover;
     background-position: center;
     height: 91.4vh;
@@ -21,7 +21,7 @@
 
 .third {
     /*    border: 2px solid green;*/
-    background-image: url('Image/BackgroundImages/garden.jpg');
+    background-image: url('Image/BackgroundImages/bgm.jpg');
     background-size: cover;
     background-position: center;
     height: 91.4vh;
