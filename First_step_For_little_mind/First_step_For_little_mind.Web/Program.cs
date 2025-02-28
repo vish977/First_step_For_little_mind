@@ -30,4 +30,10 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(First_step_For_little_mind.Shared._Imports).Assembly);
 
-app.Run();
+try
+{
+    app.Run();
+}catch(Exception ex)
+{
+    Console.WriteLine(ex.ToString());
+}

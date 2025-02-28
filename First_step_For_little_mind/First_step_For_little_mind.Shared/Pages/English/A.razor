@@ -1,14 +1,14 @@
-﻿@page "/A"
+﻿@page "/{letter}"
 @inject IJSRuntime JSRuntime
 
 <Carousal />
 
 @code {
-	// [Parameter] public string Letter { get; set; }
+	[Parameter] public string letter { get; set; }
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		try {
-			await JSRuntime.InvokeAsync<object>("learningAnimation", "myCanvas", "A.png", "Apple.png");
+			await JSRuntime.InvokeAsync<object>("learningAnimation", "myCanvas", $"{letter}.png", "Apple.png");
 		} catch(Exception ex) {
 			Console.WriteLine(ex.Message);
 		}
