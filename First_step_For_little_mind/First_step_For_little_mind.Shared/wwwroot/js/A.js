@@ -1,4 +1,11 @@
-﻿function learningAnimation(Id, letterImg, Img) {
+﻿var canva = document.getElementById("myCanvas");
+var container = canva.parentElement;
+
+// Set canvas drawing dimensions to match container size
+canva.width = container.clientWidth;
+canva.height = container.clientHeight;
+
+function learningAnimation(Id, letterImg, Img) {
     var canvas = document.getElementById(Id);
     if (!canvas) {
         console.log("Canvas element not found!");
