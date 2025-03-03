@@ -19,8 +19,8 @@ function learningAnimation(Id, letterImg, Img) {
     var startX = 150;
     var x = startX;
     var y = 70;
-    var width = 10;
-    var height = 10;
+    var width = 50;
+    var height = 50;
     var maxWidth = 100;
     var maxHeight = 100;
     var minWidth = 50;
