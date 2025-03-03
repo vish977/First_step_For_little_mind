@@ -1,0 +1,44 @@
+﻿body {
+    height: 100vh;
+    width: 100vw;
+    background: url('Bg/rabbits.gif')no-repeat center left, url('Bg/skys.jpg')no-repeat top, url('Bg/grass.jpg')no-repeat bottom;
+    background-size: 25vw,100vw 60vh, 100vw 40vh;
+}
+
+
+.checks{
+    margin-top:10rem;
+    width: 100%;
+    max-width: 800px; 
+    height: 400px; 
+    position: relative;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.check {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    padding-top: 5px;
+}
+
+.cardContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card-hover:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card {
+    height: 200px;
+    width: 250.11px;
+    background-size: cover;
+    background-position: center;
+}

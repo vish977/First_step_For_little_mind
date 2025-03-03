@@ -1,0 +1,16 @@
+﻿@page "/English/{letter}"
+@inject IJSRuntime JSRuntime
+
+<Carousal />
+
+@code {
+	[Parameter] public string? letter { get; set; }
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		try {
+			await JSRuntime.InvokeAsync<object>("learningAnimation", "myCanvas", $"{letter}.png", $"{ letter}.jpeg");
+		} catch(Exception ex) {
+			Console.WriteLine(ex.Message);
+		}
+	}
+}
