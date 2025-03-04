@@ -7,6 +7,7 @@ canva.height = container.clientHeight;
 
 function learningAnimation(Id, letterImg, Img) {
     var canvas = document.getElementById(Id);
+
     if (!canvas) {
         console.log("Canvas element not found!");
         return;
@@ -131,4 +132,18 @@ function cardpauseAudio(audioId) {
     cardAudio.pause();
     cardAudio.currentTime = 0; // Reset audio to start when mouse leaves
 }
+//console.log("hello ji");
+////function tracePractice(letter) {
+//var canvasx = document.getElementById("LetterTrace");
+//console.log("hello ji" + canvasx);
+//    var ctxv = canvasx.getContext("2d");
+
+//    ctxv.font = "300px Arial";
+//    ctxv.strokeStyle = "red";  
+//    ctxv.lineWidth = 5;        
+
+
+//    ctxv.strokeText("hello", 50, 100);
+////}
+////tracePractice("A");
 
