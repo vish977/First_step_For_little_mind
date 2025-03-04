@@ -1,6 +1,10 @@
-﻿/*body {
-   
-}*/
+﻿.second {
+    border: 1px solid red;
+    height: 40vh;
+    width: 100vw;
+    background: url('Image/English/plane.gif') no-repeat top right;
+    background-size: 30vw 40vh;
+}
 
 .main {
     height: 100vh;
