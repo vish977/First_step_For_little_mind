@@ -1,0 +1,21 @@
+﻿@page "/AiseHi"
+
+<canvas height="300"width="300" id=" check"></canvas>
+<script>
+        console.log("hello ji");
+    //function tracePractice(letter) {
+    var canvasx = document.getElementById("check");
+    console.log("hello ji" + canvasx);
+        var ctxv = canvasx.getContext("2d");
+
+        ctxv.font = "300px Arial";
+        ctxv.strokeStyle = "red";
+        ctxv.lineWidth = 5;
+
+
+        ctxv.strokeText("A", 50, 100);
+</script>
+
+@code {
+
+}
