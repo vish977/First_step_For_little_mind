@@ -2,26 +2,36 @@
     border: 1px solid red;
     margin: 15px 15px 15px 15px;
 }
+.first {
+   
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    height: 100vh;
+    gap: 20px; 
+    background-color: #f0f0f0;
+    padding-right: 10rem;
+}
 
+#canvas1 {
+/*    border: 1px solid black;*/
+    height: 50vh;
+    width: 30vw;
+}
+
+#canvas2 {
+/*    border: 1px solid red;*/
+    /* height: 50vh; */
+    /* width: 30vw; */
+}
 .main {
     height: 100vh;
     width: 100vw;
-    background: url('Bg/rabbits.gif')no-repeat center left, url('Bg/skys.jpg')no-repeat top, url('Bg/grass.jpg')no-repeat bottom;
-    background-size: 25vw,100vw 60vh, 100vw 40vh;
+    background:  url('Bg/skys.jpg')no-repeat top, url('Bg/grass.jpg')no-repeat bottom;
+    background-size: 100vw 60vh, 100vw 40vh;
+
 }
 
-.pr {
-    margin-top: 8rem;
-/*    border: 1px solid blue;*/
-}
-
-.checks{
-    margin-top:10rem;
-    width: 100%;
-    max-width: 800px; 
-    height: 400px; 
-    position: relative;
-}
 
 #myCanvas {
     border: 1px solid red;
