@@ -1,7 +1,8 @@
 ﻿@page "/English/{letter}"
 @inject IJSRuntime JSRuntime
 
-<Carousal />
+<Carousal Letter="@letter" />
+
 
 @code {
 	[Parameter] public string? letter { get; set; }
