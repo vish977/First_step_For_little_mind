@@ -1,21 +1,23 @@
 ﻿@page "/English/{letter}"
 @inject IJSRuntime JSRuntime
 
-<Carousal />
+<Carousal Letter="@letter" />
+
 
 @code {
 	[Parameter] public string? letter { get; set; }
 	
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		try {
-			await JSRuntime.InvokeAsync<object>("learningAnimation", "myCanvas", $"{letter}.png", $"{letter}.jpeg");
-
+			string smallLetter = letter?.ToLower() ?? string.Empty;
+			await JSRuntime.InvokeVoidAsync("animateCanvasText", "canvas1", $"{letter}", $"{smallLetter}");
+			await JSRuntime.InvokeVoidAsync("showImageInSecondCanvas", $"{letter}.jpeg");
 		}
 		catch (Exception ex)
 		{
 			Console.WriteLine(ex.Message);
 		}
-		// await IJSRuntime.InvokeAsync<object>("tracePractice", $"{letter}");
 	}
 }

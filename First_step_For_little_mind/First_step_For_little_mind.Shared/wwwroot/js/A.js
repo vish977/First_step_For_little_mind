@@ -1,149 +1,115 @@
-﻿var canva = document.getElementById("myCanvas");
-var container = canva.parentElement;
+﻿
 
-// Set canvas drawing dimensions to match container size
-canva.width = container.clientWidth;
-canva.height = container.clientHeight;
 
-function learningAnimation(Id, letterImg, Img) {
-    var canvas = document.getElementById(Id);
+//    animate1();
+//    playAudio();
 
-    if (!canvas) {
-        console.log("Canvas element not found!");
-        return;
-    }
-    console.log(canvas);
-    
-    var ctx = canvas.getContext("2d");
-    
-
-    var startX = 150;
-    var x = startX;
-    var y = 70;
-    var width = 50;
-    var height = 50;
-    var maxWidth = 100;
-    var maxHeight = 100;
-    var minWidth = 50;
-    var minHeight = 50;
-    var speed = 1;
-    var moveSpeed = 2.5;
-    var expanding = true;
-    var paused = false;
-    var animate2Started = false;
-
-    var img = new Image();
-    var img1 = new Image();
-
-    img.src = `_content/First_step_For_little_mind.Shared/Image/English/Letter/${letterImg}`;
-    img1.src = `_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/${Img}`;
+//}
 
 
 
-    function animate1() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        var newX = x - width / 2;
-        var newY = y - height / 2;
-        ctx.drawImage(img, newX, newY, width, height);
+//  //voice on hovering on divcard.
+//function cardAudioPlay(audioId) {
+//    var cardAudio = document.getElementById(audioId);
+//    cardAudio.currentTime = 0; // Restart audio from the beginning
+//    cardAudio.play();
+//}
 
-        if (expanding) {
-            if (width < maxWidth && height < maxHeight) {
-                width += speed;
-                height += speed;
-            } else if (!paused) {
-                paused = true;
-                setTimeout(() => {
-                    expanding = false;
-                    paused = false;
-                }, 1000);
-            }
-        } else {
-            if (width > minWidth && height > minHeight) {
-                width -= speed;
-                height -= speed;
-                x -= moveSpeed;
-            } else {
-                if (!animate2Started) {
-                    animate2Started = true;
-                    requestAnimationFrame(animate2);
-                }
-                return;
-            }
-        }
-        requestAnimationFrame(animate1);
-    }
+//function cardpauseAudio(audioId) {
+//    var cardAudio = document.getElementById(audioId);
+//    cardAudio.pause();
+//    cardAudio.currentTime = 0; // Reset audio to start when mouse leaves
+//}
+////console.log("hello ji");
+//////function tracePractice(letter) {
+////var canvasx = document.getElementById("LetterTrace");
+////console.log("hello ji" + canvasx);
+////    var ctxv = canvasx.getContext("2d");
 
-    function animate2() {
-        var width1 = 10;
-        var height1 = 10;
-        var maxWidth1 = 100;
-        var maxHeight1 = 100;
-        var x1 = 150;
-        var y1 = 80;
-        var speed1 = 1;
+////    ctxv.font = "300px Arial";
+////    ctxv.strokeStyle = "red";
+////    ctxv.lineWidth = 5;
 
-        function grow() {
+
+////    ctxv.strokeText("hello", 50, 100);
+//////}
+//////tracePractice("A");
+
+function animateCanvasText(canvasId, text1, text2) {
+    return new Promise((resolve) => {
+        var canvas = document.getElementById(canvasId);
+        var ctx = canvas.getContext("2d");
+
+        // Set initial canvas size to full window size
+        canvas.width = window.innerWidth - 120;
+        canvas.height = window.innerHeight;
+
+        var x1 = -100;
+        var x2 = canvas.width + 100;
+        var y = canvas.height / 2;
+        var speed = 2;
+
+        function animateText() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Draw Text 1
+            ctx.font = "400px serif";
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text1, x1, y);
 
-            var newX = x - width / 2;
-            var newY = y - height / 2;
-            ctx.drawImage(img, newX, newY, width, height);
+            // Draw Text 2
+            ctx.fillStyle = "red";
+            ctx.fillText(text2, x2, y);
 
-            var newX1 = x1 - width1 / 2;
-            var newY1 = y1 - height1 / 2;
-            ctx.drawImage(img1, newX1, newY1, width1, height1);
+            // Move texts toward the center
+            if (x1 < canvas.width / 2 - 60) x1 += speed;
+            if (x2 > canvas.width / 2 + 60) x2 -= speed;
 
-            if (width1 < maxWidth1 && height1 < maxHeight1) {
-                width1 += speed1;
-                height1 += speed1;
-                requestAnimationFrame(grow);
+            if (x1 < canvas.width / 2 - 60 || x2 > canvas.width / 2 + 60) {
+                requestAnimationFrame(animateText);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "red";
+                ctx.fillText(text1 + "" + text2, canvas.width / 2, y);
+                resolve(); 
             }
         }
+        playAudio();
+        animateText();
+      
 
-        grow();
+    });
+}
+
+function playAudio() {
+    var audio = document.getElementById("audio");
+    console.log(audio);
+    if (audio) {
+        audio.play();
+    } else {
+        console.log("Audio element not found!");
     }
-
-    function playAudio() {
-        var audio1 = document.getElementById("Audio1");
-        if (audio1) {
-            audio1.play();
-        } else {
-            console.log("Audio element not found!");
-        }
-    }
-
-    animate1();
-    playAudio();
-
 }
 
+function showImageInSecondCanvas(letter) {
+    console.log(letter);
+    var canvas2 = document.getElementById('canvas2');
+    var ctx2 = canvas2.getContext('2d');
 
+    var img = new Image();
+    img.src = `_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/${letter}`;
 
-  //voice on hovering on divcard.
-function cardAudioPlay(audioId) {
-    var cardAudio = document.getElementById(audioId);
-    cardAudio.currentTime = 0; // Restart audio from the beginning
-    cardAudio.play();
+    img.onload = function () {
+        canvas2.width = img.width;
+        canvas2.height = img.height;
+        ctx2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
+    };
+
+    img.onerror = function () {
+        console.error("Image failed to load:", img.src);
+    };
 }
 
-function cardpauseAudio(audioId) {
-    var cardAudio = document.getElementById(audioId);
-    cardAudio.pause();
-    cardAudio.currentTime = 0; // Reset audio to start when mouse leaves
-}
-//console.log("hello ji");
-////function tracePractice(letter) {
-//var canvasx = document.getElementById("LetterTrace");
-//console.log("hello ji" + canvasx);
-//    var ctxv = canvasx.getContext("2d");
-
-//    ctxv.font = "300px Arial";
-//    ctxv.strokeStyle = "red";  
-//    ctxv.lineWidth = 5;        
-
-
-//    ctxv.strokeText("hello", 50, 100);
-////}
-////tracePractice("A");
 
