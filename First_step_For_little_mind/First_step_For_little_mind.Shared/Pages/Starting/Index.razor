@@ -1,61 +1,44 @@
 ﻿@page "/Index"
+@inject IJSRuntime JSRuntime
 <PageTitle>Home</PageTitle>
 
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <!-- First Carousel Item: Classes -->
+        <div class="carousel-item first active">
+            @{
+                var classData = new List<string> { "Nursery", "LKG", "UKG", "Class 1", "Class 2", "Class 3" };
+            }
+            <div class="container mt-4 mb-4">
+                <div class="row cardContainer mt-4 mb-4">
+                    @foreach (var title in classData)
+                    {
+                        <div class="card card-hover shadow mb-4 class-card"
+                             onclick="selectClass('@title')">
+                            <div class="card-body">
+                                <h5 class="card-title">@title</h5>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
 
-<div class="container mt-4 mb-4">
-	<div class="row cardContainer mt-4 mb-4">
-		<div class="card card-hover shadow s1 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">English</h5>
-				<a href="/English Syallabus" class="stretched-link"></a>
-			</div>
-		</div>
-		<div class="card card-hover shadow s2 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">Hindi</h5>
-				<a href="/AiseHi" class="stretched-link"></a>
-			</div>
-		</div>
-		<div class="card card-hover shadow s3 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">Maths</h5>
-				<a href="/counter" class="stretched-link"></a>
-			</div>
-		</div>
-		<div class="card card-hover shadow s4 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">Basic Learning</h5>
-				<a href="chapter.html" class="stretched-link"></a>
-			</div>
-		</div>
-	</div>
-	<div class="row cardContainer mt-4 mb-4">
-		<div class="card card-hover shadow s5 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">Poem Story</h5>
-				<a href="/alphabets" class="stretched-link"></a>
-			</div>
-		</div>
-		<div class="card card-hover shadow s6 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">Game Zone</h5>
-				<a href="/matching" class="stretched-link"></a>
-			</div>
-		</div>
-		<div class="card card-hover shadow s7 mb-4">
-			<div class="card-body">
-				<h5 class="card-title">-------</h5>
-				<a href="chapter.html" class="stretched-link"></a>
-			</div>
-		</div>
-		<div class="card card-hover shadow s8 mb-4">
-		<div class="card-body">
-			<h5 class="card-title">---------</h5>
-			<a href="chapter.html" class="stretched-link"></a>
-		</div>
-	</div>
-	</div>
+        <!-- Second Carousel Item: Subjects -->
+        <div class="carousel-item">
+            <div class="container mt-4 mb-4">
+                <div class="row cardContainer mt-4 mb-4" id="subjectContainer">
+                    <!-- Subjects will be loaded here dynamically -->
+                   
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+            </div>
+        </div>
+    </div>
+   
 </div>
 
-
-
+<script src="_content/First_step_For_little_mind.Shared/js/Index.js"></script>

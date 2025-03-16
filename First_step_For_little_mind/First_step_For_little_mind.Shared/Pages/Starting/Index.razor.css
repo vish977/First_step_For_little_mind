@@ -1,12 +1,4 @@
-﻿/*.maindiv {
-    border: 1px solid red;
-    background-image: url('Images/BackgroungI.png');
-    background-size: cover;
-    background-position: center;
-    height: 83.1vh;
-}*/
-
-.col {
+﻿.col {
     border: 2px solid green;
 }
 
@@ -21,39 +13,21 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 .card {
+    border: 1px solid green;
     height: 142px;
     width: 240.11px;
    
     background-size: cover;
     background-position: center;
 }
-.s1 {
-    background-image:url(Image/BackgroundImages/English.jpeg);
-}
 
-.s2 {
-    background-image: url(Image/BackgroundImages/Hindi.jpeg);
-}
 
-.s3 {
-    background-image: url(Image/BackgroundImages/Maths.jpeg);
-}
-
-.s4 {
-    background-image: url(Image/BackgroundImages/EVS.jpeg);
-}
-.s5 {
-    background-image: url(Image/BackgroundImages/PoemStory.jpg);
-}
-.s6 {
-    background-image: url(Image/BackgroundImages/GameZone.jpeg);
-}
-.s7 {
-/*    background-image: url(Image/.jpeg);*/
-}
-.s8 {
-/*    background-image: url(Image/PoemStory.jpeg);*/
-}
 .container {
     border:1px solid red;
+}
+
+.first {
+    width: 60vw;
+    margin-left: 18rem;
+    margin-top: 6rem;
 }

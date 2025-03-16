@@ -1,0 +1,64 @@
+﻿@code {
+    [Parameter] public string SelectedClass { get; set; } = "Nursery";
+
+    private List<(string Title, string Link)> subjects = new();
+
+    protected override void OnParametersSet()
+    {
+        LoadSubjects();
+    }
+
+    private void LoadSubjects()
+    {
+        subjects.Clear();
+
+        if (SelectedClass == "Nursery")
+        {
+            subjects = new()
+            {
+                ("English", "/English Syallabus"),
+                ("Hindi", "/AiseHi"),
+                ("Poem Story", "/alphabets"),
+                ("Game Zone", "/matching")
+            };
+        }
+        else if (SelectedClass == "LKG" || SelectedClass == "UKG")
+        {
+            subjects = new()
+            {
+                ("English", "/English Syallabus"),
+                ("Hindi", "/AiseHi"),
+                ("Maths", "/counter"),
+                ("Basic Learning", "chapter.html"),
+                ("Poem Story", "/alphabets"),
+                ("Game Zone", "/matching")
+            };
+        }
+        else if (SelectedClass == "Class 1" || SelectedClass == "Class 2" || SelectedClass == "Class 3")
+        {
+            subjects = new()
+            {
+                ("English", "/English Syallabus"),
+                ("Hindi", "/AiseHi"),
+                ("Maths", "/counter"),
+                ("Basic Learning", "chapter.html"),
+                ("Poem Story", "/alphabets"),
+                ("Game Zone", "/matching")
+            };
+        }
+    }
+}
+
+<div class="container mt-4 mb-4">
+    <div class="row cardContainer mt-4 mb-4">
+        @foreach (var (title, link) in subjects)
+        {
+            <div class="card card-hover shadow mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">@title</h5>
+                    <a href="@link" class="stretched-link"></a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
