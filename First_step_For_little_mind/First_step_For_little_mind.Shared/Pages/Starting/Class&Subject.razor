@@ -1,0 +1,78 @@
+﻿@page "/Class&Subject"
+@inject IJSRuntime JSRuntime
+<PageTitle>Home</PageTitle>
+
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <!-- First Carousel Item: Classes -->
+        <div class="carousel-item FSLM-first active">
+            @{
+                var classData = new List<string> { "Nursery", "LKG", "UKG", "Class 1", "Class 2", "Class 3" };
+            }
+            <div class="container mt-4 mb-4">
+                <div class="row cardContainer mt-4 mb-4">
+                    @foreach (var title in classData)
+                    {
+                        <div class="card card-hover shadow mb-4 class-card"
+                             @onclick="() => SelectClass(title)">
+                            <div class="card-body">
+                                <h5 class="card-title">@title</h5>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Carousel Item: Subjects -->
+        <div class="carousel-item FSLM-second @(selectedClass != null ? "active" : "")">
+            <div class="container mt-4 mb-4">
+                <div class="row cardContainer mt-4 mb-4">
+                    @foreach (var (title, link) in filteredSubjects)
+                    {
+                        <div class="card card-hover shadow mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">@title</h5>
+                                <a href="@link" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+        function moveCarouselNext() {
+        var carousel = new bootstrap.Carousel(document.getElementById('carouselExample'));
+        carousel.next();
+    }
+</script>
+
+
+@code {
+    private string? selectedClass;
+    private List<(string Title, string Link)> filteredSubjects = new List<(string, string)>();
+
+    private Dictionary<string, List<(string Title, string Link)>> classSubjects = new()
+    {
+        { "Nursery", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game") } },
+        { "LKG", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } }
+    };
+
+    private async Task SelectClass(string className)
+    {
+        selectedClass = className;
+        filteredSubjects = classSubjects.ContainsKey(className) ? classSubjects[className] : new List<(string, string)>();
+        await JSRuntime.InvokeVoidAsync("moveCarouselNext");
+    }
+}
+
+ 
