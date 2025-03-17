@@ -1,0 +1,134 @@
+﻿@page "/aa"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match the Number</title>
+    
+    <style>
+        body {
+            background-color: #fce4ec;
+            text-align: center;
+        }
+        .game-container {
+            margin-top: 50px;
+        }
+        .image-box, .option-box {
+            width: 120px;
+            height: 120px;
+            margin: 10px;
+            display: inline-block;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 120px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .image-box {
+            background-color: #ffcc80;
+            padding: 10px;
+        }
+        .option-box {
+            background-color: #bbdefb;
+            border: 2px solid #1976d2;
+        }
+        .animated-character {
+            font-size: 50px;
+            margin-top: 20px;
+        }
+        .score-board {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .next-level {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container game-container">
+        <h2>Match the Number</h2>
+        <p>Count the objects and select the correct number!</p>
+
+        <div id="images"></div>
+
+        <div id="options"></div>
+
+        <div class="animated-character" id="character">😀</div>
+        <div class="score-board">Score: <span id="score">0</span></div>
+        <button id="nextLevel" class="btn btn-success next-level">Next Level</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let level = 1;
+        const totalLevels = 20;
+
+        function generateLevel() {
+            $("#images, #options").empty();
+            let count = Math.floor(Math.random() * 10) + 1;
+            let correctOption = count;
+            let options = new Set([correctOption]);
+            while (options.size < 4) {
+                options.add(Math.floor(Math.random() * 10) + 1);
+            }
+            let shuffledOptions = Array.from(options).sort(() => Math.random() - 0.5);
+
+            let imagesHtml = "";
+            for (let i = 0; i < count; i++) {
+                imagesHtml += <img src='https://via.placeholder.com/50' class='image-box' alt='item'>;
+            }
+            $("#images").html(imagesHtml);
+
+            shuffledOptions.forEach(num => {
+                $("#options").append(<div class='option-box' data-number='${num}'>${num}</div>);
+            });
+
+            addClickListeners(correctOption);
+        }
+
+        function addClickListeners(correctOption) {
+            $('.option-box').on('click', function() {
+                let selectedNumber = $(this).data("number");
+
+                if (selectedNumber == correctOption) {
+                    $(this).css("background-color", "#4CAF50");
+                    $("#character").text("🎉 Great Job!");
+                    score += 10;
+                    $('#score').text(score);
+                    if (level < totalLevels) {
+                        $("#nextLevel").show().text("Next Level");
+                    } else {
+                        $("#nextLevel").show().text("You are a champ! Go play other games!");
+                    }
+                } else {
+                    $(this).css("background-color", "#FF0000");
+                    $("#character").text("😞 Try Again!");
+                    if (score > 0) score -= 5;
+                    $('#score').text(score);
+                    setTimeout(() => {
+                        $(this).css("background-color", "#bbdefb");
+                    }, 1000);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            generateLevel();
+            $("#nextLevel").on("click", function() {
+                if (level < totalLevels) {
+                    level++;
+                    generateLevel();
+                    $(this).hide();
+                } else {
+                    alert("You are a champ! Congratulations! Go to the other games.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
