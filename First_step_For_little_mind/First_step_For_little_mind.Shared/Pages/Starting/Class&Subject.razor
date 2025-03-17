@@ -25,25 +25,26 @@
         </div>
 
         <!-- Second Carousel Item: Subjects -->
-        <div class="carousel-item FSLM-second @(selectedClass != null ? "active" : "")">
-            <div class="container mt-4 mb-4">
-                <div class="row cardContainer mt-4 mb-4">
-                    @foreach (var (title, link) in filteredSubjects)
-                    {
-                        <div class="card card-hover shadow mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">@title</h5>
-                                <a href="@link" class="stretched-link"></a>
+        <div class="carousel-item @(selectedClass != null ? "active" : "")">
+            <div class="container-fluid">
+                <div class="container mt-4 mb-4">
+                    <div class="row cardContainer mt-4 mb-4">
+                        @foreach (var (title, link) in filteredSubjects)
+                        {
+                            <div class="card card-hover shadow mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">@title</h5>
+                                    <a href="@link" class="stretched-link"></a>
+                                </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon FSLM-button" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
             </div>
-
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
         </div>
     </div>
 </div>
@@ -63,8 +64,13 @@
 
     private Dictionary<string, List<(string Title, string Link)>> classSubjects = new()
     {
-        { "Nursery", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game") } },
-        { "LKG", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } }
+        { "Nursery", new List<(string, string)> { ("English", "/AlphabetsChart"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game") } },
+        { "LKG", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
+        { "UKG", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
+        { "Class 1", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
+        { "Class 2", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
+        { "Class 3", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } }
+
     };
 
     private async Task SelectClass(string className)
