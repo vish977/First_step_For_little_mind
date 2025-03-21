@@ -1,16 +1,101 @@
-﻿@page "/English_Syallabus" 
+﻿@page "/Syllabus/{Subject}"
+@inject IJSRuntime JSRuntime
+@using System.Collections.Generic
 
 <div class="container-fluid FSLM-BG">
     <div class="container mt-4 mb-4">
         <div class="row cardContainer mt-4 mb-4">
-            <h1>ENGLISH</h1>
-             <div class="container FSLM-menue">
-                <a href="/AlphabetsChart"><h3>Alphabets</h3></a>
-                <h3>Vowel</h3>  
-                 <h3>Consonents</h3>  
-                 <h3>Two Letter words</h3>  
-                <h3>Three Letter Words</h3> 
+            <h1>@Subject</h1>
+            <div class="container FSLM-menue">
+                @foreach (var item in GetSyllabusItems(Subject))
+                {
+                    if (item.Link != null)
+                    {
+                        <a href="@item.Link"><h3>@item.Name</h3></a>
+                    }
+                    else
+                    {
+                        <h3>@item.Name</h3>
+                    }
+                }
             </div>
         </div>
     </div>
 </div>
+
+@code {
+    [Parameter] public string? Subject { get; set; }
+
+    private List<SyllabusItem> GetSyllabusItems(string? subject)
+    {
+        var syllabus = new Dictionary<string, List<SyllabusItem>>
+        {
+            {
+                "English (अंग्रेज़ी)", new List<SyllabusItem>
+                {
+                    new SyllabusItem("Alphabets", "/AlphabetsChart"),
+                    new SyllabusItem("Vowel"),
+                    new SyllabusItem("Consonants"),
+                    new SyllabusItem("Two Letter Words"),
+                    new SyllabusItem("Three Letter Words")
+                }
+            },
+            {
+                "Hindi( हिन्दी)", new List<SyllabusItem>
+                {
+                    new SyllabusItem("अ से  अः "),
+                    new SyllabusItem("क से ज्ञ "),
+                    new SyllabusItem("मात्रा"),
+                    new SyllabusItem("दो  वर्णों वाले शब्द "),
+                    new SyllabusItem("स्वर"),
+                    new SyllabusItem("व्यंजन"),
+                    new SyllabusItem("दो अक्षर के शब्द"),
+                    new SyllabusItem("तीन अक्षर के शब्द")
+                }
+            },
+            {
+                "Maths (गणित)", new List<SyllabusItem>
+                {
+                    new SyllabusItem("Numbers"),
+                    new SyllabusItem("Addition"),
+                    new SyllabusItem("Subtraction")
+                }
+            },
+            {
+                "GK (सामान्य ज्ञान)", new List<SyllabusItem>
+                {
+                    new SyllabusItem("National Symbols"),
+                    new SyllabusItem("Famous Personalities")
+                }
+            },
+            {
+                "Rhymes (कविता)", new List<SyllabusItem>
+                {
+                    new SyllabusItem("Twinkle Twinkle"),
+                    new SyllabusItem("Johny Johny")
+                }
+            },
+            {
+                "Story (कहानी)", new List<SyllabusItem>
+                {
+                    new SyllabusItem("Panchatantra Stories"),
+                    new SyllabusItem("Moral Stories")
+                }
+            }
+        };
+
+        return syllabus.ContainsKey(subject ?? "") ? syllabus[subject ?? ""] : new List<SyllabusItem>();
+    }
+
+    public class SyllabusItem
+    {
+        public string Name { get; set; }
+        public string? Link { get; set; }
+
+        public SyllabusItem(string name, string? link = null)
+        {
+            Name = name;
+            Link = link;
+        }
+    }
+}
