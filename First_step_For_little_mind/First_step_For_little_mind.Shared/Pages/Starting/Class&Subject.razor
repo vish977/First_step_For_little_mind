@@ -1,84 +1,44 @@
-﻿@page "/Class&Subject"
+﻿@page "/Subject"
 @inject IJSRuntime JSRuntime
+@using System.Collections.Generic
+
 <PageTitle>Home</PageTitle>
 
-<div id="carouselExample" class="carousel slide">
-    <div class="carousel-inner">
-        <!-- First Carousel Item: Classes -->
-        <div class="carousel-item FSLM-first active">
-            @{
-                var classData = new List<string> { "Nursery", "LKG", "UKG", "Class 1", "Class 2", "Class 3" };
-            }
-            <div class="container mt-4 mb-4">
-                <div class="row cardContainer mt-4 mb-4">
-                    @foreach (var title in classData)
-                    {
-                        <div class="card card-hover shadow mb-4 class-card"
-                             @onclick="() => SelectClass(title)">
-                            <div class="card-body">
-                                <h5 class="card-title">@title</h5>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-
-        <!-- Second Carousel Item: Subjects -->
-        <div class="carousel-item @(selectedClass != null ? "active" : "")">
-            <div class="container-fluid">
-                <div class="container mt-4 mb-4">
-                    <div class="row cardContainer mt-4 mb-4">
-                        @foreach (var (title, link) in filteredSubjects)
-                        {
-                            <div class="card card-hover shadow mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">@title</h5>
-                                    <a href="@link" class="stretched-link"></a>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon FSLM-button" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-            </div>
+<div class="container-fluid FSLM-BG">
+    <div class="container mt-4 mb-4">
+        <div class="row cardContainer mt-4 mb-4"> 
+            @foreach (var item in filteredSubjects) 
+             { 
+                 <div class="col-md-3"> 
+                     <div class="card card-hover shadow mb-4"> 
+                         <div class="card-body"> 
+                             <h4 class="card-title">@item.Title</h4> 
+                             <a href="@item.Link" class="stretched-link"></a> 
+                         </div> 
+                     </div> 
+                 </div> 
+             }
         </div>
     </div>
 </div>
 
 
-<script>
-        function moveCarouselNext() {
-        var carousel = new bootstrap.Carousel(document.getElementById('carouselExample'));
-        carousel.next();
-    }
-</script>
-
-
 @code {
-    private string? selectedClass;
-    private List<(string Title, string Link)> filteredSubjects = new List<(string, string)>();
-
-    private Dictionary<string, List<(string Title, string Link)>> classSubjects = new()
+    private List<Subject> filteredSubjects = new List<Subject>
     {
-        { "Nursery", new List<(string, string)> { ("English", "/English_Syallabus"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game") } },
-        { "LKG", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
-        { "UKG", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
-        { "Class 1", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
-        { "Class 2", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } },
-        { "Class 3", new List<(string, string)> { ("English", "/English"), ("Hindi", "/Hindi"), ("Maths", "/Maths"), ("Poem Story", "/Poem"), ("Game Zone", "/Game"), ("EVS", "/EVS") } }
-
+        new Subject { Title = "English/ अंग्रेज़ी", Link = "/English_Syallabus" },
+        new Subject { Title = "Hindi/ हिन्दी ", Link = "/hindi " },
+        new Subject { Title = "Maths/ गणित ", Link = "/maths" },
+        new Subject { Title = "GK/ सामान्य ज्ञान ", Link = "/gk" },
+        new Subject { Title = "Rhymes/ कविता  ", Link = "/rhymes" },
+        new Subject { Title = "Story/ कहानी   ", Link = "/story" }
+        // new Subject { Title = "Practice Sheet/ अभ्यास शीट  ", Link = "/practiceSheet" },
+        // new Subject { Title = "Game / खेल ", Link = "/game" },
     };
 
-    private async Task SelectClass(string className)
+    private class Subject
     {
-        selectedClass = className;
-        filteredSubjects = classSubjects.ContainsKey(className) ? classSubjects[className] : new List<(string, string)>();
-        await JSRuntime.InvokeVoidAsync("moveCarouselNext");
+        public string? Title { get; set; }
+        public string? Link { get; set; }
     }
 }
-
- 
