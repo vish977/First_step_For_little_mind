@@ -1,79 +1,28 @@
-﻿@* <body> *@
-@* 	<div class="container-fluid "> *@
-@* 		<div id="carouselExample" class="carousel slide"> *@
-@* 			<div class="carousel-inner"> *@
-@* 				<div class="carousel-item main active  pr first"> *@
-@* 					@* <div class="container-fluid pr"> *@ 
-@* 						<canvas id="canvas1"></canvas> *@
-@* 						<canvas id="canvas2"></canvas> *@
-@* 					@* </div> *@ 
-@* 				</div> *@
-@* 				@*  related word *@ 
-@* 				<div class="carousel-item second"> *@
-					
-@* 					@* <img src="_content/First_step_For_little_mind.Shared/Image/English/plane.gif" height="200" width="400" alt="Alternate Text" /> *@ 
-@* 					<button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"> *@
-@* 						 <span><img src="_content/First_step_For_little_mind.Shared/Image/BackgroundImages/button.png" height="100" width="100" alt="Alternate Text" /></span>  *@
-@* 					</button> *@
-@* 					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" )"> *@
-@* 						<span class="carousel-control-prev-icon"></span> *@
-@* 					</button> *@
-@* 				</div> *@
-@* 				@* practice page *@ 
-@* 				<div class=" carousel-item third"> *@
-@* 					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" )"> *@
-@* 						<span class="carousel-control-prev-icon"></span> *@
-@* 					</button> *@
-@* 					<div class="container "> *@
-@* 						<canvas class="practiceBox" id="LetterTrace" height="300" width="300"></canvas> *@
-@* 						<canvas class="practiceBox" id="SelfPractice" height="300" width="300"></canvas> *@
-@* 						<audio id="audio"> *@
-@* 							<source src="_content/First_step_For_little_mind.Shared/voice/aa.mp3" type="audio/mpeg"> *@
-@* 						</audio> *@
-@* 					</div> *@
-@* 				</div> *@
-@* 			</div> *@
-@* 		</div> *@
-@* 	</div> *@
-@* </body> *@
-
-@code {
+﻿@code {
     [Parameter] public string? Letter { get; set; }
 }
+
+<style>
+    .resize-div {
+        background: url("@($"/_content/First_step_For_little_mind.Shared/Image/English/Letter/{Letter}.png")")no-repeat;
+        background-size:100%;
+        background-position:top;
+    }
+</style>
 
 <div id="carouselExample" class="carousel slide">
     <div class="carousel-inner">
         <div class="carousel-item main first active">
-            <canvas id="canvas1"></canvas> 
- 		    <canvas id="canvas2"></canvas>
-             <video autoplay controls>
-                <source src="@($"/_content/First_step_For_little_mind.Shared/video/{Letter}.mp4")" type="video/mp4" />
-
-            </video> 
+            <div class="resize-div" id="resizeDiv"></div>
+            <div class="container FSLM-Word">
+                <div class="card">Apple</div>
+                <div class="card">Aeroplane</div>
+                <div class="card">Ant</div>
+                <div class="card">Alligator</div>
+            </div>
         </div>
         <div class="carousel-item main second">
-           
-                @* <style> *@
-                @*     body { *@
-                @*         text-align: center; *@
-                @*     } *@
-
-                @*     canvas { *@
-                @*         border: 1px solid black; *@
-                @*         cursor: crosshair; *@
-                @*     } *@
-                @* </style> *@
-                @* <!-- Color Picker --> *@
-                @* <label for="colorPicker">Brush Color: </label> *@
-                @* <input type="color" id="colorPicker" value="#ff0000"> *@
-
-                @* <button onclick="clearCanvas()">Clear</button> *@
-                @* <canvas id="myCanvas" width="600" height="400"></canvas> *@
-
         </div>
-        @* <div class="carousel-item main third"> *@
-            
-        @* </div> *@
     </div>
 
     <!-- Previous & Next Buttons -->
@@ -86,5 +35,3 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-
-
