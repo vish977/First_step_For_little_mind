@@ -6,16 +6,24 @@
         margin-bottom: 15px;
     }
 
+    .FSLM-container{
+        display:flex;
+        justify-content:center;
+    }
+
     .main {
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+        height:100%;
+        width:70vw;
+        padding-left:5rem;
     }
 
     .Letter {
-        margin: 30px;
+        margin: 15px;
     }
 </style>
 
-<div class="container">
+<div class="container FSLM-container">
     <div class="main row">
         @foreach (var letter in Letters)
         {
