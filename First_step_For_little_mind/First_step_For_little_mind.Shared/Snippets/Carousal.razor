@@ -46,20 +46,34 @@
         <div class="carousel-item main first active">
             <canvas id="canvas1"></canvas> 
  		    <canvas id="canvas2"></canvas>
-            @* <audio id="audio"> *@
-            @*     <source src="@($"/_content/First_step_For_little_mind.Shared/voice/{Letter}.mp3")" type="audio/mp3" /> *@
-            @* </audio> *@
-             <video autoplay controls> 
-             <source src="_content/First_step_For_little_mind.Shared/video/A.mp4"  type="video/mp4" /> 
-  
-             </video> 
+             <video autoplay controls>
+                <source src="@($"/_content/First_step_For_little_mind.Shared/video/{Letter}.mp4")" type="video/mp4" />
+
+            </video> 
         </div>
         <div class="carousel-item main second">
-            
+           
+                @* <style> *@
+                @*     body { *@
+                @*         text-align: center; *@
+                @*     } *@
+
+                @*     canvas { *@
+                @*         border: 1px solid black; *@
+                @*         cursor: crosshair; *@
+                @*     } *@
+                @* </style> *@
+                @* <!-- Color Picker --> *@
+                @* <label for="colorPicker">Brush Color: </label> *@
+                @* <input type="color" id="colorPicker" value="#ff0000"> *@
+
+                @* <button onclick="clearCanvas()">Clear</button> *@
+                @* <canvas id="myCanvas" width="600" height="400"></canvas> *@
+
         </div>
-        <div class="carousel-item main third">
+        @* <div class="carousel-item main third"> *@
             
-        </div>
+        @* </div> *@
     </div>
 
     <!-- Previous & Next Buttons -->

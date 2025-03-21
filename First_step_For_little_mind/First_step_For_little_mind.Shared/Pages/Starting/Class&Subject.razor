@@ -1,0 +1,43 @@
+﻿@page "/Subject"
+@inject IJSRuntime JSRuntime
+@using System.Collections.Generic
+
+
+<div class="container-fluid FSLM-BG">
+    <div class="container mt-4 mb-4">
+        <div class="row cardContainer mt-4 mb-4"> 
+            @foreach (var item in filteredSubjects) 
+             { 
+                 <div class="col-md-3"> 
+                     <div class="card card-hover shadow mb-4"> 
+                         <div class="card-body"> 
+                             <h4 class="card-title">@item.Title</h4>
+                            <a href="/Syllabus/@item.Title" class="stretched-link"></a>
+                        </div> 
+                     </div> 
+                 </div> 
+             }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private List<Subject> filteredSubjects = new List<Subject>
+    {
+        new Subject { Title = "English (अंग्रेज़ी)", Link = "/English_Syallabus" },
+        new Subject { Title = "Hindi( हिन्दी)", Link = "/hindi " },
+        new Subject { Title = "Maths (गणित)", Link = "/maths" },
+        new Subject { Title = "GK (सामान्य ज्ञान)", Link = "/gk" },
+        new Subject { Title = "Rhymes (कविता)", Link = "/rhymes" },
+        new Subject { Title = "Story (कहानी)", Link = "/story" }
+        // new Subject { Title = "Practice Sheet/ अभ्यास शीट  ", Link = "/practiceSheet" },
+        // new Subject { Title = "Game / खेल ", Link = "/game" },
+    };
+
+    private class Subject
+    {
+        public string? Title { get; set; }
+        public string? Link { get; set; }
+    }
+}

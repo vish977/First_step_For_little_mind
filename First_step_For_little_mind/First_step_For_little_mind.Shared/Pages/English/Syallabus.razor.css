@@ -1,65 +1,79 @@
-﻿body {
-    font-family: sans-serif; /* Choose a suitable font */
-    margin: 20px; /* Add some margin to the body */
-    background-color: #f0f0f0; /* Light background color */
+﻿.FSLM-BG {
+    height: 100vh;
+    width: 100vw;
+    background: url("Bg/SubjectTemp.jpg");
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    
 }
 
-.infographic-container {
-    background: #BBD2C5; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #292E49, #536976, #BBD2C5); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #292E49, #536976, #BBD2C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-/*    background-size: cover;*/
-/*    background-position: center;*/
-/*    height: 100%;*/
-    display: flex;
-    flex-direction: column; /* Arrange items vertically */
-    gap: 20px; /* Spacing between items */
-}
-
-.infographic-item {
-    display: flex;
-    align-items: flex-start; /* Align items to the top */
-    border-radius: 10px; /* Rounded corners for the items */
-    padding: 20px;
-    background-color: white; /* White background for items */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    height: 100%;
-}
-
-.tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 60px; /* Fixed width for the tab */
-    height: 60px; /* Fixed height for the tab */
-    color: white; /* White text color */
-    border-radius: 10px; /* Rounded corners for the tab */
-    margin-right: 20px; /* Spacing between tab and text */
-}
-
-.data-text {
-    font-size: 12px; /* Smaller font size for "DATA" */
-    text-transform: uppercase; /* Uppercase text */
-}
-
-.number {
-    font-size: 20px; /* Larger font size for the number */
-    font-weight: bold;
-}
-
-.infographic-item p {
-    margin: 0; /* Remove default paragraph margins */
-}
-
-    .infographic-item p:first-of-type {
-        font-weight: bold; /* Make the first paragraph bold */
-        margin-bottom: 5px; /* Add some spacing below the title */
-    }
-
-.shutterstock {
+h1 {
     text-align: center;
-    font-size: 12px;
-    color: #999;
-    margin-top:  20px;
+    text-decoration:underline;
+    color:red;
+    font-weight:bold;
 }
+h3 {
+    color: greenyellow;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+/*h3:hover {
+    font-size: 50px;*/ /* Increase size on hover */
+    /*transition: font-size 0.3s ease-in-out;*/ /* Smooth animation */
+/*}*/
+
+
+h3::before {
+    content: "➜ "; 
+    color: darkblue; 
+    font-size: 1.2em; 
+    margin-right: 8px;
+}
+
+a{
+    text-decoration:none;
+}
+
+.FSLM-menue {
+    display: flex;
+    flex-direction: column; 
+    justify-content: left; 
+    padding-left:17rem;
+    
+   
+   
+/*    border: 2px solid black; */
+}
+.cardContainer {
+   
+    display: flex;
+    justify-content: center;
+}
+
+.card-hover:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card {
+    height: 142px;
+    width: 240.11px;
+    margin-top: 5px;
+    text-align: center;
+    background-color: rgb(194, 224, 174);
+    color: darkblue;
+    font-weight: bold;
+    padding-top: 5rem;
+    background-image: url("Bg/subjectBG.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container {
+    display:flex;
+    justify-content:center;
+}
+
