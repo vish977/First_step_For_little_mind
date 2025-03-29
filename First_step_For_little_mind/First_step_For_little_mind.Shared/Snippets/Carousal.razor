@@ -8,6 +8,8 @@
         background-size:100%;
         background-position:top;
     }
+
+    
 </style>
 
 <div id="carouselExample" class="carousel slide">
@@ -15,25 +17,58 @@
         <div class="carousel-item main first active">
             <div class="resize-div" id="resizeDiv"></div>
             <div class="container FSLM-Word">
-                <div class="card FSLM-RelatedWord box" id=" Words" >Apple</div>
-                <div class="card box">Aeroplane</div>
-                <div class="card box">Ant</div>
-                <div class="card box">Alligator</div>
+               @foreach (var item in items)
+                {
+                    <div class="card box">
+                        <img src="@($"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg")" alt="@item" class="Alphabets_image" />
+                    </div>
+
+                }
+               
             </div>
         </div>
         <div class="carousel-item main second">
         </div>
     </div>
-
-  
-
-    <!-- Previous & Next Buttons -->
-    @* <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"> *@
-    @*     <span class="carousel-control-prev-icon" aria-hidden="true"></span> *@
-    @*     <span class="visually-hidden">Previous</span> *@
-    @* </button> *@
-    @* <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"> *@
-    @*     <span class="carousel-control-next-icon" aria-hidden="true"></span> *@
-    @*     <span class="visually-hidden">Next</span> *@
-    @* </button> *@
 </div>
+
+
+@code {
+    
+    string[] items = Array.Empty<string>(); // Initialize with an empty array
+
+    protected override void OnParametersSet()
+    {
+        // Populate the array based on the value of Letter
+        items = Letter?.ToUpper() switch
+        {
+            "A" => new string[] { "Apple", "Aeroplane", "Ant", "Alligator" },
+            "B" => new string[] { "Bat", "Ball", "Boy", "Bag" },
+            "C" => new string[] { "Cat", "Cap", "Cup", "Cow" },
+            "D" => new string[] { "Dog", "Doll", "Donkey", "Duck" },
+            "E" => new string[] { "Elephant", "Egg", "Ear", "Eye" },
+            "F" => new string[] { "Flag", "Fish", "Fan", "Frog" },
+            "G" => new string[] { "Girl", "Goat", "Grapes", "Giraff" },
+            "H" => new string[] { "Hen", "Hat", "House", "Helicopter" },
+            "I" => new string[] { "Ink", "Ice", "Ice-Cream", "Iron" },
+            "J" => new string[] { "Jug", "Joker", "Jelly", "Jam" },
+            "K" => new string[] { "Kite", "Kangaroo", "King", "Key" },
+            "L" => new string[] { "Lion", "Lemon", "Lamp", "Leaf" },
+            "M" => new string[] { "Monkey", "Mango", "Moon", "Mushroom" },
+            "N" => new string[] { "Nest", "Net", "Nail", "Notebook" },
+            "O" => new string[] { "Orange", "Owl", "Octopus", "Oven" },
+            "P" => new string[] { "Parrot", "Pumpkin", "Peacock", "Pineapple" },
+            "Q" => new string[] { "Queen", "Quilt", "Quail", "Quiz" },
+            "R" => new string[] { "Rabbit", "Rose", "Rainbow", "Rocket" },
+            "S" => new string[] { "Sun", "Star", "Ship", "Snail" },
+            "T" => new string[] { "Tiger", "Tomato", "Train", "Turtle" },
+            "U" => new string[] { "Umbrella", "Unicorn", "Uniform", "Urn" },
+            "V" => new string[] { "Van", "Violet", "Violin", "Vase" },
+            "W" => new string[] { "Whale", "Watermelon", "Watch", "Wolf" },
+            "X" => new string[] { "Xylophone", "X-ray", "Xerox", "Xmas" },
+            "Y" => new string[] { "Yak", "Yogurt", "Yarn", "Yacht" },
+            "Z" => new string[] { "Zebra", "Zip", "Zoo", "Zigzag" },
+            _ => Array.Empty<string>() // Default case if Letter doesn't match
+        };
+    }
+}
