@@ -20,7 +20,15 @@
                @foreach (var item in items)
                 {
                     <div class="card box">
-                        <img src="@($"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg")" alt="@item" class="Alphabets_image" />
+                        <img src="@($"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg")"
+                             alt="@item"
+                             class="@(item == "Astronout" ? "astronout-img" : "")"
+                             style="width:100%" />
+
+                        <div class="container">
+                            <h4><b>@item</b></h4>
+                            
+                        </div>
                     </div>
 
                 }
@@ -28,8 +36,23 @@
             </div>
         </div>
         <div class="carousel-item main second">
+            <div class="container-fluid FSLM-Box">
+                <canvas class="canvas"></canvas>
+                <canvas class="canvas"></canvas>
+            </div>
+            
+            
         </div>
     </div>
+    <!-- Previous & Next Buttons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 
 
@@ -42,7 +65,7 @@
         // Populate the array based on the value of Letter
         items = Letter?.ToUpper() switch
         {
-            "A" => new string[] { "Apple", "Aeroplane", "Ant", "Alligator" },
+            "A" => new string[] { "Apple", "Aeroplane", "Ant", "Astronout" },
             "B" => new string[] { "Bat", "Ball", "Boy", "Bag" },
             "C" => new string[] { "Cat", "Cap", "Cup", "Cow" },
             "D" => new string[] { "Dog", "Doll", "Donkey", "Duck" },
