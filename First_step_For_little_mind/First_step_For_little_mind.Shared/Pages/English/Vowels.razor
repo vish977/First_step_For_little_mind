@@ -1,0 +1,79 @@
+﻿@page "/learn-letters"
+
+<style>
+    .container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .letter-box {
+        display: inline-block;
+        margin: 10px;
+        padding: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .vowel {
+        background-color: #FFD700;
+    }
+    /* Gold for vowels */
+    .consonant {
+        background-color: #87CEEB;
+    }
+    /* Light Blue for consonants */
+    .toggle-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #FF6347;
+        color: white;
+    }
+</style>
+
+<div class="container">
+    <h1>Learn Vowels & Consonants</h1>
+    <button class="toggle-btn" @onclick="ToggleCategory">Show @CurrentCategory</button>
+    <div>
+        @foreach (var letter in DisplayedLetters)
+        {
+            <div class="letter-box @(IsVowel(letter) ? "vowel" : "consonant")">
+                @letter
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private bool ShowVowels = true;
+    private string CurrentCategory => ShowVowels ? "Consonants" : "Vowels";
+
+    private List<string> VowelLetters = new() { "A", "E", "I", "O", "U" };
+    private List<string> ConsonantLetters = new(); // Initialize empty
+
+    private List<string> DisplayedLetters => ShowVowels ? VowelLetters : ConsonantLetters;
+
+    protected override void OnInitialized()
+    {
+        // Initialize consonants after vowels are defined
+        ConsonantLetters = Enumerable.Range(65, 26)
+            .Select(c => ((char)c).ToString())
+            .Where(l => !VowelLetters.Contains(l))
+            .ToList();
+    }
+
+    private void ToggleCategory()
+    {
+        ShowVowels = !ShowVowels;
+    }
+
+    private bool IsVowel(string letter) => VowelLetters.Contains(letter);
+}
+
+

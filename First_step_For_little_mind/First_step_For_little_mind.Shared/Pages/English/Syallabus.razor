@@ -2,6 +2,8 @@
 @inject IJSRuntime JSRuntime
 @using System.Collections.Generic
 
+
+
 <div class="container-fluid FSLM-BG">
     <div class="container mt-4 mb-4">
         <div class="row cardContainer mt-4 mb-4">
@@ -33,8 +35,8 @@
             {
                 "English (अंग्रेज़ी)", new List<SyllabusItem>
                 {
-                    new SyllabusItem("Alphabets", "/AlphabetsChart"),
-                    new SyllabusItem("Vowel And Consonants", "/vowel&consonant"),
+                    new SyllabusItem("Alphabets", "/subjects/AlphabetsChart"),
+                    new SyllabusItem("Vowel And Consonants", "/learn-letters"),
                     // new SyllabusItem("Consonants"),
                     new SyllabusItem("Two Letter Words"),
                     new SyllabusItem("Three Letter Words")
@@ -43,8 +45,8 @@
             {
                 "Hindi( हिन्दी)", new List<SyllabusItem>
                 {
-                    new SyllabusItem("अ से  अः ", "/अ_से_अः_chart"),
-                    new SyllabusItem("क से ज्ञ "),
+                    new SyllabusItem("अ से  अः ", "/subjects/अ_से_अः"),
+                    new SyllabusItem("क से ज्ञ ", "/subjects/क_से_ज्ञ"),
                     new SyllabusItem("मात्रा"),
                     new SyllabusItem("दो  वर्णों वाले शब्द "),
                     new SyllabusItem("स्वर"),
@@ -56,7 +58,7 @@
             {
                 "Maths (गणित)", new List<SyllabusItem>
                 {
-                    new SyllabusItem("Numbers"),
+                    new SyllabusItem("Numbers", "/subjects/Numbers"),
                     new SyllabusItem("Addition"),
                     new SyllabusItem("Subtraction")
                 }
