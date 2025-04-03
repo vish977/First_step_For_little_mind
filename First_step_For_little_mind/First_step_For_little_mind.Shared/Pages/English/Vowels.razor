@@ -1,79 +1,100 @@
-﻿@page "/learn-letters"
+﻿@page "/vowel-consonant"
 
 <style>
-    .container {
-        text-align: center;
-        margin-top: 20px;
-    }
+	.FSLM-body {
+		height: 100vh;
+		width: 100%;
+		background: url("_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg") no-repeat;
+		background-size: 100vw 100vh;
+	}
 
-    .letter-box {
-        display: inline-block;
-        margin: 10px;
-        padding: 20px;
-        font-size: 24px;
-        font-weight: bold;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-    }
+	.row {
+		/* border: 1px solid red; */
+	}
 
-    .vowel {
-        background-color: #FFD700;
-    }
-    /* Gold for vowels */
-    .consonant {
-        background-color: #87CEEB;
-    }
-    /* Light Blue for consonants */
-    .toggle-btn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 18px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #FF6347;
-        color: white;
-    }
+	.Board {
+		height: 32rem;
+		width: 62rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		/* border: 1px solid red; */
+	}
+
+	button {
+		border: none;
+		margin: 10px;
+	}
+
+	.FSLM-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 50px;
+		color: white;
+		font-size: 30px;
+		font-weight: bold;
+	}
+
+	.pe-custom {
+		padding-right: 7rem !important;
+	}
 </style>
 
-<div class="container">
-    <h1>Learn Vowels & Consonants</h1>
-    <button class="toggle-btn" @onclick="ToggleCategory">Show @CurrentCategory</button>
-    <div>
-        @foreach (var letter in DisplayedLetters)
-        {
-            <div class="letter-box @(IsVowel(letter) ? "vowel" : "consonant")">
-                @letter
-            </div>
-        }
-    </div>
+<div class="container-fluid FSLM-body">
+	<button class="play">
+		<img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Play" height="50" />
+	</button>
+	<button class="pause">
+		<img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Pause" height="50" />
+	</button>
+
+	<!-- Audio element placed outside the loop -->
+	<audio id="myAudio">
+		<source src="_content/First_step_For_little_mind.Shared/voice/Vowels.mp3" type="audio/mp3" />
+	</audio>
+
+	<div class="container Board">
+		<div class="row">
+			@foreach (var letter in Letters)
+			{
+				<div class="@GetClass(letter)">
+					<div>@letter</div>
+				</div>
+			}
+		</div>
+	</div>
 </div>
 
+<script>
+	window.onload = function() {
+		var audio = document.getElementById("myAudio");
+
+		function playAudio() {
+			audio.play();
+			console.log("audio is playing");
+		}
+
+		function pauseAudio() {
+			audio.pause();
+			console.log("audio is paused");
+		}
+
+		document.querySelector(".play").addEventListener("click", playAudio);
+		document.querySelector(".pause").addEventListener("click", pauseAudio);
+	};
+</script>
+
 @code {
-    private bool ShowVowels = true;
-    private string CurrentCategory => ShowVowels ? "Consonants" : "Vowels";
+	private List<string> Letters = Enumerable.Range(65, 26)
+			.Select(x => ((char)x).ToString())
+			.ToList();
 
-    private List<string> VowelLetters = new() { "A", "E", "I", "O", "U" };
-    private List<string> ConsonantLetters = new(); // Initialize empty
-
-    private List<string> DisplayedLetters => ShowVowels ? VowelLetters : ConsonantLetters;
-
-    protected override void OnInitialized()
-    {
-        // Initialize consonants after vowels are defined
-        ConsonantLetters = Enumerable.Range(65, 26)
-            .Select(c => ((char)c).ToString())
-            .Where(l => !VowelLetters.Contains(l))
-            .ToList();
-    }
-
-    private void ToggleCategory()
-    {
-        ShowVowels = !ShowVowels;
-    }
-
-    private bool IsVowel(string letter) => VowelLetters.Contains(letter);
+	private string GetClass(string letter)
+	{
+		if (letter == "Y")
+			return "col-6 d-flex justify-content-end pe-custom FSLM-container";
+		else
+			return "col-3 FSLM-container";
+	}
 }
-
-
