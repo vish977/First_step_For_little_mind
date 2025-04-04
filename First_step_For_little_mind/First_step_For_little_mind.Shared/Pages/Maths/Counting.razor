@@ -1,22 +1,63 @@
-﻿@page "/counter"
+﻿@page "/counting/{Number}"
 
-<PageTitle>Counter</PageTitle>
-
-<h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
-<div>
-
+<div class="container-fluid">
+    <div>
+        @foreach (var item in SelectedList)
+        {
+            <div class="num">
+                <a href="/English/@item">
+                    <img class="Letter" src="@GetImagePath(item)" alt="@item" />
+                </a>
+            </div>
+        }
+    </div>
 </div>
 
-@code {
-    private int currentCount = 0;
+@code{
+    [Parameter] public string? Number { get; set; }
 
-    private void IncrementCount()
-    {
-        currentCount++;
+        private string Title = "Learning Chart";
+        private List<string> first = Enumerable.Range(1, 10).Select(x => x.ToString()).ToList();
+        private List<string> second = Enumerable.Range(11, 20).Select(x => x.ToString()).ToList();
+        private List<string> third = Enumerable.Range(21, 30).Select(x => x.ToString()).ToList();
+        private List<string> fourth = Enumerable.Range(31, 40).Select(x => x.ToString()).ToList();
+
+        private List<string> SelectedList = new();
+
+        protected override void OnParametersSet()
+        {
+            SelectedList = Number switch
+            {
+               
+                "1to10" => first,
+                "11to20" => second,
+                "21to30" => third,
+                "31to40" => fourth,
+
+
+                _ => new List<string>()
+            };
+
+            // Set Title based on selection
+            Title = Number switch
+            {
+                
+                "Numbers" => "Numbers (1-10)",
+                _ => "Learning Chart"
+            };
+        }
+
+        
+        private string GetImagePath(string item)
+        {
+            string basePath = "/_content/First_step_For_little_mind.Shared/Image";
+
+            return Number switch
+            {
+                "Numbers" => $"{basePath}/Numbers/{item}.jpg",
+                _ => ""
+            };
+        }
     }
+
 }
