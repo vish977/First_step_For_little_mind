@@ -1,4 +1,6 @@
-﻿@code {
+﻿@inject IJSRuntime JS
+
+@code {
     [Parameter] public string? Letter { get; set; }
 }
 
@@ -32,6 +34,7 @@
                     </div>
 
                 }
+              
                
             </div>
         </div>
@@ -45,16 +48,29 @@
         </div>
     </div>
     <!-- Previous & Next Buttons -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+    @* <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"> *@
+    @*     <span class="carousel-control-prev-icon" aria-hidden="true"></span> *@
+    @*     <span class="visually-hidden">Previous</span> *@
+    @* </button> *@
+    @* <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"> *@
+    @*     <span class="carousel-control-next-icon" aria-hidden="true"></span> *@
+    @*     <span class="visually-hidden">Next</span> *@
+    @* </button> *@
 </div>
 
+<audio id="letterAudio" autoplay>
+    <source src="@($"_content/First_step_For_little_mind.Shared/voice/{Letter}.mp3")" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    window.playAudio = function () {
+        var audio = document.getElementById("letterAudio");
+        if (audio) {
+            audio.play().catch(error => console.log("Audio play failed:", error));
+        }
+    };
+</script>
 
 @code {
     
@@ -93,5 +109,15 @@
             "Z" => new string[] { "Zebra", "Zip", "Zoo", "Zigzag" },
             _ => Array.Empty<string>() // Default case if Letter doesn't match
         };
+    }
+
+    private bool isFirstRender = true; // Ensure audio plays only once
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrEmpty(Letter))
+        {
+            await JS.InvokeVoidAsync("playAudio");
+        }
     }
 }

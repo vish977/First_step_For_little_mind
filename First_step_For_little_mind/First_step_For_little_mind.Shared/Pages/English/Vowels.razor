@@ -1,17 +1,19 @@
-﻿@page "/vowel-consonant"
+﻿@page "/vowel-Consonant"
+@inject IJSRuntime JS
 
 <style>
 	.FSLM-body {
+		
 		height: 100vh;
 		width: 100%;
 		background: url("_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg") no-repeat;
 		background-size: 100vw 100vh;
+		transition: background-image 1s ease-in-out;
 	}
 
-	.row {
+	.row{
 		/* border: 1px solid red; */
 	}
-
 	.Board {
 		height: 32rem;
 		width: 62rem;
@@ -20,70 +22,72 @@
 		align-items: center;
 		/* border: 1px solid red; */
 	}
-
-	button {
-		border: none;
-		margin: 10px;
+	button{
+		border:none;
+		margin:10px;
 	}
-
 	.FSLM-container {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 50px;
-		color: white;
+		/* border: 1px solid white; */
+		 color: white; 
 		font-size: 30px;
 		font-weight: bold;
 	}
 
 	.pe-custom {
-		padding-right: 7rem !important;
+		padding-right:7rem !important; /* Adjust as needed */
 	}
+
 </style>
 
 <div class="container-fluid FSLM-body">
-	<button class="play">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Play" height="50" />
+	<button @onclick="PlayAudio">
+		<img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Alternate Text" height="50" />
 	</button>
-	<button class="pause">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Pause" height="50" />
-	</button>
-
-	<!-- Audio element placed outside the loop -->
-	<audio id="myAudio">
-		<source src="_content/First_step_For_little_mind.Shared/voice/Vowels.mp3" type="audio/mp3" />
-	</audio>
-
+	<button @onclick="PauseAudio">
+		<img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Alternate Text" height="50" /></button>
 	<div class="container Board">
+
 		<div class="row">
 			@foreach (var letter in Letters)
 			{
 				<div class="@GetClass(letter)">
 					<div>@letter</div>
+					
 				</div>
 			}
+			
 		</div>
 	</div>
 </div>
 
+<audio id="letterAudio">
+	<source src="@($"_content/First_step_For_little_mind.Shared/voice/Vowels.mp3")" type="audio/mpeg">
+	Your browser does not support the audio element.
+</audio>
+
 <script>
-	window.onload = function() {
-		var audio = document.getElementById("myAudio");
-
-		function playAudio() {
-			audio.play();
-			console.log("audio is playing");
+	window.playAudio = function () {
+		var audio = document.getElementById("letterAudio");
+		if (audio) {
+			audio.play().catch(error => console.log("Audio play failed:", error));
 		}
-
-		function pauseAudio() {
-			audio.pause();
-			console.log("audio is paused");
-		}
-
-		document.querySelector(".play").addEventListener("click", playAudio);
-		document.querySelector(".pause").addEventListener("click", pauseAudio);
 	};
+
+	window.pauseAudio = function () {
+		var audio = document.getElementById("letterAudio");
+		if (audio) {
+			audio.pause();
+		}
+	};
+
+
+
 </script>
+
 
 @code {
 	private List<string> Letters = Enumerable.Range(65, 26)
@@ -96,5 +100,25 @@
 			return "col-6 d-flex justify-content-end pe-custom FSLM-container";
 		else
 			return "col-3 FSLM-container";
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await JS.InvokeVoidAsync("playAudio");
+		}
+	}
+
+
+
+	private async Task PlayAudio()
+	{
+		await JS.InvokeVoidAsync("playAudio");
+	}
+
+	private async Task PauseAudio()
+	{
+		await JS.InvokeVoidAsync("pauseAudio");
 	}
 }
