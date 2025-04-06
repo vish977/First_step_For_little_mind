@@ -1,105 +1,86 @@
-﻿@page "/av"
+﻿@page "/trace"
+@inject IJSRuntime JS
 
-<style>
-	.pr{
-		height:100vh;
-		width:100vw;
-        display:flex;
-        justify-content: flex-end; /* Centers content horizontally */
-        align-items: center; /* Centers content vertically */
-        height: 100vh; /* Full viewport height */
-        gap: 20px; /* Space between canvases */
-        background-color: #f0f0f0;
-        padding-right:3rem;
-	}
-	#canvas1{
-		border:1px solid black;
-	    height:50vh;
-        width:30vw;
-	}
+<h3>Trace the Letter A</h3>
 
-	#canvas2{
-		border: 1px solid red;
-        /* height: 50vh; */
-        /* width: 30vw; */
-	}
+<canvas id="myCanvas" width="600" height="400" style="border:1px solid black;"></canvas>
 
-</style>
-
-
-<div class="container-fluid pr">
-	<canvas id="canvas1" ></canvas>
-	<canvas id="canvas2"></canvas>
-</div>
-
+<button @onclick="ClearCanvas">Clear</button>
 
 <script>
-            function animateCanvasText(canvasId, text1, text2, callback) {
-        var canvas = document.getElementById(canvasId);
+    window.initializeCanvas = () => {
+        var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
+        var isDrawing = false;
+        var lastX = 0, lastY = 0;
 
-        // Set initial canvas size to full window size
-        canvas.width = window.innerWidth - 120;
-        canvas.height = window.innerHeight;
-
-        var x1 = -100;                    // Start position of text1 (off-screen left)
-        var x2 = canvas.width + 100;      // Start position of text2 (off-screen right)
-        var y = canvas.height / 2;        // Vertical center
-        var speed = 3;                    // Movement speed
-
-        function animateText() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous frame
-
-            // Draw Text 1 (moving from left)
-            ctx.font = "400px serif";
-            ctx.fillStyle = "red";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(text1, x1, y);
-
-            // Draw Text 2 (moving from right)
-            ctx.fillStyle = "red";
-            ctx.fillText(text2, x2, y);
-
-            // Move texts toward the center
-            if (x1 < canvas.width / 2 - 60) x1 += speed;
-            if (x2 > canvas.width / 2 + 60) x2 -= speed;
-
-            // Continue animation until both texts reach the center
-            if (x1 < canvas.width / 2 - 60 || x2 > canvas.width / 2 + 60) {
-                requestAnimationFrame(animateText);
-            } else {
-                // Combine texts at the center
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "red";
-                ctx.fillText(text1 +""+ text2, canvas.width / 2, y);
-
-                // Trigger the callback function (Show Image in Canvas 2)
-                if (callback) callback();
-            }
+        function drawLetter() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "200px Arial";
+            ctx.fillStyle = "black";
+            ctx.fillText("A", 150, 250);
         }
 
-        animateText(); // Start the animation
-    }
+        drawLetter();
 
-    // Function to show image in the second canvas
-    function showImageInSecondCanvas() {
-        var canvas2 = document.getElementById('canvas2');
-        var ctx2 = canvas2.getContext('2d');
+        canvas.addEventListener("mousedown", (e) => {
+            var x = e.offsetX, y = e.offsetY;
+            if (isInsideLetter(x, y)) {
+                isDrawing = true;
+                lastX = x;
+                lastY = y;
+            }
+        });
 
-        var img = new Image();
-        img.src = "_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/A.jpeg";
+        canvas.addEventListener("mousemove", (e) => {
+            if (!isDrawing) return;
+            var x = e.offsetX, y = e.offsetY;
 
-        img.onload = function () {
-            canvas2.width = img.width;
-            canvas2.height = img.height;
-            ctx2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
-        };
-    }
+            if (isInsideLetter(x, y)) {
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 15;
+                ctx.lineJoin = "round";
+                ctx.lineCap = "round";
 
-    // Call the function with a callback to show the image
-    animateCanvasText('canvas1', 'A', 'a', showImageInSecondCanvas);
-	
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+
+                lastX = x;
+                lastY = y;
+            }
+        });
+
+        canvas.addEventListener("mouseup", () => isDrawing = false);
+
+        function isInsideLetter(x, y) {
+            var imageData = ctx.getImageData(x, y, 1, 1).data;
+            return imageData[0] === 0 && imageData[1] === 0 && imageData[2] === 0;
+        }
+    };
+
+    window.clearCanvas = () => {
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "200px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText("A", 150, 250);
+    };
 </script>
 
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initializeCanvas");
+        }
+    }
 
+    private async Task ClearCanvas()
+    {
+        await JS.InvokeVoidAsync("clearCanvas");
+    }
+}

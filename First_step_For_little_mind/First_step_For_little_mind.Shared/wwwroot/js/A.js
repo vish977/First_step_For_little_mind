@@ -1,30 +1,63 @@
 ﻿
-    //var canvas = document.getElementById("Tracing");
-   
-    ////const ctx = canvas.getContext('2d');
+window.initializeCanvas = async (letter) => {
+    await document.fonts.ready;
 
-    //function drawRoundedA(x, y, width, height, radius) {
-    //    ctx.beginPath();
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
+    let lastX = 0, lastY = 0;
 
-    //    // Left side of the A
-    //    ctx.moveTo(x + radius, y + height);
-    //    ctx.lineTo(x, y + radius);
-    //    ctx.arc(x + radius, y + radius, radius, Math.PI, 1.5 * Math.PI);
-    //    ctx.lineTo(x + width / 2 - radius, y);
+    function drawLetter() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "400px 'Baloo 2'";
+        ctx.fillStyle = "black";
+        ctx.fillText(letter.toUpperCase(), 150, 250);
+    }
 
-    //    // Top of the A
-    //    ctx.arc(x + width / 2, y + radius, radius, 1.5 * Math.PI, 1.75 * Math.PI); // Adjust arc angle for rounded top
-    //    ctx.arc(x + width / 2, y + radius, radius, 1.75 * Math.PI, 2 * Math.PI);
+    drawLetter();
 
-    //    // Right side of the A
-    //    ctx.lineTo(x + width, y + radius);
-    //    ctx.arc(x + width - radius, y + radius, radius, 0, 0.5 * Math.PI);
-    //    ctx.lineTo(x + width - radius, y + height);
+    function isInsideLetter(x, y) {
+        const imageData = ctx.getImageData(x, y, 1, 1).data;
+        return imageData[0] === 0 && imageData[1] === 0 && imageData[2] === 0;
+    }
 
-    //    ctx.closePath();
-    //    ctx.fillStyle = 'white'; // Fill the A with white
-    //    ctx.fill();
-    //}
+    canvas.onmousedown = (e) => {
+        const x = e.offsetX, y = e.offsetY;
+        if (isInsideLetter(x, y)) {
+            isDrawing = true;
+            lastX = x;
+            lastY = y;
+        }
+    };
 
-    //// Draw the A
-    //drawRoundedA(20, 20, 160, 260, 20); // Adjust parameters as needed
+    canvas.onmousemove = (e) => {
+        if (!isDrawing) return;
+        const x = e.offsetX, y = e.offsetY;
+
+        if (isInsideLetter(x, y)) {
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 45;
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+    };
+
+    canvas.onmouseup = () => isDrawing = false;
+};
+
+window.clearCanvas = (letter) => {
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "400px 'Baloo 2'";
+    ctx.fillStyle = "black";
+    ctx.fillText(letter.toUpperCase(), 150, 250);
+};

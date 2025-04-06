@@ -4,14 +4,17 @@
     [Parameter] public string? Letter { get; set; }
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap" rel="stylesheet" />
+
 <style>
     .resize-div {
-        background: url("@($"/_content/First_step_For_little_mind.Shared/Image/English/Letter/{Letter}.png")")no-repeat;
-        background-size:100%;
-        background-position:top;
+        background: url("@($"/_content/First_step_For_little_mind.Shared/Image/English/Letter/{Letter}.png")") no-repeat;
+        background-size: 100%;
+        background-position: top;
     }
-
-    
+    #mycanvas {
+        background:blue;
+    }
 </style>
 
 <div id="carouselExample" class="carousel slide">
@@ -19,43 +22,37 @@
         <div class="carousel-item main first active">
             <div class="resize-div" id="resizeDiv"></div>
             <div class="container FSLM-Word">
-               @foreach (var item in items)
+                @foreach (var item in items)
                 {
                     <div class="card box">
                         <img src="@($"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg")"
                              alt="@item"
                              class="@(item == "Astronout" ? "astronout-img" : "")"
                              style="width:100%" />
-
                         <div class="container">
                             <h4 class="gradient-text"><b>@item</b></h4>
-                            
                         </div>
                     </div>
-
                 }
-              
-               
             </div>
         </div>
+
         <div class="carousel-item main second">
             <div class="container-fluid FSLM-Box">
-                <canvas class="canvas" id="Tracing"></canvas>
-                <canvas class="canvas" id="FreeHandWriting"></canvas>
+                <canvas id="myCanvas" width="600" height="400" style="border:1px solid black;"></canvas>
+                <button @onclick="ClearCanvas">Clear</button>
             </div>
-            
-            
         </div>
     </div>
-    <!-- Previous & Next Buttons -->
-    @* <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"> *@
-    @*     <span class="carousel-control-prev-icon" aria-hidden="true"></span> *@
-    @*     <span class="visually-hidden">Previous</span> *@
-    @* </button> *@
-    @* <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"> *@
-    @*     <span class="carousel-control-next-icon" aria-hidden="true"></span> *@
-    @*     <span class="visually-hidden">Next</span> *@
-    @* </button> *@
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 
 <audio id="letterAudio" autoplay>
@@ -63,22 +60,16 @@
     Your browser does not support the audio element.
 </audio>
 
-<script>
-    window.playAudio = function () {
-        var audio = document.getElementById("letterAudio");
-        if (audio) {
-            audio.play().catch(error => console.log("Audio play failed:", error));
-        }
-    };
-</script>
+@* <script>   *@
+    
+
+@* </script> *@
 
 @code {
-    
-    string[] items = Array.Empty<string>(); // Initialize with an empty array
+    string[] items = Array.Empty<string>();
 
     protected override void OnParametersSet()
     {
-        // Populate the array based on the value of Letter
         items = Letter?.ToUpper() switch
         {
             "A" => new string[] { "Apple", "Aeroplane", "Ant", "Astronout" },
@@ -107,17 +98,20 @@
             "X" => new string[] { "Xylophone", "X-ray", "Xerox", "Xmas" },
             "Y" => new string[] { "Yak", "Yogurt", "Yarn", "Yacht" },
             "Z" => new string[] { "Zebra", "Zip", "Zoo", "Zigzag" },
-            _ => Array.Empty<string>() // Default case if Letter doesn't match
+            _ => Array.Empty<string>()
         };
     }
-
-    private bool isFirstRender = true; // Ensure audio plays only once
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !string.IsNullOrEmpty(Letter))
         {
-            await JS.InvokeVoidAsync("playAudio");
+            await JS.InvokeVoidAsync("initializeCanvas", Letter);
         }
+    }
+
+    private async Task ClearCanvas()
+    {
+        await JS.InvokeVoidAsync("clearCanvas", Letter);
     }
 }
