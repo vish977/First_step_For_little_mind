@@ -40,8 +40,20 @@
         <div class="carousel-item main second">
             <div class="container-fluid FSLM-Box">
                 <canvas id="myCanvas" width="600" height="400" style="border:1px solid black;"></canvas>
+                <div id="successMessage" style="display: none; text-align: center; color: green; font-size: 36px; font-weight: bold; margin-top: 20px;">
+                    🎉 Well Done! 🎉
+                </div>
+
                 <button @onclick="ClearCanvas">Clear</button>
+
+                <div>
+                    <label for="colorPicker"><b>Choose Your Color:</b></label>
+                    <input type="color" id="colorPicker" value="#000000" />
+                </div>
             </div>
+
+           
+
         </div>
     </div>
 
@@ -60,10 +72,13 @@
     Your browser does not support the audio element.
 </audio>
 
-@* <script>   *@
-    
+<audio id="successAudio">
+    <source src="_content/First_step_For_little_mind.Shared/voice/clapping.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>
 
-@* </script> *@
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 
 @code {
     string[] items = Array.Empty<string>();
@@ -106,7 +121,14 @@
     {
         if (firstRender && !string.IsNullOrEmpty(Letter))
         {
-            await JS.InvokeVoidAsync("initializeCanvas", Letter);
+            try
+            {
+                await JS.InvokeVoidAsync("initializeCanvas", Letter); // Pass the letter here
+            }
+            catch (TaskCanceledException)
+            {
+                Console.WriteLine("JS initialization was cancelled or took too long.");
+            }
         }
     }
 

@@ -1,5 +1,4 @@
-﻿
-window.initializeCanvas = async (letter) => {
+﻿window.initializeCanvas = async (letter) => {
     await document.fonts.ready;
 
     const canvas = document.getElementById("myCanvas");
@@ -8,18 +7,29 @@ window.initializeCanvas = async (letter) => {
     let lastX = 0, lastY = 0;
 
     function drawLetter() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Blue background
+        ctx.fillStyle = "blue";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw filled white letter
         ctx.font = "400px 'Baloo 2'";
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
         ctx.fillText(letter.toUpperCase(), 150, 250);
+
+        // Draw red border around the letter
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 5; // Border thickness
+        ctx.strokeText(letter.toUpperCase(), 150, 250);
     }
 
     drawLetter();
 
     function isInsideLetter(x, y) {
         const imageData = ctx.getImageData(x, y, 1, 1).data;
-        return imageData[0] === 0 && imageData[1] === 0 && imageData[2] === 0;
+        // Check if pixel is close to white (for anti-aliased smooth edges)
+        return imageData[0] > 200 && imageData[1] > 200 && imageData[2] > 200;
     }
+
 
     canvas.onmousedown = (e) => {
         const x = e.offsetX, y = e.offsetY;
@@ -35,7 +45,8 @@ window.initializeCanvas = async (letter) => {
         const x = e.offsetX, y = e.offsetY;
 
         if (isInsideLetter(x, y)) {
-            ctx.strokeStyle = "red";
+            const colorPicker = document.getElementById("colorPicker");
+            ctx.strokeStyle = colorPicker.value;
             ctx.lineWidth = 45;
             ctx.lineJoin = "round";
             ctx.lineCap = "round";
@@ -50,14 +61,25 @@ window.initializeCanvas = async (letter) => {
         }
     };
 
+
     canvas.onmouseup = () => isDrawing = false;
 };
 
 window.clearCanvas = (letter) => {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Blue background
+    ctx.fillStyle = "blue";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // White filled letter
     ctx.font = "400px 'Baloo 2'";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.fillText(letter.toUpperCase(), 150, 250);
+
+    // Red border
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 5;
+    ctx.strokeText(letter.toUpperCase(), 150, 250);
 };
