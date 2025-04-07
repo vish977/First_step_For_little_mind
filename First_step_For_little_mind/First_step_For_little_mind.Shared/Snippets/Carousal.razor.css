@@ -32,10 +32,7 @@
     width: 45% !important;
 }
 .resize-div {
-    
-    width: 10px;
-    height: 10px;
-    margin: 50px auto;
+    margin: 5px auto;
     animation: increaseSize 3s ease-in-out forwards; 
 }
 
@@ -53,7 +50,7 @@
 .FSLM-Word {
     position:fixed;
     bottom:50px;
-    margin-left:7rem;
+    margin-left:1rem;
 
     display:flex;
     flex-direction:row;
