@@ -1,4 +1,6 @@
 ﻿window.initializeCanvas = async (letter) => {
+    // Ensure the Baloo 2 font is loaded specifically
+    await document.fonts.load("400px 'Baloo 2'");
     await document.fonts.ready;
 
     const canvas = document.getElementById("myCanvas");
@@ -7,15 +9,14 @@
     let lastX = 0, lastY = 0;
 
     function drawLetter() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear background
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw filled white letter with red border
         ctx.font = "400px 'Baloo 2'";
         ctx.textBaseline = "top";
         ctx.lineWidth = 5;
 
-        ctx.strokeStyle = "red";   // Red border
-        ctx.fillStyle = "white";   // White fill
+        ctx.strokeStyle = "red";
+        ctx.fillStyle = "white";
 
         ctx.strokeText(letter.toUpperCase(), 150, 50);
         ctx.fillText(letter.toUpperCase(), 150, 50);
@@ -61,11 +62,14 @@
     canvas.onmouseup = () => isDrawing = false;
 };
 
-window.clearCanvas = (letter) => {
+window.clearCanvas = async (letter) => {
+    await document.fonts.load("400px 'Baloo 2'");
+    await document.fonts.ready;
+
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // No background
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.font = "400px 'Baloo 2'";
     ctx.textBaseline = "top";
