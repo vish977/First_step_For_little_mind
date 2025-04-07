@@ -7,29 +7,26 @@
     let lastX = 0, lastY = 0;
 
     function drawLetter() {
-        // Blue background
-        ctx.fillStyle = "blue";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear background
 
-        // Draw filled white letter
+        // Draw filled white letter with red border
         ctx.font = "400px 'Baloo 2'";
-        ctx.fillStyle = "white";
-        ctx.fillText(letter.toUpperCase(), 150, 250);
+        ctx.textBaseline = "top";
+        ctx.lineWidth = 5;
 
-        // Draw red border around the letter
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 5; // Border thickness
-        ctx.strokeText(letter.toUpperCase(), 150, 250);
+        ctx.strokeStyle = "red";   // Red border
+        ctx.fillStyle = "white";   // White fill
+
+        ctx.strokeText(letter.toUpperCase(), 150, 50);
+        ctx.fillText(letter.toUpperCase(), 150, 50);
     }
 
     drawLetter();
 
     function isInsideLetter(x, y) {
         const imageData = ctx.getImageData(x, y, 1, 1).data;
-        // Check if pixel is close to white (for anti-aliased smooth edges)
         return imageData[0] > 200 && imageData[1] > 200 && imageData[2] > 200;
     }
-
 
     canvas.onmousedown = (e) => {
         const x = e.offsetX, y = e.offsetY;
@@ -61,7 +58,6 @@
         }
     };
 
-
     canvas.onmouseup = () => isDrawing = false;
 };
 
@@ -69,17 +65,15 @@ window.clearCanvas = (letter) => {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    // Blue background
-    ctx.fillStyle = "blue";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // No background
 
-    // White filled letter
     ctx.font = "400px 'Baloo 2'";
-    ctx.fillStyle = "white";
-    ctx.fillText(letter.toUpperCase(), 150, 250);
-
-    // Red border
-    ctx.strokeStyle = "red";
+    ctx.textBaseline = "top";
     ctx.lineWidth = 5;
-    ctx.strokeText(letter.toUpperCase(), 150, 250);
+
+    ctx.strokeStyle = "red";
+    ctx.fillStyle = "white";
+
+    ctx.strokeText(letter.toUpperCase(), 150, 50);
+    ctx.fillText(letter.toUpperCase(), 150, 50);
 };
