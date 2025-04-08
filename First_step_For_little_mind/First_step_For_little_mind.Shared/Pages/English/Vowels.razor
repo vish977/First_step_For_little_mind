@@ -46,20 +46,36 @@
 		opacity: 0;
 	}
 
-	.red-div {
+	.red-div, .blue-div {
 		position: absolute;
 		top: 0;
 		left: 0;
 		height: 100%;
 		width: 100%;
-		background: url("_content/First_step_For_little_mind.Shared/Bg/VowelConsonent.png") no-repeat center center;
-		background-size: 75vw 60vh;
 		transform: scale(0);
 		transition: transform 1s ease;
 		z-index: 1;
 	}
 
+	.red-div {
+		background: url("_content/First_step_For_little_mind.Shared/Bg/VowelConsonent.png") no-repeat center center;
+		background-size: 75vw 60vh;
+	}
+
+	.blue-div {
+		background: url("_content/First_step_For_little_mind.Shared/Bg/GreenBoard.jpg") no-repeat center center;
+		background-size: 75vw 60vh;
+	}
+
 	.show-red {
+		transform: scale(1);
+	}
+
+	.hide-red {
+		transform: scale(0);
+	}
+
+	.show-blue {
 		transform: scale(1);
 	}
 </style>
@@ -81,11 +97,46 @@
 				</div>
 			}
 		</div>
-		<div class="red-div @(isRedShown ? "show-red" : "")"></div>
+
+		<div class="red-div @(isRedShown ? (isRedHidden ? "hide-red" : "show-red") : "")"></div>
+		<div class="@($"blue-div {(isBlueShown ? "show-blue" : "")} flex flex-col items-center justify-center text-center")">
+
+			<div class="flex justify-center mt-8 flex-wrap gap-4">
+				@if (CurrentWord != null)
+				{
+					foreach (char letter in CurrentWord)
+					{
+						<button class="text-2xl px-4 py-2 rounded bg-gray-200 hover:bg-blue-200 transition"
+								@onclick="() => CheckLetter(letter)">
+							@letter
+						</button>
+					}
+				}
+			</div>
+
+			<p class="mt-6 text-xl font-semibold"
+			   style="@(string.IsNullOrWhiteSpace(MessageColor) ? null : $"color:{MessageColor}")">
+				@Message
+			</p>
+
+			<div class="mt-4">
+				@if (ShowNextButton)
+				{
+					<button class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+							@onclick="LoadNextWord">
+						Next Word
+					</button>
+				}
+			</div>
+		</div>
+
+
+		
+		
 	</div>
 </div>
 
-<audio id="letterAudio" onended="audioEnded()">
+<audio id="letterAudio" onended="notifyAudioEnd()">
 	<source src="_content/First_step_For_little_mind.Shared/voice/Vowels.mp3" type="audio/mpeg">
 	Your browser does not support the audio element.
 </audio>
@@ -117,8 +168,15 @@
 		}
 	};
 
-	function audioEnded() {
+	window.setDotNetHelper = function (helper) {
+		window.dotNetHelper = helper;
+	};
+
+	function notifyAudioEnd() {
 		window.audioCompleted = true;
+		if (window.dotNetHelper) {
+			window.dotNetHelper.invokeMethodAsync('OnAudioEnded');
+		}
 	}
 
 	function pauseAnimation() {
@@ -134,7 +192,7 @@
 		if (!window.animationTimer && !window.audioCompleted) {
 			window.animationStartTime = new Date();
 			window.animationTimer = setTimeout(function () {
-				dotNetHelper.invokeMethodAsync('TriggerAnimation');
+				window.dotNetHelper.invokeMethodAsync('TriggerAnimation');
 			}, window.remainingAnimationTime);
 			window.animationPaused = false;
 		}
@@ -144,7 +202,10 @@
 @code {
 	private bool isGreenHidden = false;
 	private bool isRedShown = false;
-	private DotNetObjectReference<Vowels> dotNetHelper;
+	private bool isRedHidden = false;
+	private bool isBlueShown = false;
+
+	private DotNetObjectReference<Vowels>? dotNetHelper;
 
 	private List<string> Letters = Enumerable.Range(65, 26)
 		.Select(x => ((char)x).ToString())
@@ -155,8 +216,8 @@
 		if (firstRender)
 		{
 			dotNetHelper = DotNetObjectReference.Create(this);
-			await JS.InvokeVoidAsync("playAudio");
 			await JS.InvokeVoidAsync("setDotNetHelper", dotNetHelper);
+			await JS.InvokeVoidAsync("playAudio");
 			await JS.InvokeVoidAsync("startAnimationTimer");
 		}
 	}
@@ -171,6 +232,18 @@
 		StateHasChanged();
 	}
 
+	[JSInvokable("OnAudioEnded")]
+	public async Task OnAudioEnded()
+	{
+		await Task.Delay(1000); //vowel and consonant cloud show
+		isRedHidden = true;
+		StateHasChanged();
+
+		await Task.Delay(1000);  //Practice div show
+		isBlueShown = true;
+		StateHasChanged();
+	}
+
 	private string GetClass(string letter)
 	{
 		return letter == "Y"
@@ -181,10 +254,63 @@
 	private async Task PlayAudio() => await JS.InvokeVoidAsync("playAudio");
 
 	private async Task PauseAudio() => await JS.InvokeVoidAsync("pauseAudio");
-}
 
-<script>
-	window.setDotNetHelper = function (helper) {
-		window.dotNetHelper = helper;
+	// Game Logic
+	private List<string> AllWords = new()
+	{
+		"APPLE", "ORANGE", "GRAPE", "MANGO", "BANANA", "WATER", "FISH", "CHAIR", "STOOL", "PEACH",
+		"PENCIL", "TABLE", "EAGLE", "BIRD", "LION", "ZEBRA", "UMBRELLA", "EGG", "ANT", "ICE",
+		"OLIVE", "DESK", "BAG", "FROG", "BOTTLE", "CAMEL", "DUCK", "EEL", "FAN", "GOAT",
+		"HOUSE", "INK", "JUG", "KITE", "LEAF", "MOON", "NEST", "OWL", "PIG", "QUEEN",
+		"RAT", "SUN", "TREE", "URANUS", "VAN", "WIND", "XMAS", "YAK", "ZIP", "BULB"
 	};
-</script>
+
+	private List<string> SelectedWords = new();
+	private string? CurrentWord;
+	private int CurrentWordIndex = 0;
+	private string Message = "";
+	private string MessageColor = "black";
+	private bool ShowNextButton = false;
+
+	private HashSet<char> VowelLetters = new() { 'A', 'E', 'I', 'O', 'U' };
+
+	protected override void OnInitialized()
+	{
+		var rnd = new Random();
+		SelectedWords = AllWords.OrderBy(_ => rnd.Next()).Take(10).ToList();
+		LoadNextWord();
+	}
+
+	private void CheckLetter(char letter)
+	{
+		if (VowelLetters.Contains(Char.ToUpper(letter)))
+		{
+			Message = $"✅ Well Done! '{letter}' is a vowel.";
+			MessageColor = "green";
+		}
+		else
+		{
+			Message = $"❌ Wrong! '{letter}' is a consonant.";
+			MessageColor = "red";
+		}
+		ShowNextButton = true;
+	}
+
+	private void LoadNextWord()
+	{
+		if (CurrentWordIndex < SelectedWords.Count)
+		{
+			CurrentWord = SelectedWords[CurrentWordIndex];
+			CurrentWordIndex++;
+			Message = "";
+			ShowNextButton = false;
+		}
+		else
+		{
+			CurrentWord = null;
+			Message = "🎉 Game Over! You completed all the words.";
+			MessageColor = "blue";
+			ShowNextButton = false;
+		}
+	}
+}
