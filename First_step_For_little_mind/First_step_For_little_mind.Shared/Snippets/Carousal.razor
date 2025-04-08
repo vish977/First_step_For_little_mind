@@ -12,9 +12,12 @@
         background-size: 100%;
         background-position: top;
     }
-    #mycanvas {
-        background:blue;
+
+    input[type="color"] {
+        background-color: white;
     }
+
+   
 </style>
 
 <div id="carouselExample" class="carousel slide">
@@ -38,20 +41,23 @@
         </div>
 
         <div class="carousel-item main second">
-            <div class="container-fluid FSLM-Box">
-                <canvas id="myCanvas" width="600" height="400" style="border:1px solid black;"></canvas>
-                
-                <button @onclick="ClearCanvas">Clear</button>
+            <div class="container-fluid FSLM-Box d-flex flex-column align-items-center">
+                <canvas id="myCanvas" width="500" height="400" style="border:1px solid black; max-width: 600px;"></canvas>
 
-                <div>
-                    <label for="colorPicker"><b>Choose Your Color:</b></label>
-                    <input type="color" id="colorPicker" value="#000000" />
+                <div class="row mt-3 w-100 justify-content-center" style="max-width: 600px;">
+                    <div class="col-12 col-md-6 d-flex flex-column align-items-center align-items-md-start mb-2 mb-md-0">
+                        <label for="colorPicker" class="form-label"><b>Choose Your Color:</b></label>
+                        <input type="color" id="colorPicker" class="form-control-color" value="#000000" />
+                    </div>
+
+                    <div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-end">
+                        <button @onclick="ClearCanvas" class="btn btn-primary">Clear</button>
+                    </div>
                 </div>
             </div>
-
-           
-
         </div>
+
+
     </div>
 
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">

@@ -3,77 +3,109 @@
 
 <style>
 	.FSLM-body {
-		
 		height: 100vh;
 		width: 100%;
 		background: url("_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg") no-repeat;
 		background-size: 100vw 100vh;
-		transition: background-image 1s ease-in-out;
 	}
 
-	.row{
-		/* border: 1px solid red; */
-	}
 	.Board {
-		height: 32rem;
+		height: 28rem;
 		width: 62rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		/* border: 1px solid red; */
+		position: relative;
 	}
-	button{
-		border:none;
-		margin:10px;
+
+	button {
+		border: none;
+		margin: 10px;
 	}
+
 	.FSLM-container {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 50px;
-		/* border: 1px solid white; */
-		 color: white; 
+		color: white;
 		font-size: 30px;
 		font-weight: bold;
 	}
 
 	.pe-custom {
-		padding-right:7rem !important; /* Adjust as needed */
+		padding-right: 7rem !important;
 	}
 
+	.green-row {
+		transition: transform 1s ease, opacity 1s ease;
+	}
+
+	.hide-green {
+		transform: scale(0);
+		opacity: 0;
+	}
+
+	.red-div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background: url("_content/First_step_For_little_mind.Shared/Bg/VowelConsonent.png") no-repeat center center;
+		background-size: 75vw 60vh;
+		transform: scale(0);
+		transition: transform 1s ease;
+		z-index: 1;
+	}
+
+	.show-red {
+		transform: scale(1);
+	}
 </style>
 
 <div class="container-fluid FSLM-body">
 	<button @onclick="PlayAudio">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Alternate Text" height="50" />
+		<img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Play" height="50" />
 	</button>
 	<button @onclick="PauseAudio">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Alternate Text" height="50" /></button>
-	<div class="container Board">
+		<img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Pause" height="50" />
+	</button>
 
-		<div class="row">
+	<div class="container Board">
+		<div class="row green-row @(isGreenHidden ? "hide-green" : "")">
 			@foreach (var letter in Letters)
 			{
 				<div class="@GetClass(letter)">
 					<div>@letter</div>
-					
 				</div>
 			}
-			
 		</div>
+		<div class="red-div @(isRedShown ? "show-red" : "")"></div>
 	</div>
 </div>
 
-<audio id="letterAudio">
-	<source src="@($"_content/First_step_For_little_mind.Shared/voice/Vowels.mp3")" type="audio/mpeg">
+<audio id="letterAudio" onended="audioEnded()">
+	<source src="_content/First_step_For_little_mind.Shared/voice/Vowels.mp3" type="audio/mpeg">
 	Your browser does not support the audio element.
 </audio>
 
 <script>
+	window.audioCompleted = false;
+	window.remainingAnimationTime = 25000;
+	window.animationTimer = null;
+	window.animationPaused = false;
+	window.animationStartTime = null;
+
 	window.playAudio = function () {
 		var audio = document.getElementById("letterAudio");
 		if (audio) {
-			audio.play().catch(error => console.log("Audio play failed:", error));
+			if (window.audioCompleted) {
+				location.reload();
+			} else {
+				audio.play().catch(error => console.log("Audio play failed:", error));
+				startAnimationTimer();
+			}
 		}
 	};
 
@@ -81,44 +113,78 @@
 		var audio = document.getElementById("letterAudio");
 		if (audio) {
 			audio.pause();
+			pauseAnimation();
 		}
 	};
 
+	function audioEnded() {
+		window.audioCompleted = true;
+	}
 
+	function pauseAnimation() {
+		if (window.animationTimer) {
+			clearTimeout(window.animationTimer);
+			window.animationTimer = null;
+			window.remainingAnimationTime -= (new Date() - window.animationStartTime);
+			window.animationPaused = true;
+		}
+	}
 
+	function startAnimationTimer() {
+		if (!window.animationTimer && !window.audioCompleted) {
+			window.animationStartTime = new Date();
+			window.animationTimer = setTimeout(function () {
+				dotNetHelper.invokeMethodAsync('TriggerAnimation');
+			}, window.remainingAnimationTime);
+			window.animationPaused = false;
+		}
+	}
 </script>
 
-
 @code {
-	private List<string> Letters = Enumerable.Range(65, 26)
-			.Select(x => ((char)x).ToString())
-			.ToList();
+	private bool isGreenHidden = false;
+	private bool isRedShown = false;
+	private DotNetObjectReference<Vowels> dotNetHelper;
 
-	private string GetClass(string letter)
-	{
-		if (letter == "Y")
-			return "col-6 d-flex justify-content-end pe-custom FSLM-container";
-		else
-			return "col-3 FSLM-container";
-	}
+	private List<string> Letters = Enumerable.Range(65, 26)
+		.Select(x => ((char)x).ToString())
+		.ToList();
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
 		{
+			dotNetHelper = DotNetObjectReference.Create(this);
 			await JS.InvokeVoidAsync("playAudio");
+			await JS.InvokeVoidAsync("setDotNetHelper", dotNetHelper);
+			await JS.InvokeVoidAsync("startAnimationTimer");
 		}
 	}
 
-
-
-	private async Task PlayAudio()
+	[JSInvokable("TriggerAnimation")]
+	public async Task TriggerAnimation()
 	{
-		await JS.InvokeVoidAsync("playAudio");
+		isGreenHidden = true;
+		StateHasChanged();
+		await Task.Delay(1000);
+		isRedShown = true;
+		StateHasChanged();
 	}
 
-	private async Task PauseAudio()
+	private string GetClass(string letter)
 	{
-		await JS.InvokeVoidAsync("pauseAudio");
+		return letter == "Y"
+			? "col-6 d-flex justify-content-end pe-custom FSLM-container"
+			: "col-3 FSLM-container";
 	}
+
+	private async Task PlayAudio() => await JS.InvokeVoidAsync("playAudio");
+
+	private async Task PauseAudio() => await JS.InvokeVoidAsync("pauseAudio");
 }
+
+<script>
+	window.setDotNetHelper = function (helper) {
+		window.dotNetHelper = helper;
+	};
+</script>
