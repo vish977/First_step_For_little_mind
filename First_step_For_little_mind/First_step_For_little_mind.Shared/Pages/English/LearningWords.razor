@@ -1,0 +1,42 @@
+﻿@page "/Learn/{letter}"
+@inject IJSRuntime JS
+@using First_step_For_little_mind.Shared.List;
+
+
+
+<div class="container-fluid">
+	<div class="container">
+		<div class="FSLM-WordImg">
+			<img src="@GetImagePath(word)" alt="Image of @word" width="200" height="200" />
+		</div>
+		<div class="FSLM-Word">@word</div>
+	</div>
+</div>
+@code {
+	[Parameter]
+	public string? letter { get; set; }
+
+	private string word = "";
+
+	protected override void OnParametersSet()
+	{
+		if (letter?.ToLower() == "threeletterword")
+		{
+			word = RequiredList.ThreeLetterWords.FirstOrDefault() ?? "";
+		}
+		else if (letter?.ToLower() == "fourletterword")
+		{
+			word = RequiredList.FourLetterWords.FirstOrDefault() ?? "";
+		}
+		else
+		{
+			word = "Word Not Found";
+		}
+	}
+
+	private string GetImagePath(string word)
+	{
+		return $"images/{word}.png";
+	}
+}
+
