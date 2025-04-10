@@ -1,32 +1,38 @@
 ﻿@page "/"
 @using First_step_For_little_mind.Shared.Services
 @inject IFormFactor FormFactor
+@inject NavigationManager Navigation
 
 <PageTitle>Home</PageTitle>
 
-<div class="maindiv container-fluid text-center">
-    <h1>Welcome To</h1><br />
-    <h1 class="fslm"> First Step For Little Mind</h1><br /><br />
-    <div class="typing-container">
-        <h1 class="typing-text">!!स्वागत आहे !!</h1>
-    </div>
-
-    <NavLink href="/Subject" class="btn btn-primary">Start Learning</NavLink>
-    <div row>
-    </div>
-    <footer class="bg-dark row text-white text-center py-3">
-        <div> 
-            <h7> Contact us</h7> <br />
-            <h7> E-Mail : 000153kids@gmail.com</h7><br />
-            <h7> Call   : +919794366574</h7>
+<div class="container-fluid ">
+    <div class="content maindiv text-center">
+        <h1>Welcome To</h1><br />
+        <h2 class="fslm"> First Steps For Little Minds</h2><br /><br />
+        <div class="typing-container">
+            <h2 class="typing-text">!!स्वागत आहे !!</h2>
         </div>
-        <div class="container-fluid">
-            <p class="mb-0">© 2025 First Step for Little Minds. All rights reserved.</p>
-        </div>
-    </footer>
+        @* <NavLink href="/Subject" class="btn btn-primary">Start Learning</NavLink>  *@
+        <div class="d-flex justify-content-center align-items-center vh-20">
+            <button class="pressed-btn" @onclick="GoToPage">Start Learning</button>
+       </div>
+        <div class="Board">!! विद्यां ददाति विनयं !!</div>
+    </div>
+    <div class="footer">
+        <h7> Contact us</h7> <br />
+        <h7> E-Mail : 000153kids@gmail.com</h7><br />
+        <h7> Call   : +919794366574</h7>
+        <p class="mb-0">© 2025 First Step for Little Minds. All rights reserved.</p>
+    </div>
+     
 </div>
 
 @code {
     private string factor => FormFactor.GetFormFactor();
     private string platform => FormFactor.GetPlatform();
+    
+    void GoToPage()
+    {
+        Navigation.NavigateTo("/Subject");
+    }
 }

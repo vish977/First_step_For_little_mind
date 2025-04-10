@@ -34,4 +34,11 @@ public static class RequiredList
         "Hop", "Hut", "Jaw", "Joy", "Kid", "Lap", "Leg", "Log", "Man", "Mat",
         "Mug", "Nap", "Net", "Nut", "Pet", "Pop", "Rug", "Run", "Sun", "Tip"
     };
+
+    public static List<string> Poems => new()
+    {
+        "TwinkleTwinkle", "RainRain"
+
+    };
+    
 }

@@ -1,0 +1,142 @@
+﻿@page "/Poem/{PoemName}"
+@using Microsoft.JSInterop
+
+<style>
+    .FSLM-body {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #poemVideo {
+        height: 70vh;
+        width: 70vw;
+        border: 1px solid red;
+    }
+
+    .Video-Container {
+        border: 1px solid green;
+        height: 100vh;
+        width: 60vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .PoemTextContainer {
+        border: 1px solid blue;
+        height: 100vh;
+        width: 38vw;
+        overflow-y: auto;
+        padding: 20px;
+        font-size: 20px;
+        font-family: monospace;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .line {
+        display: block;
+        white-space: pre-wrap;
+        font-size: 20px;
+        font-weight: 500;
+        margin: 10px 0;
+    }
+</style>
+
+<div class="container-fluid FSLM-body">
+    <div class="Video-Container">
+        @if (!string.IsNullOrEmpty(PoemName))
+        {
+            <video id="poemVideo" controls autoplay muted>
+                <source src="_content/First_step_For_little_mind.Shared/video/Poem/@(PoemName).mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        }
+        else
+        {
+            <p>No poem selected.</p>
+        }
+    </div>
+
+    <div class="PoemTextContainer" id="poemTextContainer">
+        <!-- Poem lines will be typed here -->
+    </div>
+</div>
+
+<script>
+    window.typePoem = function (lines) {
+        const container = document.getElementById("poemTextContainer");
+        container.innerHTML = "";
+
+        let currentLine = 0;
+
+        function typeLine(lineText, callback) {
+            const div = document.createElement("div");
+            div.className = "line";
+            container.appendChild(div);
+
+            let index = 0;
+            let interval = setInterval(() => {
+                if (index < lineText.length) {
+                    div.textContent += lineText.charAt(index);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    callback();
+                }
+            }, 50);
+        }
+
+        function startTypingLines() {
+            if (currentLine < lines.length) {
+                typeLine(lines[currentLine], function () {
+                    currentLine++;
+                    setTimeout(startTypingLines, 500); // delay before next line
+                });
+            }
+        }
+
+        startTypingLines(); // Start with the first line
+    };
+</script>
+
+
+@code {
+    [Parameter]
+    public string? PoemName { get; set; }
+
+    [Inject]
+    public IJSRuntime JS { get; set; } = default!;
+
+    private Dictionary<string, string[]> poemData = new()
+        {
+            ["TwinkleTwinkle"] = new[]
+        {
+            "Twinkle, twinkle, little star,",
+            "How I wonder what you are!",
+            "Up above the world so high,",
+            "Like a diamond in the sky."
+    },
+            ["BaaBaa"] = new[]
+        {
+            "Baa, baa, black sheep,",
+            "Have you any wool?",
+            "Yes sir, yes sir,",
+            "Three bags full."
+    }
+        };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrEmpty(PoemName))
+        {
+            if (poemData.TryGetValue(PoemName, out var lines))
+            {
+                await JS.InvokeVoidAsync("typePoem", lines);
+            }
+        }
+    }
+}
+
