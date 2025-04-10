@@ -2,315 +2,262 @@
 @inject IJSRuntime JS
 
 <style>
-	.FSLM-body {
-		height: 100vh;
-		width: 100%;
-		background: url("_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg") no-repeat;
-		background-size: 100vw 100vh;
-	}
+    .screen {
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        background: url("_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg") no-repeat;
+        background-size: 100vw 100vh;
+    }
 
-	.Board {
-		height: 28rem;
-		width: 62rem;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-	}
+    .Board {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 57rem;
+        height: 22rem;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        transition: all 1s ease;
+        text-align: center;
+    }
 
-	button {
-		border: none;
-		margin: 10px;
-	}
+    .one {
+        z-index: 3;
+        flex-direction: column;
+        background: url("_content/First_step_For_little_mind.Shared/Bg/GreenBoard.jpg") no-repeat center;
+        background-size: 100vw 100vh;
+    }
 
-	.FSLM-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 50px;
-		color: white;
-		font-size: 30px;
-		font-weight: bold;
-	}
+    .Two {
+        background: url("_content/First_step_For_little_mind.Shared/Bg/VowelConsonent.png") no-repeat center;
+        background-size: 74vw 59vh;
+        z-index: 2;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 1s ease;
+    }
 
-	.pe-custom {
-		padding-right: 7rem !important;
-	}
+    .Three {
+        background: url("_content/First_step_For_little_mind.Shared/Bg/GreenBoard.jpg") no-repeat center;
+        background-size: 100vw 100vh;
+        z-index: 1;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 1s ease;
+    }
 
-	.green-row {
-		transition: transform 1s ease, opacity 1s ease;
-	}
+    .visible {
+        opacity: 1 !important;
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
 
-	.hide-green {
-		transform: scale(0);
-		opacity: 0;
-	}
+    .hidden {
+        opacity: 0 !important;
+        transform: translate(-50%, -50%) scale(0) !important;
+    }
 
-	.red-div, .blue-div {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 100%;
-		transform: scale(0);
-		transition: transform 1s ease;
-		z-index: 1;
-	}
+    .alphabet-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        max-width: 35rem;
+        margin-top: 1rem;
+    }
 
-	.red-div {
-		background: url("_content/First_step_For_little_mind.Shared/Bg/VowelConsonent.png") no-repeat center center;
-		background-size: 75vw 60vh;
-	}
+        .alphabet-grid span {
+            width: 3rem;
+            text-align: center;
+        }
 
-	.blue-div {
-		background: url("_content/First_step_For_little_mind.Shared/Bg/GreenBoard.jpg") no-repeat center center;
-		background-size: 75vw 60vh;
-	}
-
-	.show-red {
-		transform: scale(1);
-	}
-
-	.hide-red {
-		transform: scale(0);
-	}
-
-	.show-blue {
-		transform: scale(1);
-	}
+    .vowel-row {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 2rem;
+        justify-content: center;
+    }
 </style>
 
-<div class="container-fluid FSLM-body">
-	<button @onclick="PlayAudio">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Play" height="50" />
-	</button>
-	<button @onclick="PauseAudio">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Pause" height="50" />
-	</button>
+<div class="screen">
+    <button @onclick="TogglePlay">
+        <img src="_content/First_step_For_little_mind.Shared/Bg/play.png" alt="Play" height="50" />
+    </button>
+    <button @onclick="PauseAudio">
+        <img src="_content/First_step_For_little_mind.Shared/Bg/pause.png" alt="Pause" height="50" />
+    </button>
 
-	<div class="container Board">
-		<div class="row green-row @(isGreenHidden ? "hide-green" : "")">
-			@foreach (var letter in Letters)
-			{
-				<div class="@GetClass(letter)">
-					<div>@letter</div>
-				</div>
-			}
-		</div>
+    <div class="Board one" style="@box1Style">
+        Vowels and Consonents
+        <div>
+            @if (showAZ)
+            {
+                <div class="alphabet-grid">
+                    @foreach (var letter in alphabets)
+                    {
+                        <span>@letter</span>
+                    }
+                </div>
+            }
 
-		<div class="red-div @(isRedShown ? (isRedHidden ? "hide-red" : "show-red") : "")"></div>
-		<div class="@($"blue-div {(isBlueShown ? "show-blue" : "")} flex flex-col items-center justify-center text-center")">
+            @if (showVowels)
+            {
+                <div class="vowel-row">
+                    @foreach (var v in vowelsToShow)
+                    {
+                        <span>@v</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
 
-			<div class="flex justify-center mt-8 flex-wrap gap-4">
-				@if (CurrentWord != null)
-				{
-					foreach (char letter in CurrentWord)
-					{
-						<button class="text-2xl px-4 py-2 rounded bg-gray-200 hover:bg-blue-200 transition"
-								@onclick="() => CheckLetter(letter)">
-							@letter
-						</button>
-					}
-				}
-			</div>
+    <div class="Board Two @(box2Visible ? "visible" : "hidden")">
+        Box 2
+    </div>
 
-			<p class="mt-6 text-xl font-semibold"
-			   style="@(string.IsNullOrWhiteSpace(MessageColor) ? null : $"color:{MessageColor}")">
-				@Message
-			</p>
-
-			<div class="mt-4">
-				@if (ShowNextButton)
-				{
-					<button class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-							@onclick="LoadNextWord">
-						Next Word
-					</button>
-				}
-			</div>
-		</div>
-
-
-		
-		
-	</div>
+    <div class="Board Three @(box3Visible ? "visible" : "hidden")">
+        Box 3
+    </div>
 </div>
 
-<audio id="letterAudio" onended="notifyAudioEnd()">
-	<source src="_content/First_step_For_little_mind.Shared/voice/Vowels.mp3" type="audio/mpeg">
-	Your browser does not support the audio element.
+<audio id="letterAudio" autoplay onended="notifyAudioEnd()">
+    <source src="_content/First_step_For_little_mind.Shared/voice/Vowels.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
 </audio>
 
 <script>
-	window.audioCompleted = false;
-	window.remainingAnimationTime = 25000;
-	window.animationTimer = null;
-	window.animationPaused = false;
-	window.animationStartTime = null;
+    let animationPaused = false;
 
-	window.playAudio = function () {
-		var audio = document.getElementById("letterAudio");
-		if (audio) {
-			if (window.audioCompleted) {
-				location.reload();
-			} else {
-				audio.play().catch(error => console.log("Audio play failed:", error));
-				startAnimationTimer();
-			}
-		}
-	};
+    window.playAudio = function () {
+        let audio = document.getElementById("letterAudio");
+        if (audio.paused) {
+            audio.play();
+        } else if (window.audioEnded) {
+            location.reload();
+        }
+        window.resumeAnimation();
+    };
 
-	window.pauseAudio = function () {
-		var audio = document.getElementById("letterAudio");
-		if (audio) {
-			audio.pause();
-			pauseAnimation();
-		}
-	};
+    window.pauseAudio = function () {
+        let audio = document.getElementById("letterAudio");
+        if (!audio.paused) {
+            audio.pause();
+        }
+        window.pauseAnimation();
+    };
 
-	window.setDotNetHelper = function (helper) {
-		window.dotNetHelper = helper;
-	};
+    window.pauseAnimation = function () {
+        animationPaused = true;
+    };
 
-	function notifyAudioEnd() {
-		window.audioCompleted = true;
-		if (window.dotNetHelper) {
-			window.dotNetHelper.invokeMethodAsync('OnAudioEnded');
-		}
-	}
-
-	function pauseAnimation() {
-		if (window.animationTimer) {
-			clearTimeout(window.animationTimer);
-			window.animationTimer = null;
-			window.remainingAnimationTime -= (new Date() - window.animationStartTime);
-			window.animationPaused = true;
-		}
-	}
-
-	function startAnimationTimer() {
-		if (!window.animationTimer && !window.audioCompleted) {
-			window.animationStartTime = new Date();
-			window.animationTimer = setTimeout(function () {
-				window.dotNetHelper.invokeMethodAsync('TriggerAnimation');
-			}, window.remainingAnimationTime);
-			window.animationPaused = false;
-		}
-	}
+    window.resumeAnimation = function () {
+        animationPaused = false;
+    };
 </script>
 
 @code {
-	private bool isGreenHidden = false;
-	private bool isRedShown = false;
-	private bool isRedHidden = false;
-	private bool isBlueShown = false;
+    private bool showAZ = false;
+    private bool showVowels = false;
+    private List<string> alphabets = new();
+    private List<string> vowelsToShow = new();
+    private string[] vowels = { "A", "E", "I", "O", "U" };
 
-	private DotNetObjectReference<Vowels>? dotNetHelper;
+    private string box1Style = "";
+    private bool box2Visible = false;
+    private bool box3Visible = false;
 
-	private List<string> Letters = Enumerable.Range(65, 26)
-		.Select(x => ((char)x).ToString())
-		.ToList();
+    private bool isPaused = false;
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			dotNetHelper = DotNetObjectReference.Create(this);
-			await JS.InvokeVoidAsync("setDotNetHelper", dotNetHelper);
-			await JS.InvokeVoidAsync("playAudio");
-			await JS.InvokeVoidAsync("startAnimationTimer");
-		}
-	}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _ = RunAnimationSequence();
+        }
+    }
 
-	[JSInvokable("TriggerAnimation")]
-	public async Task TriggerAnimation()
-	{
-		isGreenHidden = true;
-		StateHasChanged();
-		await Task.Delay(1000);
-		isRedShown = true;
-		StateHasChanged();
-	}
+    private async Task RunAnimationSequence()
+    {
+        await WaitIfPaused(5000);
 
-	[JSInvokable("OnAudioEnded")]
-	public async Task OnAudioEnded()
-	{
-		await Task.Delay(1000); //vowel and consonant cloud show
-		isRedHidden = true;
-		StateHasChanged();
+        showAZ = true;
+        GenerateAlphabetList();
+        StateHasChanged();
+        await WaitIfPaused(7000);
 
-		await Task.Delay(1000);  //Practice div show
-		isBlueShown = true;
-		StateHasChanged();
-	}
+        showAZ = false;
+        StateHasChanged();
+        await WaitIfPaused(1000);
 
-	private string GetClass(string letter)
-	{
-		return letter == "Y"
-			? "col-6 d-flex justify-content-end pe-custom FSLM-container"
-			: "col-3 FSLM-container";
-	}
+        showVowels = true;
+        vowelsToShow.Clear();
+        foreach (var v in vowels)
+        {
+            vowelsToShow.Add(v);
+            StateHasChanged();
+            await WaitIfPaused(2000);
+        }
 
-	private async Task PlayAudio() => await JS.InvokeVoidAsync("playAudio");
+        await WaitIfPaused(2000);
 
-	private async Task PauseAudio() => await JS.InvokeVoidAsync("pauseAudio");
+        box1Style = "opacity: 0; transform: translate(-50%, -50%) scale(0); transition: all 1s ease;";
+        StateHasChanged();
+        await WaitIfPaused(998);
 
-	// Game Logic
-	private List<string> AllWords = new()
-	{
-		"APPLE", "ORANGE", "GRAPE", "MANGO", "BANANA", "WATER", "FISH", "CHAIR", "STOOL", "PEACH",
-		"PENCIL", "TABLE", "EAGLE", "BIRD", "LION", "ZEBRA", "UMBRELLA", "EGG", "ANT", "ICE",
-		"OLIVE", "DESK", "BAG", "FROG", "BOTTLE", "CAMEL", "DUCK", "EEL", "FAN", "GOAT",
-		"HOUSE", "INK", "JUG", "KITE", "LEAF", "MOON", "NEST", "OWL", "PIG", "QUEEN",
-		"RAT", "SUN", "TREE", "URANUS", "VAN", "WIND", "XMAS", "YAK", "ZIP", "BULB"
-	};
+        box2Visible = true;
+        StateHasChanged();
+        await WaitIfPaused(6000);
 
-	private List<string> SelectedWords = new();
-	private string? CurrentWord;
-	private int CurrentWordIndex = 0;
-	private string Message = "";
-	private string MessageColor = "black";
-	private bool ShowNextButton = false;
+        box2Visible = false;
+        StateHasChanged();
+        await WaitIfPaused(1000);
 
-	private HashSet<char> VowelLetters = new() { 'A', 'E', 'I', 'O', 'U' };
+        box3Visible = true;
+        StateHasChanged();
+    }
 
-	protected override void OnInitialized()
-	{
-		var rnd = new Random();
-		SelectedWords = AllWords.OrderBy(_ => rnd.Next()).Take(10).ToList();
-		LoadNextWord();
-	}
+    private async Task WaitIfPaused(int ms)
+    {
+        int interval = 100;
+        int waited = 0;
+        while (waited < ms)
+        {
+            if (!isPaused)
+            {
+                await Task.Delay(interval);
+                waited += interval;
+            }
+            else
+            {
+                await Task.Delay(100);
+            }
+        }
+    }
 
-	private void CheckLetter(char letter)
-	{
-		if (VowelLetters.Contains(Char.ToUpper(letter)))
-		{
-			Message = $"✅ Well Done! '{letter}' is a vowel.";
-			MessageColor = "green";
-		}
-		else
-		{
-			Message = $"❌ Wrong! '{letter}' is a consonant.";
-			MessageColor = "red";
-		}
-		ShowNextButton = true;
-	}
+    private void GenerateAlphabetList()
+    {
+        alphabets = Enumerable.Range('A', 26).Select(c => ((char)c).ToString()).ToList();
+    }
 
-	private void LoadNextWord()
-	{
-		if (CurrentWordIndex < SelectedWords.Count)
-		{
-			CurrentWord = SelectedWords[CurrentWordIndex];
-			CurrentWordIndex++;
-			Message = "";
-			ShowNextButton = false;
-		}
-		else
-		{
-			CurrentWord = null;
-			Message = "🎉 Game Over! You completed all the words.";
-			MessageColor = "blue";
-			ShowNextButton = false;
-		}
-	}
+    private async Task TogglePlay()
+    {
+        isPaused = false;
+        await JS.InvokeVoidAsync("playAudio");
+    }
+
+    private async Task PauseAudio()
+    {
+        isPaused = true;
+        await JS.InvokeVoidAsync("pauseAudio");
+    }
 }
+
+
