@@ -4,33 +4,66 @@
 
 
 
+
 <div class="container-fluid">
-	<div class="container">
-		<div class="FSLM-WordImg">
-			<img src="@GetImagePath(word)" alt="Image of @word" width="200" height="200" />
-		</div>
-		<div class="FSLM-Word">@word</div>
+	<div class="container text-center">
+		@if (currentIndex < selectedWords.Count)
+		{
+			<div class="FSLM-WordImg">
+				<img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" width="200" height="200" />
+			</div>
+			<div class="FSLM-Word">
+				@foreach (var (ch, index) in selectedWords[currentIndex].Select((c, i) => (c, i)))
+				{
+					<span class="color-@(@index % 7)">@ch</span>
+				}
+			</div>
+
+			<button class="btn btn-primary mt-3" @onclick="ShowNextWord">Next</button>
+		}
+		else
+		{
+			<div class="FSLM-Word">Great job! You've learned all the words.</div>
+		}
 	</div>
 </div>
+
 @code {
 	[Parameter]
 	public string? letter { get; set; }
 
-	private string word = "";
+	private List<string> selectedWords = new();
+	private int currentIndex = 0;
 
 	protected override void OnParametersSet()
 	{
+		List<string> sourceList = new();
+
 		if (letter?.ToLower() == "threeletterword")
 		{
-			word = RequiredList.ThreeLetterWords.FirstOrDefault() ?? "";
+			sourceList = RequiredList.ThreeLetterWords;
 		}
 		else if (letter?.ToLower() == "fourletterword")
 		{
-			word = RequiredList.FourLetterWords.FirstOrDefault() ?? "";
+			sourceList = RequiredList.FourLetterWords;
+		}
+
+		if (sourceList.Count > 0)
+		{
+			selectedWords = sourceList.OrderBy(x => Guid.NewGuid()).Take(10).ToList(); // Randomly pick 10
+			currentIndex = 0;
 		}
 		else
 		{
-			word = "Word Not Found";
+			selectedWords = new() { "Word Not Found" };
+		}
+	}
+
+	private void ShowNextWord()
+	{
+		if (currentIndex < selectedWords.Count - 1)
+		{
+			currentIndex++;
 		}
 	}
 
@@ -39,4 +72,3 @@
 		return $"images/{word}.png";
 	}
 }
-
