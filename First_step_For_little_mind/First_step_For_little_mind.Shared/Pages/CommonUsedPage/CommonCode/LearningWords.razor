@@ -3,14 +3,12 @@
 @using First_step_For_little_mind.Shared.List;
 
 
-
-
 <div class="container-fluid">
 	<div class="container text-center">
 		@if (currentIndex < selectedWords.Count)
 		{
 			<div class="FSLM-WordImg">
-				<img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" width="200" height="200" />
+				<img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" />
 			</div>
 			<div class="FSLM-Word">
 				@foreach (var (ch, index) in selectedWords[currentIndex].Select((c, i) => (c, i)))
@@ -69,6 +67,6 @@
 
 	private string GetImagePath(string word)
 	{
-		return $"images/{word}.png";
+		return $"_content/First_step_For_little_mind.shared/WordsLearning/{word}.jpg";
 	}
 }

@@ -48,59 +48,21 @@
     }
 }
 .FSLM-Word {
-    position:fixed;
-    bottom:50px;
-    margin-left:1rem;
-
-    display:flex;
-    flex-direction:row;
-    justify-content:space-between
+    position: fixed;
+    bottom:5px;
+    left:3rem;
+    width: 100vw;
+/*    max-width: 800px;*/
+    height: 15rem;
+/*    border: 2px solid #000;*/
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+/*    padding: 15px;*/
 }
-
-.box:nth-child(1) {
-    animation-delay: 2.4s;
-}
-
-.box:nth-child(2) {
-    animation-delay: 2.7s;
-}
-
-.box:nth-child(3) {
-    animation-delay: 3.3s;
-}
-
-.box:nth-child(4) {
-    animation-delay: 3.7s;
-}
-
-@keyframes enter {
-    from {
-        transform: translateX(-100vw);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-
-
-h4{
-    text-align:center;
-    color:;
-/*    padding-top:4px;*/
-}
-
-.gradient-text {
-    font-size: 20px;
-    font-weight: bold;
-    background: linear-gradient(to right, yellow, orange, red, pink, blue);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 
 .canvas {
  border:1px solid black;
@@ -108,7 +70,7 @@ h4{
  width:40%;
 }
 .FSLM-Box {
-/*    border: 1px solid red;*/
+
     height: 100vh;
     width: 100%;
     display: flex;
@@ -120,4 +82,38 @@ h4{
 
 #Tracing {
     background-color:blue;
+}
+
+.red-div {
+    width: 15rem;
+    height: 14rem;
+    background-size: 18vw 30vh;
+    background-repeat: no-repeat;
+    background-position: center;
+/*    border: 1px solid red;*/
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    transform: scale(0);
+    transition: transform 2s ease;
+    flex-shrink: 0;
+    padding-bottom: 5px;
+    text-shadow: 0 0 4px #000;
+}
+
+.red-div.show {
+    transform: scale(1);
+}
+
+.container.FSLM-Word {
+    display: flex;
+    gap: 10px;
+}
+
+.container.FSLM-Word span {
+    font-size: 20px;
+    color:white ;
+    text-align: center;
 }

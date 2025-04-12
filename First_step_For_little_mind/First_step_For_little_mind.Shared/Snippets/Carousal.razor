@@ -25,16 +25,11 @@
         <div class="carousel-item main first active">
             <div class="resize-div" id="resizeDiv"></div>
             <div class="container FSLM-Word">
-                @foreach (var item in items)
+                @foreach (var box in Boxes)
                 {
-                    <div class="card box">
-                        <img src="@($"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg")"
-                             alt="@item"
-                             class="@(item == "Astronout" ? "astronout-img" : "")"
-                             style="width:100%" />
-                        <div class="container">
-                            <h4 class="gradient-text"><b>@item</b></h4>
-                        </div>
+                    <div class="red-div @(box.IsVisible ? "show" : "")" style="background-image: url('@box.ImagePath')">
+                     <span style="margin-top: 5px; font-weight: bold; color: black;">@box.Text
+                     </span>
                     </div>
                 }
             </div>
@@ -84,11 +79,11 @@
 
 
 @code {
-    string[] items = Array.Empty<string>();
+    private List<BoxModel> Boxes = new();
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        items = Letter?.ToUpper() switch
+        var items = Letter?.ToUpper() switch
         {
             "A" => new string[] { "Apple", "Aeroplane", "Ant", "Astronout" },
             "B" => new string[] { "Bat", "Ball", "Boy", "Bag" },
@@ -118,7 +113,29 @@
             "Z" => new string[] { "Zebra", "Zip", "Zoo", "Zero" },
             _ => Array.Empty<string>()
         };
+
+        Boxes = items.Select(item => new BoxModel
+            {
+                Text = item,
+                ImagePath = $"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg"
+            }).ToList();
+
+        // Animate one by one
+        for (int i = 0; i < Boxes.Count; i++)
+        {
+            await Task.Delay(2000);
+            Boxes[i].IsVisible = true;
+            StateHasChanged();
+        }
     }
+
+    private class BoxModel
+    {
+        public string Text { get; set; } = "";
+        public string ImagePath { get; set; } = "";
+        public bool IsVisible { get; set; }
+    }
+    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -126,7 +143,7 @@
         {
             try
             {
-                await JS.InvokeVoidAsync("initializeCanvas", Letter); // Pass the letter here
+                await JS.InvokeVoidAsync("initializeCanvas", Letter);
             }
             catch (TaskCanceledException)
             {

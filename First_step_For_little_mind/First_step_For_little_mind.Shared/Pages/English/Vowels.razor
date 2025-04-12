@@ -51,6 +51,9 @@
         opacity: 0;
         transform: scale(0);
         transition: all 1s ease;
+        display:flex;
+        flex-direction:column;
+        
     }
 
     .visible {
@@ -72,10 +75,10 @@
         margin-top: 1rem;
     }
 
-        .alphabet-grid span {
-            width: 3rem;
-            text-align: center;
-        }
+    .alphabet-grid span {
+        width: 3rem;
+        text-align: center;
+    }
 
     .vowel-row {
         display: flex;
@@ -120,11 +123,43 @@
     </div>
 
     <div class="Board Two @(box2Visible ? "visible" : "hidden")">
-        Box 2
+       
     </div>
 
     <div class="Board Three @(box3Visible ? "visible" : "hidden")">
-        Box 3
+        <h1 class="text-center text-2xl font-bold text-gray-800">Choose the vowels</h1>
+        <div class="flex justify-center mt-8 flex-wrap gap-4">
+        @if (CurrentWord != null)
+        {
+            foreach (char letter in CurrentWord)
+            {
+                <button class="text-2xl px-4 py-2 rounded bg-gray-200 hover:bg-blue-200 transition"
+                        disabled="@IsLocked"
+                        @onclick="() => CheckLetter(letter)">
+                    @letter
+                </button>
+            }
+        }
+    </div>
+
+    <p class="text-center mt-6 text-xl font-semibold" style="color:@(string.IsNullOrEmpty(MessageColor) ? "black" : MessageColor)">
+        @Message
+    </p>
+
+    <div class="text-center mt-4">
+        <p class="text-lg font-medium">✅ Correct: @CorrectCount | ❌ Wrong: @WrongCount</p>
+    </div>
+
+    @if (CurrentWord == null)
+    {
+        <div class="text-center mt-6">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700"
+                    @onclick="RestartGame">
+                🔁 Play Again
+            </button>
+        </div>
+    }
+
     </div>
 </div>
 
@@ -257,6 +292,86 @@
     {
         isPaused = true;
         await JS.InvokeVoidAsync("pauseAudio");
+    }
+
+
+    private List<string> AllWords = new()
+    {
+        "APPLE", "ORANGE", "GRAPE", "MANGO", "BANANA", "WATER", "FISH", "CHAIR", "STOOL", "PEACH",
+        "PENCIL", "TABLE", "EAGLE", "BIRD", "LION", "ZEBRA", "UMBRELLA", "EGG", "ANT", "ICE",
+        "OLIVE", "DESK", "BAG", "FROG", "BOTTLE", "CAMEL", "DUCK", "EEL", "FAN", "GOAT",
+        "HOUSE", "INK", "JUG", "KITE", "LEAF", "MOON", "NEST", "OWL", "PIG", "QUEEN",
+        "RAT", "SUN", "TREE", "URANUS", "VAN", "WIND", "XMAS", "YAK", "ZIP", "BULB"
+    };
+
+    private List<string> SelectedWords = new();
+    private string? CurrentWord;
+    private int CurrentWordIndex = 0;
+    private string Message = "";
+    private string MessageColor = "black";
+    private HashSet<char> vowelSet = new() { 'A', 'E', 'I', 'O', 'U' };
+    private bool IsLocked = false;
+    private int CorrectCount = 0;
+    private int WrongCount = 0;
+
+    protected override void OnInitialized()
+    {
+        RestartGame();
+    }
+
+    private async Task CheckLetter(char letter)
+    {
+        if (IsLocked || string.IsNullOrEmpty(CurrentWord)) return;
+
+        IsLocked = true;
+
+        if (vowelSet.Contains(Char.ToUpper(letter)))
+        {
+            Message = $"✅ Well Done! '{letter}' is a vowel.";
+            MessageColor = "green";
+            CorrectCount++;
+        }
+        else
+        {
+            Message = $"❌ Wrong! '{letter}' is a consonant.";
+            MessageColor = "red";
+            WrongCount++;
+        }
+
+        StateHasChanged(); 
+
+        await Task.Delay(2000);
+        LoadNextWord();
+    }
+
+    private void LoadNextWord()
+    {
+        if (CurrentWordIndex < SelectedWords.Count)
+        {
+            CurrentWord = SelectedWords[CurrentWordIndex];
+            CurrentWordIndex++;
+            Message = "";
+            MessageColor = "black";
+            IsLocked = false;
+        }
+        else
+        {
+            CurrentWord = null;
+            Message = "🎉 Game Over! You completed all the words.";
+            MessageColor = "blue";
+            IsLocked = true;
+        }
+    }
+
+    private void RestartGame()
+    {
+        var rnd = new Random();
+        SelectedWords = AllWords.OrderBy(_ => rnd.Next()).Take(10).ToList();
+        CurrentWordIndex = 0;
+        CorrectCount = 0;
+        WrongCount = 0;
+        IsLocked = false;
+        LoadNextWord();
     }
 }
 

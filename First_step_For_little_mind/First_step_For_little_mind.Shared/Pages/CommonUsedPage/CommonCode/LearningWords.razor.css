@@ -1,27 +1,86 @@
-﻿.container-fluid {
-    /* border: 1px solid red; */
-    height: 90vh;
-    width: 90vw;
+﻿.FSLM-WordImg {
+    height: 50vh;
+    width: 50vw;
+    margin-left:15rem;
+    margin-top:2rem;
+    padding:2rem;
+
 }
 
 .container {
-    /* border: 1px solid green; */
-    height: 90vh;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-}
-
-.FSLM-WordImg {
-    /* border: 1px solid yellow; */
-    margin-bottom: 1rem;
+    flex-direction: column;
 }
 
 .FSLM-Word {
-    /* border: 1px solid black; */
-    font-size: 2rem;
-    padding: 1rem;
+    font-size: 4rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    .FSLM-Word span {
+        display: inline-block;
+        animation: zoom-in-out 0.6s ease-in-out;
+    }
+
+@keyframes zoom-in-out {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.5);
+    }
+
+    60% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+Random color list
+.color-0 {
+    color: #e74c3c;
+}
+
+.color-1 {
+    color: #f39c12;
+}
+
+.color-2 {
+    color: #27ae60;
+}
+
+.color-3 {
+    color: #3498db;
+}
+
+.color-4 {
+    color: #9b59b6;
+}
+
+.color-5 {
+    color: #1abc9c;
+}
+
+.color-6 {
+    color: #e67e22;
+}
+
+Bootstrap style + press effect
+.btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px #666;
+}
+
+img {
+    height:15rem;
+    width:15rem;
 }
