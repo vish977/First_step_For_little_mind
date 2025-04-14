@@ -74,9 +74,9 @@
     color:red;
     height:80px;
     width:80px;
-    position:fixed;
-    bottom:13rem;
-    left:20.4rem;
+    position:relative;
+    bottom:0rem;
+    left:20rem;
 }
 
 .pressed-btn {

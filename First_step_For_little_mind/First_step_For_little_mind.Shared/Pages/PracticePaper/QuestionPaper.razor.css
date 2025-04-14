@@ -1,4 +1,27 @@
-﻿.container {
+﻿.ps-fill {
+    margin-top: 30px;
+}
+
+.letter-box {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: 2px solid #aaa;
+}
+
+.static-letter {
+    font-weight: bold;
+    font-size: 20px;
+    padding: 8px;
+}
+
+.container-fluid {
+    padding: 2rem;
+    margin: 2px;
+}
+
+.container {
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -26,6 +49,7 @@
     }
 
 canvas {
+    /* border:1px solid red; */
     position: absolute;
     top: 0;
     left: 0;
@@ -41,4 +65,67 @@ canvas {
     cursor: pointer;
     font-size: 16px;
     margin-right: 10px;
+}
+
+
+.question {
+    margin-bottom: 20px;
+}
+
+.letters {
+    display: flex;
+    gap: 5px;
+}
+
+.letter-box {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.static-letter {
+    font-weight: bold;
+    font-size: 18px;
+    padding: 9px;
+    min-width: 40px;
+    text-align: center;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+    .submit-button:hover {
+        background: #0056b3;
+    }
+
+#columnB {
+    padding-right: 15rem;
+}
+
+
+.question {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.blank-space {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
 }

@@ -1,8 +1,7 @@
 ﻿window.redrawConnections = (connections) => {
     const canvas = document.getElementById("connectorCanvas");
     const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before redrawing
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     connections.forEach(conn => {
         drawLine(conn.A, conn.B);
     });
@@ -16,10 +15,8 @@ window.highlightItem = (id) => {
 window.drawLineBetweenElements = (idA, idB) => {
     const itemA = document.querySelector(`[data-id="${idA}"]`);
     const itemB = document.querySelector(`[data-id="${idB}"]`);
-
     const rectA = itemA.getBoundingClientRect();
     const rectB = itemB.getBoundingClientRect();
-
     const canvas = document.getElementById("connectorCanvas");
     const ctx = canvas.getContext("2d");
 

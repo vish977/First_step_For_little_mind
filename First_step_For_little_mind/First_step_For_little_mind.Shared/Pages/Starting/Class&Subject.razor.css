@@ -38,3 +38,18 @@
     justify-content:center;
 }
 
+.box {
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-top: 10px;
+    color: Blue;
+    height: 120px;
+    width: 95px;
+    position: relative;
+    bottom: 43px;
+    left: 19rem;
+}
+a{
+    text-decoration:none;
+}

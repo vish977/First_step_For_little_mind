@@ -1,180 +1,76 @@
 ﻿@page "/practice_Sheet"
 @using Microsoft.JSInterop
 
-<style>
-    .ps-fill {
-        /* border: 1px solid black; */
-    }
-
-    .container-fluid {
-        padding:2rem;
-        /* border: 1px solid green; */
-        margin: 2px;
-    }
-
-    .container {
-        /* border: 1px solid red; */
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-        margin-top: 40px;
-    }
-
-    .column {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .item {
-        padding: 10px;
-        border: 2px solid #333;
-        border-radius: 10px;
-        text-align: center;
-        cursor: pointer;
-        background-color: #f9f9f9;
-    }
-
-        .item img {
-            width: 100px;
-            height: 100px;
-        }
-
-    canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 0;
-        pointer-events: none;
-    }
-
-    .btn {
-        margin-top: 30px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-right: 10px;
-    }
-
-
-    .question {
-        margin-bottom: 20px;
-    }
-
-    .letters {
-        display: flex;
-        gap: 5px;
-    }
-
-    .letter-box {
-        width: 40px;
-        height: 40px;
-        text-align: center;
-        font-size: 18px;
-        border: 2px solid #ccc;
-        border-radius: 5px;
-        background-color: #fff;
-    }
-
-    .static-letter {
-        font-weight: bold;
-        font-size: 18px;
-        padding: 9px;
-        min-width: 40px;
-        text-align: center;
-        background-color: #f0f0f0;
-        border-radius: 5px;
-    }
-
-    .submit-button {
-        padding: 10px 20px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 15px;
-    }
-
-    .submit-button:hover {
-        background: #0056b3;
-    }
-
-   
-
-    .question {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .blank-space {
-        padding: 5px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 200px;
-    }
-
-  
-</style>
 
 <div class="container-fluid">
     <h1 style="text-align: center;">First Steps For Little Minds</h1>
-    <h3 style="text-align: center;">Practice Sheet</h3>
+    <h3 style="text-align: center;" class="mb-5">Practice Sheet</h3>
 
     <!-- IMAGE QUESTIONS -->
-    <div class="ps-image">
-        <h5 style="text-align: center;">Question-1: Write the name of images.</h5>
-        @foreach (var item in SelectedItems)
-        {
-            <div class="question mb-3" @key="item.Id">
-                <div class="image-container">
-                    <img src="@item.ImagePath" alt="@item.Answer" width="150" />
+    <div class="ps-image text-center">
+        <h5 style="text-align: center;" class="mb-4 mt-3">Question-1: Write the name of image</h5>
+        <div class="row justify-content-center mb-2">
+            @foreach (var item in SelectedItems)
+            {
+                <div class="col-auto">
+                    <img src="@item.ImagePath" alt="@item.Answer" width="120" height="120" />
                 </div>
-                <input class="blank-space mt-1" type="text" placeholder="Type the name of the object"
-                       @bind="item.UserAnswer" />
-            </div>
-        }
+            }
+        </div>
+
+        <div class="row justify-content-center">
+            @foreach (var item in SelectedItems)
+            {
+                <div class="col-auto">
+                    <input class="form-control text-center" type="text" placeholder="Name"
+                           style="width: 120px;"
+                           @bind="item.UserAnswer" />
+                </div>
+            }
+        </div>
     </div>
 
+
     <!-- FILL IN THE BLANKS -->
-    <div class="ps-fill">
-        <h5 style="text-align: center;">Question-2: Fill in the Blanks</h5>
-        @foreach (var question in Questions)
-        {
-            <div class="question mb-4">
-                <div class="mb-1 font-semibold text-gray-700">@question.Id.</div>
-                <div class="letters flex gap-2">
-                    @foreach (var item in question.Letters)
-                    {
-                        if (item.IsStatic)
-                        {
-                            <span class="static-letter">@item.Char</span>
-                        }
-                        else
-                        {
-                            <input maxlength="1" class="letter-box"
-                                   @bind="item.InputChar"
-                                   @bind:event="oninput" />
-                        }
-                    }
-                </div>
-            </div>
-        }
+    <div>
+        <h5 style="text-align: center;" class="mb-4 mt-4">Question-2: Fill in the Blanks</h5>
     </div>
+    <div class="ps-fill d-flex justify-content-center">
+        <div>
+            @foreach (var question in Questions)
+            {
+                <div class="question mb-4 text-center">
+                    <div class="mb-1 font-semibold text-gray-700">@question.Id.</div>
+                    <div class="letters d-flex justify-content-center gap-2">
+                        @foreach (var item in question.Letters)
+                        {
+                            if (item.IsStatic)
+                            {
+                                <span class="static-letter">@item.Char</span>
+                            }
+                            else
+                            {
+                                <input maxlength="1" class="letter-box text-center"
+                                       @bind="item.InputChar"
+                                       @bind:event="oninput" />
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
     <div>
         <h5 style="text-align: center;">Question-3: Match the Following Images.</h5>
     </div>
 
     <!-- MATCH THE FOLLOWING -->
-    <div class="container ps-matchTheFollowing ">
+    <div class="container ps-matchTheFollowing ps-5">
 
         <canvas id="connectorCanvas" width="1000" height="600"></canvas>
 
-        <div class="column" id="columnA">
+        <div class="column ps-5" id="columnA">
             @foreach (var item in ColumnA)
             {
                 <div class="item" data-id="@item.Id" @onclick="() => SelectFromColumnA(item.Id)">
@@ -210,42 +106,7 @@
     }
 </div>
 
-<script>
-    window.redrawConnections = (connections) => {
-        const canvas = document.getElementById("connectorCanvas");
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        connections.forEach(conn => {
-            drawLine(conn.A, conn.B);
-        });
-    };
-
-    window.highlightItem = (id) => {
-        const item = document.querySelector(`[data-id="${id}"]`);
-        item.style.border = "2px solid blue";
-    };
-
-    window.drawLineBetweenElements = (idA, idB) => {
-        const itemA = document.querySelector(`[data-id="${idA}"]`);
-        const itemB = document.querySelector(`[data-id="${idB}"]`);
-        const rectA = itemA.getBoundingClientRect();
-        const rectB = itemB.getBoundingClientRect();
-        const canvas = document.getElementById("connectorCanvas");
-        const ctx = canvas.getContext("2d");
-
-        const x1 = rectA.right - canvas.getBoundingClientRect().left;
-        const y1 = rectA.top + rectA.height / 2 - canvas.getBoundingClientRect().top;
-        const x2 = rectB.left - canvas.getBoundingClientRect().left;
-        const y2 = rectB.top + rectB.height / 2 - canvas.getBoundingClientRect().top;
-
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    };
-</script>
+<script src="_content/First_step_For_little_mind.Shared/js/PracticeSheet.js"></script>
 
 @code {
     [Inject] IJSRuntime JS { get; set; } = default!;
@@ -289,7 +150,7 @@
     string? selectedA = null;
     int MatchScore = 0;
 
-    // ---------- COMMON ----------
+   
     bool AllResultShown = false;
 
     protected override void OnInitialized()
@@ -377,14 +238,14 @@
 
     private void CheckAllSections()
     {
-        // Image Answer Check
+      
         int correct = SelectedItems.Count(x => x.UserAnswer?.Trim().ToLower() == x.Answer.ToLower());
         ImageResult = $"You got {correct} / {SelectedItems.Count} image answers correct.";
 
-        // Fill-in-the-blank Score
+        
         FillScore = Questions.Count(q => string.Join("", q.Letters.Select(l => l.IsStatic ? l.Char.ToString() : l.InputChar ?? "")) == q.Answer);
 
-        // Match Score
+ 
         MatchScore = Connections.Count(c => CorrectMatches.TryGetValue(c.A, out var correctB) && correctB == c.B);
 
         AllResultShown = true;
