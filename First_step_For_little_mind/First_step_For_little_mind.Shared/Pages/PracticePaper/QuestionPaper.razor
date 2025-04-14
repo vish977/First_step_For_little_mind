@@ -1,106 +1,352 @@
 ﻿@page "/practice_Sheet"
 @using Microsoft.JSInterop
 
-<h2 style="text-align: center;">Match the Following</h2>
-
-<div class="container">
-    <canvas id="connectorCanvas" width="1000" height="600"></canvas>
-
-    <div class="column" id="columnA">
-        @foreach (var item in ColumnA)
-        {
-            <div class="item" data-id="@item.Id" @onclick="() => SelectFromColumnA(item.Id)">
-                <img src="@item.ImageUrl" alt="@item.Label" />
-            </div>
-        }
-    </div>
-
-    <div class="column" id="columnB">
-        @foreach (var item in ColumnB)
-        {
-            <div class="item" data-id="@item.Id" @onclick="() => ConnectToColumnB(item.Id)">
-                @item.Label
-            </div>
-        }
-    </div>
-</div>
-
-<!-- Buttons -->
-<button class="btn btn-success" @onclick="CheckMatches">Submit</button>
-<button class="btn btn-danger" @onclick="UndoLast">Undo</button>
-<button class="btn btn-primary" @onclick="GenerateRandomMatchSet">New Set</button>
-
-<div id="result" style="margin-top: 20px; font-weight: bold; font-size: 18px; color: green;">@Result</div>
-
-<script src="_content/First_step_For_little_mind.Shared/js/PracticeSheet.js"></script>
-
-@code {
- 
-    public class MatchItem
-    {
-        public string? Id { get; set; }
-        public string? Label { get; set; }
-        public string ImageUrl => $"_content/First_steps_For_little_mind.Shared/image/{Label.ToLower().Replace(" ", "")}.png";
+<style>
+    .ps-fill {
+        /* border: 1px solid black; */
     }
 
-    [Inject] IJSRuntime? JS { get; set; }
-    private List<MatchItem> AllItems = new()
+    .container-fluid {
+        padding:2rem;
+        /* border: 1px solid green; */
+        margin: 2px;
+    }
+
+    .container {
+        /* border: 1px solid red; */
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-top: 40px;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .item {
+        padding: 10px;
+        border: 2px solid #333;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #f9f9f9;
+    }
+
+        .item img {
+            width: 100px;
+            height: 100px;
+        }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .btn {
+        margin-top: 30px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+
+
+    .question {
+        margin-bottom: 20px;
+    }
+
+    .letters {
+        display: flex;
+        gap: 5px;
+    }
+
+    .letter-box {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        font-size: 18px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    .static-letter {
+        font-weight: bold;
+        font-size: 18px;
+        padding: 9px;
+        min-width: 40px;
+        text-align: center;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+    }
+
+    .submit-button {
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .submit-button:hover {
+        background: #0056b3;
+    }
+
+   
+
+    .question {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .blank-space {
+        padding: 5px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 200px;
+    }
+
+  
+</style>
+
+<div class="container-fluid">
+    <h1 style="text-align: center;">First Steps For Little Minds</h1>
+    <h3 style="text-align: center;">Practice Sheet</h3>
+
+    <!-- IMAGE QUESTIONS -->
+    <div class="ps-image">
+        <h5 style="text-align: center;">Question-1: Write the name of images.</h5>
+        @foreach (var item in SelectedItems)
+        {
+            <div class="question mb-3" @key="item.Id">
+                <div class="image-container">
+                    <img src="@item.ImagePath" alt="@item.Answer" width="150" />
+                </div>
+                <input class="blank-space mt-1" type="text" placeholder="Type the name of the object"
+                       @bind="item.UserAnswer" />
+            </div>
+        }
+    </div>
+
+    <!-- FILL IN THE BLANKS -->
+    <div class="ps-fill">
+        <h5 style="text-align: center;">Question-2: Fill in the Blanks</h5>
+        @foreach (var question in Questions)
+        {
+            <div class="question mb-4">
+                <div class="mb-1 font-semibold text-gray-700">@question.Id.</div>
+                <div class="letters flex gap-2">
+                    @foreach (var item in question.Letters)
+                    {
+                        if (item.IsStatic)
+                        {
+                            <span class="static-letter">@item.Char</span>
+                        }
+                        else
+                        {
+                            <input maxlength="1" class="letter-box"
+                                   @bind="item.InputChar"
+                                   @bind:event="oninput" />
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div>
+        <h5 style="text-align: center;">Question-3: Match the Following Images.</h5>
+    </div>
+
+    <!-- MATCH THE FOLLOWING -->
+    <div class="container ps-matchTheFollowing ">
+
+        <canvas id="connectorCanvas" width="1000" height="600"></canvas>
+
+        <div class="column" id="columnA">
+            @foreach (var item in ColumnA)
+            {
+                <div class="item" data-id="@item.Id" @onclick="() => SelectFromColumnA(item.Id)">
+                    <img src="@item.ImageUrl" alt="@item.Label" />
+                </div>
+            }
+        </div>
+
+        <div class="column" id="columnB">
+            @foreach (var item in ColumnB)
+            {
+                <div class="item" data-id="@item.Id" @onclick="() => ConnectToColumnB(item.Id)">
+                    @item.Label
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div style="text-align:center;">
+        <button class="btn btn-success" @onclick="CheckAllSections">Submit All</button>
+        <button class="btn btn-danger" @onclick="UndoLast">Undo</button>
+        <button class="btn btn-primary" @onclick="GenerateRandomMatchSet">New Set</button>
+    </div>
+
+    @if (AllResultShown)
     {
-        new() { Id = "1", Label = "Apple" },
-        new() { Id = "2", Label = "Banana" },
-        new() { Id = "3", Label = "Orange" },
-        new() { Id = "4", Label = "Mango" },
-        new() { Id = "5", Label = "Watermelon" },
-        new() { Id = "6", Label = "Pineapple" },
-        new() { Id = "7", Label = "Strawberry" },
-        new() { Id = "8", Label = "Grapes" },
-        new() { Id = "9", Label = "Papaya" },
-        new() { Id = "10", Label = "Guava" }
-       
+        <div style="margin-top: 20px; text-align: center; font-weight: bold; font-size: 18px; color: green;">
+            <div>@ImageResult</div>
+            <div>You scored @FillScore / @Questions.Count in Fill in the Blanks.</div>
+            <div>You matched @MatchScore / 6 correctly!</div>
+        </div>
+    }
+</div>
+
+<script>
+    window.redrawConnections = (connections) => {
+        const canvas = document.getElementById("connectorCanvas");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        connections.forEach(conn => {
+            drawLine(conn.A, conn.B);
+        });
     };
 
-    private List<MatchItem> ColumnA = new();
-    private List<MatchItem> ColumnB = new();
+    window.highlightItem = (id) => {
+        const item = document.querySelector(`[data-id="${id}"]`);
+        item.style.border = "2px solid blue";
+    };
 
-    private List<(string A, string B)> Connections = new();
+    window.drawLineBetweenElements = (idA, idB) => {
+        const itemA = document.querySelector(`[data-id="${idA}"]`);
+        const itemB = document.querySelector(`[data-id="${idB}"]`);
+        const rectA = itemA.getBoundingClientRect();
+        const rectB = itemB.getBoundingClientRect();
+        const canvas = document.getElementById("connectorCanvas");
+        const ctx = canvas.getContext("2d");
 
-    private Dictionary<string, string> CorrectMatches = new();
+        const x1 = rectA.right - canvas.getBoundingClientRect().left;
+        const y1 = rectA.top + rectA.height / 2 - canvas.getBoundingClientRect().top;
+        const x2 = rectB.left - canvas.getBoundingClientRect().left;
+        const y2 = rectB.top + rectB.height / 2 - canvas.getBoundingClientRect().top;
 
-    private string Result = "";
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    };
+</script>
 
-    private string? selectedA = null;
+@code {
+    [Inject] IJSRuntime JS { get; set; } = default!;
+    Random random = new();
 
-    private Random random = new();
+    // ---------- IMAGE QUESTIONS ----------
+    class ImageQuestion
+    {
+        public int Id { get; set; }
+        public string FileName { get; set; } = "";
+        public string Answer { get; set; } = "";
+        public string ImagePath => $"_content/First_steps_For_little_mind.Shared/image/{FileName}";
+        public string? UserAnswer { get; set; }
+    }
+
+    List<ImageQuestion> AllItem = new();
+    List<ImageQuestion> SelectedItems = new();
+    string ImageResult = "";
+
+    // ---------- FILL IN THE BLANK ----------
+    class LetterBox { public char Char { get; set; } public bool IsStatic { get; set; } public string? InputChar { get; set; } = ""; }
+    class FillBlankQuestion { public int Id { get; set; } public string Answer { get; set; } = ""; public List<LetterBox> Letters { get; set; } = new(); }
+
+    List<FillBlankQuestion> AllQuestions = new();
+    List<FillBlankQuestion> Questions = new();
+    int FillScore = 0;
+
+    FillBlankQuestion CreateQuestion(int id, string word, bool[] isStatic)
+    {
+        var letters = word.Select((c, i) => new LetterBox { Char = c, IsStatic = isStatic[i] }).ToList();
+        return new FillBlankQuestion { Id = id, Answer = word, Letters = letters };
+    }
+
+    // ---------- MATCH THE FOLLOWING ----------
+    class MatchItem { public string? Id { get; set; } public string? Label { get; set; } public string ImageUrl => $"_content/First_steps_For_little_mind.Shared/image/{Label?.ToLower().Replace(" ", "")}.png"; }
+    List<MatchItem> AllItems = new();
+    List<MatchItem> ColumnA = new();
+    List<MatchItem> ColumnB = new();
+    List<(string A, string B)> Connections = new();
+    Dictionary<string, string> CorrectMatches = new();
+    string? selectedA = null;
+    int MatchScore = 0;
+
+    // ---------- COMMON ----------
+    bool AllResultShown = false;
 
     protected override void OnInitialized()
     {
+        // IMAGE SECTION
+        AllItem = new()
+        {
+            new() { Id = 1, FileName = "apple.png", Answer = "apple" },
+            new() { Id = 2, FileName = "banana.png", Answer = "banana" },
+            new() { Id = 3, FileName = "dog.png", Answer = "dog" },
+            new() { Id = 4, FileName = "cat.png", Answer = "cat" },
+            new() { Id = 5, FileName = "car.png", Answer = "car" },
+            new() { Id = 6, FileName = "ball.png", Answer = "ball" },
+            new() { Id = 7, FileName = "fish.png", Answer = "fish" },
+            new() { Id = 8, FileName = "book.png", Answer = "book" },
+            new() { Id = 9, FileName = "pen.png", Answer = "pen" },
+            new() { Id = 10, FileName = "bus.png", Answer = "bus" },
+        };
+        SelectedItems = AllItem.OrderBy(_ => random.Next()).Take(5).ToList();
+
+        // FILL SECTION
+        AllQuestions = new List<FillBlankQuestion>
+        {
+            CreateQuestion(1, "apple",  new[] { false, false, true, true, false }),
+            CreateQuestion(2, "plane",  new[] { false, false, false, true, false }),
+            CreateQuestion(3, "orange", new[] { false, false, true, false, false, false }),
+            CreateQuestion(4, "chair",  new[] { false, false, true, false, false }),
+            CreateQuestion(5, "mouse",  new[] { false, true, false, false, false }),
+            CreateQuestion(6, "tiger",  new[] { false, false, true, false, false }),
+        };
+        Questions = AllQuestions.OrderBy(x => random.Next()).Take(6).ToList();
+
+        // MATCH SECTION
+        AllItems = new()
+        {
+            new() { Id = "1", Label = "Apple" },
+            new() { Id = "2", Label = "Banana" },
+            new() { Id = "3", Label = "Orange" },
+            new() { Id = "4", Label = "Mango" },
+            new() { Id = "5", Label = "Watermelon" },
+            new() { Id = "6", Label = "Grapes" },
+            new() { Id = "7", Label = "Pineapple" },
+        };
         GenerateRandomMatchSet();
     }
+
     private void GenerateRandomMatchSet()
     {
-        Result = "";
         Connections.Clear();
         selectedA = null;
 
         var selected = AllItems.OrderBy(x => random.Next()).Take(6).ToList();
 
-        ColumnA = selected.Select((item, index) => new MatchItem
-            {
-                Id = (index + 1).ToString(),
-                Label = item.Label
-            }).ToList();
+        ColumnA = selected.Select((item, index) => new MatchItem { Id = (index + 1).ToString(), Label = item.Label }).ToList();
+        ColumnB = selected.OrderBy(x => random.Next()).Select((item, index) => new MatchItem { Id = ((char)('a' + index)).ToString(), Label = item.Label }).ToList();
 
-        ColumnB = selected.OrderBy(x => random.Next()).Select((item, index) => new MatchItem
-            {
-                Id = ((char)('a' + index)).ToString(),
-                Label = item.Label
-            }).ToList();
-
-        CorrectMatches = ColumnA.ToDictionary(
-            a => a.Id,
-            a => ColumnB.First(b => b.Label == a.Label).Id
-        );
-
+        CorrectMatches = ColumnA.ToDictionary(a => a.Id!, a => ColumnB.First(b => b.Label == a.Label).Id!);
         JS.InvokeVoidAsync("redrawConnections", Connections);
     }
 
@@ -120,7 +366,6 @@
         }
     }
 
-   
     private async void UndoLast()
     {
         if (Connections.Any())
@@ -130,10 +375,18 @@
         }
     }
 
-    // This function checks the number of correct matches made by the user
-    private void CheckMatches()
+    private void CheckAllSections()
     {
-        int score = Connections.Count(c => CorrectMatches.TryGetValue(c.A, out var correctB) && correctB == c.B);
-        Result = $"You matched {score} out of 6 correctly!";
+        // Image Answer Check
+        int correct = SelectedItems.Count(x => x.UserAnswer?.Trim().ToLower() == x.Answer.ToLower());
+        ImageResult = $"You got {correct} / {SelectedItems.Count} image answers correct.";
+
+        // Fill-in-the-blank Score
+        FillScore = Questions.Count(q => string.Join("", q.Letters.Select(l => l.IsStatic ? l.Char.ToString() : l.InputChar ?? "")) == q.Answer);
+
+        // Match Score
+        MatchScore = Connections.Count(c => CorrectMatches.TryGetValue(c.A, out var correctB) && correctB == c.B);
+
+        AllResultShown = true;
     }
 }
