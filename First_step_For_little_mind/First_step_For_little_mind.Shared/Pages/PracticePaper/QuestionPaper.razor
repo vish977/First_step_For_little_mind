@@ -1,0 +1,139 @@
+﻿@page "/practice_Sheet"
+@using Microsoft.JSInterop
+
+<h2 style="text-align: center;">Match the Following</h2>
+
+<div class="container">
+    <canvas id="connectorCanvas" width="1000" height="600"></canvas>
+
+    <div class="column" id="columnA">
+        @foreach (var item in ColumnA)
+        {
+            <div class="item" data-id="@item.Id" @onclick="() => SelectFromColumnA(item.Id)">
+                <img src="@item.ImageUrl" alt="@item.Label" />
+            </div>
+        }
+    </div>
+
+    <div class="column" id="columnB">
+        @foreach (var item in ColumnB)
+        {
+            <div class="item" data-id="@item.Id" @onclick="() => ConnectToColumnB(item.Id)">
+                @item.Label
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Buttons -->
+<button class="btn btn-success" @onclick="CheckMatches">Submit</button>
+<button class="btn btn-danger" @onclick="UndoLast">Undo</button>
+<button class="btn btn-primary" @onclick="GenerateRandomMatchSet">New Set</button>
+
+<div id="result" style="margin-top: 20px; font-weight: bold; font-size: 18px; color: green;">@Result</div>
+
+<script src="_content/First_step_For_little_mind.Shared/js/PracticeSheet.js"></script>
+
+@code {
+ 
+    public class MatchItem
+    {
+        public string? Id { get; set; }
+        public string? Label { get; set; }
+        public string ImageUrl => $"_content/First_steps_For_little_mind.Shared/image/{Label.ToLower().Replace(" ", "")}.png";
+    }
+
+    [Inject] IJSRuntime? JS { get; set; }
+    private List<MatchItem> AllItems = new()
+    {
+        new() { Id = "1", Label = "Apple" },
+        new() { Id = "2", Label = "Banana" },
+        new() { Id = "3", Label = "Orange" },
+        new() { Id = "4", Label = "Mango" },
+        new() { Id = "5", Label = "Watermelon" },
+        new() { Id = "6", Label = "Pineapple" },
+        new() { Id = "7", Label = "Strawberry" },
+        new() { Id = "8", Label = "Grapes" },
+        new() { Id = "9", Label = "Papaya" },
+        new() { Id = "10", Label = "Guava" }
+       
+    };
+
+    private List<MatchItem> ColumnA = new();
+    private List<MatchItem> ColumnB = new();
+
+    private List<(string A, string B)> Connections = new();
+
+    private Dictionary<string, string> CorrectMatches = new();
+
+    private string Result = "";
+
+    private string? selectedA = null;
+
+    private Random random = new();
+
+    protected override void OnInitialized()
+    {
+        GenerateRandomMatchSet();
+    }
+    private void GenerateRandomMatchSet()
+    {
+        Result = "";
+        Connections.Clear();
+        selectedA = null;
+
+        var selected = AllItems.OrderBy(x => random.Next()).Take(6).ToList();
+
+        ColumnA = selected.Select((item, index) => new MatchItem
+            {
+                Id = (index + 1).ToString(),
+                Label = item.Label
+            }).ToList();
+
+        ColumnB = selected.OrderBy(x => random.Next()).Select((item, index) => new MatchItem
+            {
+                Id = ((char)('a' + index)).ToString(),
+                Label = item.Label
+            }).ToList();
+
+        CorrectMatches = ColumnA.ToDictionary(
+            a => a.Id,
+            a => ColumnB.First(b => b.Label == a.Label).Id
+        );
+
+        JS.InvokeVoidAsync("redrawConnections", Connections);
+    }
+
+    private void SelectFromColumnA(string id)
+    {
+        selectedA = id;
+        JS.InvokeVoidAsync("highlightItem", id);
+    }
+
+    private async void ConnectToColumnB(string bId)
+    {
+        if (selectedA != null && !Connections.Any(c => c.A == selectedA || c.B == bId))
+        {
+            Connections.Add((selectedA, bId));
+            await JS.InvokeVoidAsync("drawLineBetweenElements", selectedA, bId);
+            selectedA = null;
+        }
+    }
+
+   
+    private async void UndoLast()
+    {
+        if (Connections.Any())
+        {
+            Connections.RemoveAt(Connections.Count - 1);
+            await JS.InvokeVoidAsync("redrawConnections", Connections);
+        }
+    }
+
+    // This function checks the number of correct matches made by the user
+    private void CheckMatches()
+    {
+        int score = Connections.Count(c => CorrectMatches.TryGetValue(c.A, out var correctB) && correctB == c.B);
+        Result = $"You matched {score} out of 6 correctly!";
+    }
+}

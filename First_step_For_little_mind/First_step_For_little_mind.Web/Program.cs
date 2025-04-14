@@ -3,6 +3,7 @@ using First_step_For_little_mind.Web.Components;
 using First_step_For_little_mind.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

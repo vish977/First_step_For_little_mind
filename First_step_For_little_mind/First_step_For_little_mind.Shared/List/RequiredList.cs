@@ -34,5 +34,15 @@ public static class RequiredList
         "Dot", "Hut", "Jaw", "Pot", "Kid", "Rat", "Leg", "Map", "Man", "Mat",
         "Mug", "Toy", "Net", "Nut", "Pet", "Son", "Rug", "Run", "Sun", "Bee"
     };
-    
+
+    public class Question
+    {
+        public string Id { get; set; }
+        public string QuestionText { get; set; }
+        public List<string> Options { get; set; }
+        public string CorrectAnswer { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? SelectedAnswer { get; set; } // For user selection
+    }
+
 }

@@ -1,0 +1,44 @@
+﻿.container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-top: 40px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.item {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+    .item img {
+        width: 100px;
+        height: 100px;
+    }
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.btn {
+    margin-top: 30px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}

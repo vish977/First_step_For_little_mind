@@ -1,40 +1,40 @@
-﻿@page "/matching"
-@using First_step_For_little_mind.Shared.Helper
-@using System
+﻿@* @page "/matching" *@
+@* @using First_step_For_little_mind.Shared.Helper *@
+@* @using System *@
 
-<PageTitle>Matching Game</PageTitle>
-
-
-<div class="container">
-	<div class="row">
-		<div class="col-6">
-			@foreach (int idx in Helper.rearangeTheAnswerList(randomIndexList))
-			{
-				<div class="matching-img-container mt-4 mb-4">
-					<img src=@($"_content/First_step_For_little_mind.Shared/Image/English/{MatchingGameList[idx]}") />
-				</div>
-			}
-		</div>
-		<div class="col-6">
-			@foreach (int idx in answerIndexList)
-			{
-				<div>@MatchingGameList[idx].Split(".")[0]</div>
-			}
-		</div>
-	</div>
-</div>
-
-@code {
-	private static List<string> MatchingGameList = new List<string>()
-	{
-		"Apple.jpeg", "Ball.png", "Cat.jpeg", "Dog.jpeg", "Elephant.jpeg", "fish.jpeg", "hen.jpeg", "icecream.png"
-	};
-
-	private static List<int> randomIndexList = Helper.RandomNumberList(4, MatchingGameList.Count); //this function is call for generating random number.
-
-	List<int> answerIndexList = Helper.rearangeTheAnswerList(randomIndexList);//This function is call for shuffling the matching of the listobject
+@* <PageTitle>Matching Game</PageTitle> *@
 
 
+@* <div class="container"> *@
+@* 	<div class="row"> *@
+@* 		<div class="col-6"> *@
+@* 			@foreach (int idx in Helper.rearangeTheAnswerList(randomIndexList)) *@
+@* 			{ *@
+@* 				<div class="matching-img-container mt-4 mb-4"> *@
+@* 					<img src=@($"_content/First_step_For_little_mind.Shared/Image/English/{MatchingGameList[idx]}") /> *@
+@* 				</div> *@
+@* 			} *@
+@* 		</div> *@
+@* 		<div class="col-6"> *@
+@* 			@foreach (int idx in answerIndexList) *@
+@* 			{ *@
+@* 				<div>@MatchingGameList[idx].Split(".")[0]</div> *@
+@* 			} *@
+@* 		</div> *@
+@* 	</div> *@
+@* </div> *@
 
-}
+@* @code { *@
+@* 	private static List<string> MatchingGameList = new List<string>() *@
+@* 	{ *@
+@* 		"Apple.jpeg", "Ball.png", "Cat.jpeg", "Dog.jpeg", "Elephant.jpeg", "fish.jpeg", "hen.jpeg", "icecream.png" *@
+@* 	}; *@
+
+@* 	private static List<int> randomIndexList = Helper.RandomNumberList(4, MatchingGameList.Count); //this function is call for generating random number. *@
+
+@* 	List<int> answerIndexList = Helper.rearangeTheAnswerList(randomIndexList);//This function is call for shuffling the matching of the listobject *@
+
+
+
+@* } *@
 
