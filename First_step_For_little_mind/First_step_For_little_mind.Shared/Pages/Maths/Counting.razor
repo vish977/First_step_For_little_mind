@@ -1,63 +1,187 @@
-﻿@page "/countings/{Number}"
+﻿@page "/counting/{Number}"
+
+
+<style>
+    .container {
+        /* border:1px solid red; */
+        width:70vw;
+    }
+    .number-row {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .number-row.active {
+        background-color: #e3f2fd;
+        border-left: 5px solid #0d6efd;
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
+
 
 <div class="container-fluid">
-    <div>
-        @foreach (var item in SelectedList)
+    <div class="container my-4 text-center">
+        @for (int i = 0; i <= CurrentIndex && i < SelectedList.Count; i++)
         {
-            <div class="num">
-                <a href="/English/@item">
-                    <img class="Letter" src="@GetImagePath(item)" alt="@item" />
-                </a>
+            var num = SelectedList[i];
+            var isActive = (i == CurrentIndex);
+            var color = GetColor(i);
+
+            <div class="row justify-content-center my-3 number-row @(isActive ? "active" : "")"
+                 @onmouseover="@(() => PlayAudio(num, true))">
+                <div class="col-3">
+                    <h2 style="color:@color; font-weight:bold; text-align:center">@num</h2>
+                </div>
+                <div class="col-3">
+                    <h2 style="color:@color; font-weight:bold; text-align:center">@GetNumberName(num)</h2>
+                </div>
             </div>
+        }
+
+        <audio @ref="audioPlayer" src="@CurrentAudioPath" autoplay @onended="OnAudioEnded"></audio>
+
+        @if (CurrentIndex >= SelectedList.Count)
+        {
+            <h3 class="text-success mt-4">🎉 All Numbers Played!</h3>
         }
     </div>
 </div>
 
-@code{
+@code {
     [Parameter] public string? Number { get; set; }
 
-        private string Title = "Learning Chart";
-        private List<string> first = Enumerable.Range(1, 10).Select(x => x.ToString()).ToList();
-        private List<string> second = Enumerable.Range(11, 20).Select(x => x.ToString()).ToList();
-        private List<string> third = Enumerable.Range(21, 30).Select(x => x.ToString()).ToList();
-        private List<string> fourth = Enumerable.Range(31, 40).Select(x => x.ToString()).ToList();
+    private List<string> first = Enumerable.Range(1, 10).Select(x => x.ToString()).ToList();
+    private List<string> second = Enumerable.Range(11, 10).Select(x => x.ToString()).ToList();
+    private List<string> third = Enumerable.Range(21, 10).Select(x => x.ToString()).ToList();
+    private List<string> fourth = Enumerable.Range(31, 10).Select(x => x.ToString()).ToList();
+    private List<string> fifth = Enumerable.Range(41, 10).Select(x => x.ToString()).ToList();
+    private List<string> sixth = Enumerable.Range(51, 10).Select(x => x.ToString()).ToList();
+    private List<string> seventh = Enumerable.Range(61, 10).Select(x => x.ToString()).ToList();
+    private List<string> eighth = Enumerable.Range(71, 10).Select(x => x.ToString()).ToList();
+    private List<string> nine = Enumerable.Range(81, 10).Select(x => x.ToString()).ToList();
+    private List<string> ten = Enumerable.Range(91, 10).Select(x => x.ToString()).ToList();
 
-        private List<string> SelectedList = new();
+    private List<string> SelectedList = new();
+    private int CurrentIndex = 0;
+    private string CurrentAudioPath = string.Empty;
+    private ElementReference audioPlayer;
+    private bool isHoverPlay = false;
 
-        protected override void OnParametersSet()
+    private List<string> Colors = new()
+    {
+        "#FF5733", "#33C1FF", "#33FF57", "#FF33D1", "#FFBD33",
+        "#8E44AD", "#3498DB", "#E74C3C", "#1ABC9C", "#D35400",
+        "#2ECC71", "#9B59B6", "#F39C12", "#E67E22", "#16A085"
+    };
+
+    protected override async Task OnParametersSetAsync()
+    {
+        SelectedList = Number switch
         {
-            SelectedList = Number switch
-            {
-               
-                "1to10" => first,
-                "11to20" => second,
-                "21to30" => third,
-                "31to40" => fourth,
+            "1to10" => first,
+            "11to20" => second,
+            "21to30" => third,
+            "31to40" => fourth,
+            _ => new List<string>()
+        };
 
+        CurrentIndex = 0;
 
-                _ => new List<string>()
-            };
-
-            // Set Title based on selection
-            Title = Number switch
-            {
-                
-                "Numbers" => "Numbers (1-10)",
-                _ => "Learning Chart"
-            };
-        }
-
-        
-        private string GetImagePath(string item)
+        if (SelectedList.Count > 0)
         {
-            string basePath = "/_content/First_step_For_little_mind.Shared/Image";
-
-            return Number switch
-            {
-                "Numbers" => $"{basePath}/Numbers/{item}.jpg",
-                _ => ""
-            };
+            CurrentAudioPath = GetAudioPath(SelectedList[CurrentIndex]);
         }
     }
 
+    private async Task PlayAudio(string number, bool fromHover)
+    {
+        isHoverPlay = fromHover;
+        CurrentAudioPath = GetAudioPath(number);
+        await InvokeAsync(StateHasChanged); //  audio autoplay
+    }
+
+    private async void OnAudioEnded()
+    {
+        if (isHoverPlay)
+        {
+            isHoverPlay = false;
+            return;
+        }
+
+        CurrentIndex++;
+        if (CurrentIndex < SelectedList.Count)
+        {
+            CurrentAudioPath = GetAudioPath(SelectedList[CurrentIndex]);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string GetAudioPath(string number)
+    {
+        return $"_content/First_step_For_little_mind.Shared/voice/Maths/{number}.mp3"; 
+    }
+
+    private string GetNumberName(string number)
+    {
+        return number switch
+        {
+            "1" => "One",
+            "2" => "Two",
+            "3" => "Three",
+            "4" => "Four",
+            "5" => "Five",
+            "6" => "Six",
+            "7" => "Seven",
+            "8" => "Eight",
+            "9" => "Nine",
+            "10" => "Ten",
+            "11" => "Eleven",
+            "12" => "Twelve",
+            "13" => "Thirteen",
+            "14" => "Fourteen",
+            "15" => "Fifteen",
+            "16" => "Sixteen",
+            "17" => "Seventeen",
+            "18" => "Eighteen",
+            "19" => "Nineteen",
+            "20" => "Twenty",
+            "21" => "Twenty-One",
+            "22" => "Twenty-Two",
+            "23" => "Twenty-Three",
+            "24" => "Twenty-Four",
+            "25" => "Twenty-Five",
+            "26" => "Twenty-Six",
+            "27" => "Twenty-Seven",
+            "28" => "Twenty-Eight",
+            "29" => "Twenty-Nine",
+            "30" => "Thirty",
+            "31" => "Thirty-One",
+            "32" => "Thirty-Two",
+            "33" => "Thirty-Three",
+            "34" => "Thirty-Four",
+            "35" => "Thirty-Five",
+            "36" => "Thirty-Six",
+            "37" => "Thirty-Seven",
+            "38" => "Thirty-Eight",
+            "39" => "Thirty-Nine",
+            "40" => "Forty",
+            _ => ""
+        };
+    }
+
+    private string GetColor(int index)
+    {
+        return Colors[index % Colors.Count];
+    }
 }
