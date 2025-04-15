@@ -1,5 +1,123 @@
-﻿<h3>Table</h3>
+﻿@page "/table"
+
+<h3 class="heading">Table</h3>
+
+
+<div class="input-container">
+    <label for="number" class="label">Enter a number: </label>
+    <input type="number" @bind="number" placeholder="Enter a number" class="input-box" />
+    <button @onclick="GenerateTable" class="generate-btn">Generate Table</button>
+</div>
+
+<div class="table-output">@((MarkupString)tableOutput)</div>
 
 @code {
+    private int number;
+    private string tableOutput;
 
+    private void GenerateTable()
+    {
+        if (number > 0)
+        {
+            var tableHtml = "<div class='table-grid'>";
+            for (int i = 1; i <= 10; i++)
+            {
+                tableHtml += $"<div class='table-row'>{number} x {i} = <span class='result'>{number * i}</span></div>";
+            }
+            tableHtml += "</div>";
+            tableOutput = tableHtml;
+        }
+        else
+        {
+            tableOutput = "Please enter a valid number.";
+        }
+    }
 }
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f8f9fa;
+    }
+
+    .heading {
+        text-align: center;
+        color: #4CAF50;
+        font-size: 36px;
+        margin-top: 30px;
+    }
+
+    .input-container {
+        /* text-align: center; */
+        margin: 20px 0;
+    }
+
+    .label {
+        font-size: 20px;
+        color: #333;
+        margin-left:5rem;
+    }
+
+    .input-box {
+        font-size: 20px;
+        padding: 10px;
+        margin: 10px;
+        width: 65px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .generate-btn {
+        font-size: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .generate-btn:hover {
+        background-color: #45a049;
+    }
+
+    .table-heading {
+        text-align: center;
+        color: #4CAF50;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .table-output {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Grid layout for table rows */
+    .table-grid {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction:column;
+        justify-content: center;
+        max-width: 800px;
+    }
+
+    .table-row {
+        background-color: #e0f7fa;
+        /* margin: 10px; */
+        /* padding: 15px; */
+        border-radius: 8px;
+        font-size: 25px;
+        font-weight: bold;
+        color: #333;
+        min-width: 180px;
+        text-align: center;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .result {
+        color: #FF5722;
+        font-size: 26px;
+    }
+</style>
