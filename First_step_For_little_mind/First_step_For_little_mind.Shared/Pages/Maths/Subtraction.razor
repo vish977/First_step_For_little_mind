@@ -1,0 +1,210 @@
+﻿@page "/subtraction"
+@inject IJSRuntime JS
+
+<style>
+    .container {
+        /* border: 1px solid red; */
+        height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .box-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box {
+        width: 20vw;
+        height: 30vh;
+        border: 2px solid #555; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 5px;
+        font-size: 30px;
+    }
+
+    .item {
+        width: 30px;
+        height: 30px;
+        background-color: orange;
+        border-radius: 60%;
+        margin: 5px;
+    }
+
+        .item.removed {
+            background-color: lightgray; 
+            opacity: 0.3;
+        }
+
+    .symbol {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 45px;
+    }
+
+    .number-container {
+        height: 10vh;
+        /* border: 1px solid green; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .num-symbol {
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    .hand {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        transition: all 0.5s ease;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .subtractionHeading {
+        /* border: 1px solid blue; */
+        text-align: center;
+        height: 10vh;
+        text-decoration: underline;
+    }
+
+    .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* border: 1px solid pink; */
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="subtractionHeading">
+        <h2>Subtraction</h2>
+    </div>
+
+    <div class="number-container">
+        <div>@num1</div>
+        <div class="num-symbol">-</div>
+        <div>@num2</div>
+        <div class="num-symbol">=</div>
+        <div>@displayResult</div>
+    </div>
+
+    <div class="container">
+        <div class="box-group">
+            <div class="box" id="box1"></div>
+            <div class="number">@num1</div>
+        </div>
+        <div class="symbol">-</div>
+        <div class="symbol">@num2</div>
+        <div class="symbol">=</div>
+        <div class="box-group">
+            <div class="box" id="resultBox">@displayResult</div>
+        </div>
+
+        <img src="_content/First_step_For_little_mind.Shared/Bg/pointer.png" class="hand" id="hand" alt="Hand Pointer" />
+    </div>
+
+    <div class="button">
+        <button @onclick="StartAnimation">Next</button>
+    </div>
+</div>
+
+<script>
+    window.startSubtractionAnimation = (num1, num2, result) => {
+        const hand = document.getElementById('hand');
+        const resultBox = document.getElementById('resultBox');
+        const numberContainer = document.querySelector('.number-container div:last-child');
+        const box1 = document.getElementById('box1');
+
+        box1.innerHTML = '';
+        resultBox.innerHTML = '?';
+        numberContainer.innerHTML = '?';
+
+        for (let i = 0; i < num1; i++) {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.id = `item-${i}`;
+            box1.appendChild(item);
+        }
+
+        function moveHandToElement(element, callback) {
+            const itemRect = element.getBoundingClientRect();
+            const containerRect = document.querySelector('.container').getBoundingClientRect();
+            hand.style.left = (itemRect.left - containerRect.left + 2) + 'px';
+            hand.style.top = (itemRect.top - containerRect.top - 1) + 'px';
+            setTimeout(callback, 700);
+        }
+
+        const itemsToCut = Array.from(box1.children).slice(0, num2);
+        let index = 0;
+
+        function cutNextItem() {
+            if (index < itemsToCut.length) {
+                moveHandToElement(itemsToCut[index], () => {
+                    itemsToCut[index].classList.add('removed');
+                    index++;
+                    cutNextItem();
+                });
+            } else {
+                moveHandToElement(resultBox, () => {
+                    resultBox.textContent = result;
+                    numberContainer.textContent = result;
+                });
+            }
+        }
+
+        setTimeout(() => {
+            cutNextItem();
+        }, 500);
+    };
+</script>
+
+@code {
+    private int num1;
+    private int num2;
+    private int result;
+    private string displayResult = "?";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await StartAnimation();
+        }
+    }
+
+    private async Task StartAnimation()
+    {
+        num1 = GetRandomNumber(5, 11);
+        num2 = GetRandomNumber(1, num1); // always less than num1
+        result = num1 - num2;
+        displayResult = "?";
+        await JS.InvokeVoidAsync("startSubtractionAnimation", num1, num2, result);
+        StateHasChanged();
+    }
+
+    private int GetRandomNumber(int min, int max)
+    {
+        return Random.Shared.Next(min, max);
+    }
+}
