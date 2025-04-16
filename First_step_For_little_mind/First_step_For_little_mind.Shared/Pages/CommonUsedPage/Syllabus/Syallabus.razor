@@ -62,10 +62,9 @@
                     new SyllabusItem("अ से  अः ", "/subjects/अ_से_अः"),
                     new SyllabusItem("क से ज्ञ ", "/subjects/क_से_ज्ञ"),
                     new SyllabusItem("बिना मात्रा वाले शब्द", "/Syllabus/बिना मात्रा वाले शब्द"),
-                    new SyllabusItem("मात्रा","/practice_Sheet"),
-                    new SyllabusItem("मात्रा वाले शब्द ", "/Syllabus/मात्रा वाले शब्द"),
-                    new SyllabusItem("स्वर"),
-                    new SyllabusItem("व्यंजन")
+                    new SyllabusItem("मात्रा","/subjects/मात्रा"),
+                    new SyllabusItem("मात्रा वाले शब्द ", "/Syllabus/मात्रा वाले शब्द")
+                 
                 }
             },
             {
@@ -80,17 +79,10 @@
             {
                 "GK (सामान्य ज्ञान)", new List<SyllabusItem>
                 {
-                    new SyllabusItem("National Symbols","/match-the-following"),
-                    new SyllabusItem("Body Parts "),
-                    new SyllabusItem("Colour"),
-                    new SyllabusItem("Shapes"),
-                    new SyllabusItem("Our Neighbours"),
-                    new SyllabusItem("Our National Symbols"),
-                    new SyllabusItem("Traffic Light"),
-                    new SyllabusItem("Me and My Family"),
-                    new SyllabusItem("Animals Name"),
-                    new SyllabusItem("Flower Name"),
-                    new SyllabusItem("Fruits Name"),
+                    
+                    new SyllabusItem("General Awareness","/Syllabus/General Awareness"),
+                    new SyllabusItem("World Around us","/Syllabus/World Around us"),
+         
                 }
             },
             {
@@ -157,7 +149,34 @@
                     new SyllabusItem ("story ka naam"),
                     new SyllabusItem ("story ka naam")
                 }
-            }
+            },
+            {
+                "General Awareness", new List<SyllabusItem>
+                {
+                    new SyllabusItem("National Symbols","/match-the-following"),
+                    new SyllabusItem("Body Parts "),
+                    new SyllabusItem("Colour"),
+                    new SyllabusItem("Shapes"),
+                    new SyllabusItem("Flower Name"),
+                    new SyllabusItem("Fruits Name"),
+                    new SyllabusItem("Vegetables Name"),
+                    new SyllabusItem("Fruits Name"),
+                    new SyllabusItem("Fruits Name"),
+                }
+            },
+            
+            {
+                "World Around us",new  List<SyllabusItem>
+                {
+                    new SyllabusItem("Our Neighbours"),
+                    new SyllabusItem("Traffic Light"),
+                    new SyllabusItem("Transport"),
+                    new SyllabusItem("Me and My Family"),
+                    new SyllabusItem("Animals"),
+                }
+            },
+
+           
         };
 
         return syllabus.ContainsKey(subject ?? "") ? syllabus[subject ?? ""] : new List<SyllabusItem>();

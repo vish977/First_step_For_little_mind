@@ -31,7 +31,7 @@
     { "क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण",
       "त", "थ", "द", "ध", "न", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "श", "ष", "स", "ह", "क्ष", "त्र", "ज्ञ"};
 
-     private List<string> Matra = new() { "A", "Aa", "i", "ii", "u", "u", "ri", "Ae", "aee", "o", "oo", "ank", "ah" };
+     private List<string> Matra = new() { "A", "Aa", "i", "ii", "u", "uu", "ri", "Ae", "aee", "o", "oo", "ank", "ah" };
 
     private List<string> SelectedList = new();
 
@@ -76,7 +76,7 @@
             "AlphabetsChart" => $"{basePath}/English/a_z_Full_Images/{item}.jpg",
             "अ_से_अः" => $"{basePath}/Hindi/Swar/{item}.jpg",
             "क_से_ज्ञ" => $"{basePath}/Hindi/Vyanjan/{item}.jpg",
-          
+            "मात्रा" => $"{basePath}/Hindi/Matra/{item}.jpg",
             _ => ""
         };
     }
