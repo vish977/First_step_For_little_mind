@@ -82,7 +82,7 @@
         <div class="column" id="columnB">
             @foreach (var item in ColumnB)
             {
-                <div class="item" data-id="@item.Id" @onclick="() => ConnectToColumnB(item.Id)">
+                <div class="item matching" data-id="@item.Id" @onclick="() => ConnectToColumnB(item.Id)">
                     @item.Label
                 </div>
             }
@@ -118,7 +118,7 @@
         public int Id { get; set; }
         public string FileName { get; set; } = "";
         public string Answer { get; set; } = "";
-        public string ImagePath => $"_content/First_steps_For_little_mind.Shared/image/{FileName}";
+        public string ImagePath => $"_content/First_step_For_little_mind.Shared/PracticeSheet/ImageSheet/{FileName}";
         public string? UserAnswer { get; set; }
     }
 
@@ -141,7 +141,7 @@
     }
 
     // ---------- MATCH THE FOLLOWING ----------
-    class MatchItem { public string? Id { get; set; } public string? Label { get; set; } public string ImageUrl => $"_content/First_steps_For_little_mind.Shared/image/{Label?.ToLower().Replace(" ", "")}.png"; }
+    class MatchItem { public string? Id { get; set; } public string? Label { get; set; } public string ImageUrl => $"_content/First_step_For_little_mind.Shared/PracticeSheet/MatchTheFollowing/{Label?.ToLower().Replace(" ", "")}.png"; }
     List<MatchItem> AllItems = new();
     List<MatchItem> ColumnA = new();
     List<MatchItem> ColumnB = new();
