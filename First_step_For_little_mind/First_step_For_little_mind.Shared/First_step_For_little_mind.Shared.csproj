@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\video\Story\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\Image\Hindi\Matra\" />
   </ItemGroup>
 
