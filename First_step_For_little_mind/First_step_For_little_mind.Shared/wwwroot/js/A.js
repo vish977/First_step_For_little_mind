@@ -1,5 +1,4 @@
 ﻿window.initializeCanvas = async (letter) => {
-    // Ensure the Baloo 2 font is loaded specifically
     await document.fonts.load("400px 'Baloo 2'");
     await document.fonts.ready;
 
@@ -18,8 +17,8 @@
         ctx.strokeStyle = "red";
         ctx.fillStyle = "white";
 
-        ctx.strokeText(letter.toUpperCase(), 150, 50);
-        ctx.fillText(letter.toUpperCase(), 150, 50);
+        ctx.strokeText(letter.toUpperCase(), 75  , 100);
+        ctx.fillText(letter.toUpperCase(), 75  , 100);
     }
 
     drawLetter();

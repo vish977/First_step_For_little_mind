@@ -1,15 +1,17 @@
 ﻿@page "/table"
 
-<h3 class="heading">Table</h3>
+<div class="container-fluid">
+    <h3 class="heading">Table</h3>
 
 
-<div class="input-container">
-    <label for="number" class="label">Enter a number: </label>
-    <input type="number" @bind="number" placeholder="Enter a number" class="input-box" />
-    <button @onclick="GenerateTable" class="generate-btn">Generate Table</button>
+    <div class="input-container">
+        <label for="number" class="label">Enter a number: </label>
+        <input type="number" @bind="number" placeholder="Enter a number" class="input-box" />
+        <button @onclick="GenerateTable" class="generate-btn">Generate Table</button>
+    </div>
+
+    <div class="table-output">@((MarkupString)tableOutput)</div>
 </div>
-
-<div class="table-output">@((MarkupString)tableOutput)</div>
 
 @code {
     private int number;
@@ -35,26 +37,28 @@
 }
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background-color: #f8f9fa;
-    }
+   .container-fluid {
+       border:1px solid  black;
+        margin: 0 !important;
+        height: 100vh;
+        background: url(_content/First_step_For_little_mind.Shared/Bg/Bg.jpg)no-repeat;
+        background-size: 100vw 100vh;
+   }
 
     .heading {
         text-align: center;
         color: #4CAF50;
-        font-size: 36px;
+        font-size: 40px;
+        font-weight:bolder;
         margin-top: 30px;
     }
 
     .input-container {
-        /* text-align: center; */
         margin: 20px 0;
     }
 
     .label {
-        font-size: 20px;
+        font-size: 30px;
         color: #333;
         margin-left:5rem;
     }
@@ -94,7 +98,7 @@
         justify-content: center;
     }
 
-    /* Grid layout for table rows */
+   
     .table-grid {
         display: flex;
         flex-wrap: wrap;
@@ -105,10 +109,8 @@
 
     .table-row {
         background-color: #e0f7fa;
-        /* margin: 10px; */
-        /* padding: 15px; */
         border-radius: 8px;
-        font-size: 25px;
+        font-size: 30px;
         font-weight: bold;
         color: #333;
         min-width: 180px;

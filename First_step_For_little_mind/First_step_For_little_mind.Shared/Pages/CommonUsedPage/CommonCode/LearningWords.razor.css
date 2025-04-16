@@ -1,4 +1,10 @@
-﻿.FSLM-WordImg {
+﻿.container-fluid {
+    height:100vh;
+    background: url(Bg/Bg.jpg)no-repeat;
+    background-size: 100vw 100vh;
+}
+
+.FSLM-WordImg {
     height: 50vh;
     width: 50vw;
     margin-left:15rem;
@@ -22,10 +28,10 @@
     margin-top: 20px;
 }
 
-    .FSLM-Word span {
-        display: inline-block;
-        animation: zoom-in-out 0.6s ease-in-out;
-    }
+.FSLM-Word span {
+    display: inline-block;
+    animation: zoom-in-out 0.6s ease-in-out;
+}
 
 @keyframes zoom-in-out {
     0% {
@@ -43,6 +49,14 @@
     100% {
         transform: scale(1);
     }
+}
+
+.btn-primary {
+    width: 20vw;
+    background-image: linear-gradient(to right, #00467F, #A5CC82);
+    color: white;
+    font-size: 30px;
+    margin:5px;
 }
 
 Random color list
@@ -83,4 +97,10 @@ Bootstrap style + press effect
 img {
     height:15rem;
     width:15rem;
+}
+.Button {
+    /*    display:flex;
+    justify-content:centre;*/
+  
+    align-items: center;
 }

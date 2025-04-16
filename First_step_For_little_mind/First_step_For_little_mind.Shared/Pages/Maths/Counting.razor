@@ -2,8 +2,14 @@
 
 
 <style>
+    .container-fluid {
+    border:1px solid black;
+    margin:0!important;
+    height:125vh;
+    background:url(_content/First_step_For_little_mind.Shared/Bg/Bg.jpg)no-repeat;
+    background-size:100vw 125vh;
+    }
     .container {
-        /* border:1px solid red; */
         width:70vw;
     }
     .number-row {
@@ -27,6 +33,11 @@
             transform: translateX(0);
         }
     }
+    h2 {
+        font-weight: bold;
+        text-align: center;
+        font-size: 50px;
+    }
 </style>
 
 
@@ -41,20 +52,17 @@
             <div class="row justify-content-center my-3 number-row @(isActive ? "active" : "")"
                  @onmouseover="@(() => PlayAudio(num, true))">
                 <div class="col-3">
-                    <h2 style="color:@color; font-weight:bold; text-align:center">@num</h2>
+                    <h2 style="color:@color; ">@num</h2>
                 </div>
                 <div class="col-3">
-                    <h2 style="color:@color; font-weight:bold; text-align:center">@GetNumberName(num)</h2>
+                    <h2 style="color:@color;">@GetNumberName(num)</h2>
                 </div>
             </div>
         }
 
         <audio @ref="audioPlayer" src="@CurrentAudioPath" autoplay @onended="OnAudioEnded"></audio>
 
-        @if (CurrentIndex >= SelectedList.Count)
-        {
-            <h3 class="text-success mt-4">🎉 All Numbers Played!</h3>
-        }
+       
     </div>
 </div>
 

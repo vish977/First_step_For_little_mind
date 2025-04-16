@@ -31,7 +31,7 @@
     { "क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण",
       "त", "थ", "द", "ध", "न", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "श", "ष", "स", "ह", "क्ष", "त्र", "ज्ञ"};
 
-    // private List<string> Numbers = Enumerable.Range(1, 20).Select(x => x.ToString()).ToList();
+     private List<string> Matra = new() { "A", "Aa", "i", "ii", "u", "u", "ri", "Ae", "aee", "o", "oo", "ank", "ah" };
 
     private List<string> SelectedList = new();
 
@@ -42,7 +42,7 @@
             "AlphabetsChart" => EnglishAlphabets,
             "अ_से_अः" => HindiSwar,
             "क_से_ज्ञ" => HindiVyanjan,
-            // "Numbers" => Numbers,
+            "मात्रा" => Matra,
             _ => new List<string>()
         };
 
@@ -52,7 +52,7 @@
             "AlphabetsChart" => "English Alphabets",
             "अ_से_अः" => "Hindi Swar (स्वर)",
             "क_से_ज्ञ" => "Hindi Vyanjan (व्यंजन)",
-            "Numbers" => "Numbers (1-20)",
+            
             _ => "Learning Chart"
         };
     }
