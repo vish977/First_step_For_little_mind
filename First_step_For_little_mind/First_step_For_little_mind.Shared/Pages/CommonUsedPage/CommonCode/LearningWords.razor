@@ -2,30 +2,39 @@
 @inject IJSRuntime JS
 @using First_step_For_little_mind.Shared.List;
 
-
 <div class="container-fluid">
 	<div class="container text-center">
+
+		<!-- Image or Message in FSLM-WordImg -->
+		<div class="FSLM-WordImg d-flex justify-content-center align-items-center" style="height: 300px;">
+			@if (currentIndex < selectedWords.Count)
+			{
+				<img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" />
+			}
+			else
+			{
+				<div class="FSLM-Word" style="font-size: 24px; color: green;">
+					Great job! Lets do some practices.
+				</div>
+			}
+		</div>
+
+		<!-- Word Spelling with Colored Letters -->
 		@if (currentIndex < selectedWords.Count)
 		{
-			<div class="FSLM-WordImg">
-				<img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" />
-			</div>
-			<div class="FSLM-Word">
+			<div class="FSLM-Word mt-3">
 				@foreach (var (ch, index) in selectedWords[currentIndex].Select((c, i) => (c, i)))
 				{
 					<span class="color-@(@index % 7)">@ch</span>
 				}
 			</div>
+		}
 
-			<div class="Button">
-				<button class="btn btn-primary mt-3" @onclick="ShowNextWord">Previous</button>
-				<button class="btn btn-primary mt-3" @onclick="ShowNextWord">Next</button>
-			</div>
-		}
-		else
-		{
-			<div class="FSLM-Word">Great job! You've learned all the words.</div>
-		}
+		<!-- Navigation Buttons -->
+		<div class="Button mt-4">
+			<button class="btn btn-primary" @onclick="ShowPreviousWord" disabled="@(currentIndex == 0)">Previous</button>
+			<button class="btn btn-primary ms-2" @onclick="ShowNextWord">Next</button>
+		</div>
 	</div>
 </div>
 
@@ -62,9 +71,17 @@
 
 	private void ShowNextWord()
 	{
-		if (currentIndex < selectedWords.Count - 1)
+		if (currentIndex < selectedWords.Count)
 		{
 			currentIndex++;
+		}
+	}
+
+	private void ShowPreviousWord()
+	{
+		if (currentIndex > 0)
+		{
+			currentIndex--;
 		}
 	}
 
@@ -72,4 +89,8 @@
 	{
 		return $"_content/First_step_For_little_mind.shared/WordsLearning/{word}.jpg";
 	}
+
+	// Practice code
+	
+
 }

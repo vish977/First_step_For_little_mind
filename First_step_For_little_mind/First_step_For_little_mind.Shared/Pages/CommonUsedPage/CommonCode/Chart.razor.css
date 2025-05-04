@@ -18,6 +18,8 @@
     margin: 5px;
     height: 150px;
     width: 170px;
+    box-shadow: 0 0 5px black;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 375px) {

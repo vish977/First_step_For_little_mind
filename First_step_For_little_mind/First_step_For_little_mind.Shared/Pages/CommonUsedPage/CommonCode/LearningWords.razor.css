@@ -1,22 +1,38 @@
 ﻿.container-fluid {
-    height:100vh;
-    background: url(Bg/Bg.jpg)no-repeat;
-    background-size: 100vw 100vh;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 0;
 }
+
+/* Add blur background using pseudo-element */
+.container-fluid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('Bg/Bg.jpg') no-repeat center center;
+    background-size: cover;
+    filter: blur(2px);
+    z-index: -1; 
+}
+
+
 
 .FSLM-WordImg {
     height: 50vh;
     width: 50vw;
-    margin-left:15rem;
-    margin-top:2rem;
-    padding:2rem;
+    margin-top: 2rem;
+    padding: 2rem;
 
 }
-
 .container {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 }
 
 .FSLM-Word {
@@ -32,6 +48,7 @@
     display: inline-block;
     animation: zoom-in-out 0.6s ease-in-out;
 }
+
 
 @keyframes zoom-in-out {
     0% {
@@ -56,10 +73,15 @@
     background-image: linear-gradient(to right, #00467F, #A5CC82);
     color: white;
     font-size: 30px;
-    margin:5px;
+    margin: 5px;
 }
 
-Random color list
+.btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 #666;
+}
+
+
 .color-0 {
     color: #e74c3c;
 }
@@ -88,19 +110,39 @@ Random color list
     color: #e67e22;
 }
 
-Bootstrap style + press effect
-.btn-primary:active {
-    transform: scale(0.95);
-    box-shadow: 0 4px #666;
+img {
+    height: 15rem;
+    width: 15rem;
 }
 
-img {
-    height:15rem;
-    width:15rem;
-}
+
 .Button {
-    /*    display:flex;
-    justify-content:centre;*/
-  
     align-items: center;
+}
+
+/* ---------- MEDIA QUERY FOR RESPONSIVE DESIGN ---------- */
+@media (max-width: 768px) {
+    .FSLM-WordImg {
+        width: 90vw;
+        height: auto;
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .FSLM-Word {
+        font-size: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary {
+        width: 80vw;
+        font-size: 20px;
+    }
+
+    img {
+        height: 10rem;
+        width: 10rem;
+    }
+
+   
 }
