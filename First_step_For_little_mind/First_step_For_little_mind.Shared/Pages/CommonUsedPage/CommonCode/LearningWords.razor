@@ -5,7 +5,7 @@
 <div class="container-fluid">
 	<div class="container text-center">
 
-		<!-- Image or Message in FSLM-WordImg -->
+		<!-- Image or Quiz Area -->
 		<div class="FSLM-WordImg d-flex justify-content-center align-items-center" style="height: 300px;">
 			@if (currentIndex < selectedWords.Count)
 			{
@@ -13,8 +13,30 @@
 			}
 			else
 			{
-				<div class="FSLM-Word" style="font-size: 24px; color: green;">
-					Great job! Lets do some practices.
+				<!-- Quiz Section -->
+				<div class="container game-Container">
+					<div class="img @(isVibrating ? "vibrate" : "")">
+						<img src="@GetImagePath(CurrentQuiz)" alt="Quiz Word" style="max-width: 80%; max-height: 80%;" />
+					</div>
+					<div class="option">
+						@foreach (var option in CurrentOptions)
+						{
+							<button class="btn-option @GetButtonClass(option)" @onclick="@(() => CheckAnswer(option))" disabled="@hasAnswered">
+								@option
+								@if (hasAnswered)
+								{
+									if (option == CurrentQuiz)
+									{
+										<span> ✅</span>
+									}
+									else if (option == selectedAnswer && option != CurrentQuiz)
+									{
+										<span> ❌</span>
+									}
+								}
+							</button>
+						}
+					</div>
 				</div>
 			}
 		</div>
@@ -35,6 +57,7 @@
 			<button class="btn btn-primary" @onclick="ShowPreviousWord" disabled="@(currentIndex == 0)">Previous</button>
 			<button class="btn btn-primary ms-2" @onclick="ShowNextWord">Next</button>
 		</div>
+
 	</div>
 </div>
 
@@ -44,6 +67,16 @@
 
 	private List<string> selectedWords = new();
 	private int currentIndex = 0;
+
+	private List<string> quizPool = new();
+	private List<string> selectedQuizWords = new();
+	private int CurrentQuizIndex = 0;
+	private string CurrentQuiz => selectedQuizWords[CurrentQuizIndex];
+	private List<string> CurrentOptions = new();
+
+	private bool hasAnswered = false;
+	private string selectedAnswer = string.Empty;
+	private bool isVibrating = false;
 
 	protected override void OnParametersSet()
 	{
@@ -60,13 +93,18 @@
 
 		if (sourceList.Count > 0)
 		{
-			selectedWords = sourceList.OrderBy(x => Guid.NewGuid()).Take(10).ToList(); // Randomly pick 10
-			currentIndex = 0;
+			selectedWords = sourceList.OrderBy(x => Guid.NewGuid()).Take(10).ToList();
+			quizPool = sourceList;
+			selectedQuizWords = quizPool.OrderBy(x => Guid.NewGuid()).Take(5).ToList();
+			CurrentQuizIndex = 0;
+			LoadOptions();
 		}
 		else
 		{
 			selectedWords = new() { "Word Not Found" };
 		}
+
+		currentIndex = 0;
 	}
 
 	private void ShowNextWord()
@@ -90,7 +128,44 @@
 		return $"_content/First_step_For_little_mind.shared/WordsLearning/{word}.jpg";
 	}
 
-	// Practice code
-	
+	private void LoadOptions()
+	{
+		hasAnswered = false;
+		isVibrating = false;
+		selectedAnswer = string.Empty;
 
+		var rng = new Random();
+		var incorrect = quizPool.Except(new[] { CurrentQuiz }).OrderBy(x => rng.Next()).Take(2).ToList();
+		CurrentOptions = incorrect.Append(CurrentQuiz).OrderBy(x => rng.Next()).ToList();
+	}
+
+	private async void CheckAnswer(string option)
+	{
+		if (hasAnswered) return;
+		hasAnswered = true;
+		selectedAnswer = option;
+
+		if (option != CurrentQuiz)
+		{
+			isVibrating = true;
+			await Task.Delay(500);
+			isVibrating = false;
+		}
+
+		await Task.Delay(2000);
+		if (CurrentQuizIndex < selectedQuizWords.Count - 1)
+		{
+			CurrentQuizIndex++;
+			LoadOptions();
+			StateHasChanged();
+		}
+	}
+
+	private string GetButtonClass(string option)
+	{
+		if (!hasAnswered) return "";
+		if (option == CurrentQuiz) return "correct";
+		if (option == selectedAnswer && option != CurrentQuiz) return "wrong";
+		return "";
+	}
 }
