@@ -7,7 +7,7 @@
         {
             <div class="@GetClass(item)">
                 <a href="/Letter/@item">
-                    <img class="Letter" src="@GetImagePath(item)" alt="@item" />
+                    <img class="Letter" src="@GetImagePath(item.Split("_")[0])" alt="@item" />
                 </a>
             </div>
         }
@@ -22,14 +22,14 @@
     private string Title = "Learning Chart";
 
     private List<string> EnglishAlphabets = Enumerable.Range(65, 26)
-        .Select(x => ((char)x).ToString())
+        .Select(x => ((char)x).ToString()+"_English")
         .ToList();
 
-    private List<string> HindiSwar = new() { "a", "aa", "i", "ee", "u", "oo", "ri", "e", "ai", "o", "au", "an", "ah" };
+    private List<string> HindiSwar = new() { "a_Hindi", "aa_Hindi", "i_Hindi", "ee_Hindi", "u_Hindi", "oo_Hindi", "ri_Hindi", "e_Hindi", "ai_Hindi", "o_Hindi", "au_Hindi", "an_Hindi", "ah_Hindi" };
 
     private List<string> HindiVyanjan = new()
-    { "क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण",
-      "त", "थ", "द", "ध", "न", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "श", "ष", "स", "ह", "क्ष", "त्र", "ज्ञ"};
+    { "Ka_Hindi", "Kha_Hindi", "Ga_Hindi", "Gha_Hindi", "Ang_Hindi", "Cha_Hindi", "Chha_Hindi", "Ja_Hindi", "Jha_Hindi", "Eya_Hindi", "Ta_Hindi", "Tha_Hindi", "Da_Hindi", "Dha_Hindi", "Yda_Hindi",
+      "AT_Hindi", "Th_Hindi", "AD_Hindi", "Dh_Hindi", "Na_Hindi", "Pa_Hindi", "Pha_Hindi", "Ba_Hindi", "Bha_Hindi", "Ma_Hindi", "ya_Hindi", "Ra_Hindi", "La_Hindi", "Va_Hindi", "Sha_Hindi", "Sh_Hindi", "Sa_Hindi", "Ha_Hindi", "Ksha_Hindi", "Tra_Hindi", "Gya_Hindi"};
 
      private List<string> Matra = new() { "a", "aa", "i", "ee", "u", "oo", "ri", "e", "ai", "o", "au", "an", "ah" };
 

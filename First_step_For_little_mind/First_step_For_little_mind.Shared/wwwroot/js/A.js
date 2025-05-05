@@ -80,3 +80,8 @@ window.clearCanvas = async (letter) => {
     ctx.strokeText(letter.toUpperCase(), 150, 50);
     ctx.fillText(letter.toUpperCase(), 150, 50);
 };
+
+function reloadPage() {
+    location.reload();
+}
+
