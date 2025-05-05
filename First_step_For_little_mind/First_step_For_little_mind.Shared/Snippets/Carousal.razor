@@ -9,8 +9,8 @@
 <style>
     .resize-div {
         background: url("@($"/_content/First_step_For_little_mind.Shared/Image/English/Letter/{Letter}.png")") no-repeat;
-        background-size: 100%;
-        background-position: top;
+        background-size: contain;
+        /* background-position: top; */
     }
 
     input[type="color"] {
@@ -27,9 +27,9 @@
             <div class="container FSLM-Word">
                 @foreach (var box in Boxes)
                 {
-                    <div class="red-div @(box.IsVisible ? "show" : "")" style="background-image: url('@box.ImagePath')">
-                     <span style="margin-top: 5px; font-weight: bold; color: black;">@box.Text
-                     </span>
+                    <div class="red-div @(box.IsVisible ? "show" : "")" style="background: url('@box.ImagePath')no-repeat center ; background-size: contain;">
+                     <div class="col-3" style="margin-top: 5px; font-weight: bold; color: black;">@box.Text
+                     </div>
                     </div>
                 }
             </div>
@@ -42,7 +42,7 @@
                 <div class="row mt-3 w-100 justify-content-center" style="max-width: 600px;">
                     <div class="col-12 col-md-6 d-flex flex-column align-items-center align-items-md-start mb-2 mb-md-0">
                         <label for="colorPicker" class="form-label"><b>Choose Your Color:</b></label>
-                        <input type="color" id="colorPicker" class="form-control-color" value="#000000" />
+                        <input type="color" id="colorPicker" class="form-control-color" value="#000056" />
                     </div>
 
                     <div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-end">
@@ -75,7 +75,6 @@
     Your browser does not support the audio element.
 </audio>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 
 @code {
@@ -85,76 +84,73 @@
     {
         var items = Letter?.ToUpper() switch
         {
+            // English letters
             "A" => new string[] { "Apple", "Aeroplane", "Ant", "Astronout" },
             "B" => new string[] { "Bat", "Ball", "Boy", "Bag" },
             "C" => new string[] { "Cat", "Cap", "Cup", "Cow" },
-            "D" => new string[] { "Dog", "Doll", "Donkey", "Duck" },
-            "E" => new string[] { "Elephant", "Egg", "Eye", "Ear" },
-            "F" => new string[] { "Flag", "Fish", "Fan", "Frog" },
-            "G" => new string[] { "Girl", "Goat", "Giraff", "Grapes" },
-            "H" => new string[] { "Hen", "Hat", "House", "Helicopter" },
-            "I" => new string[] { "Ink", "Ice", "Ice-Cream", "Iron" },
-            "J" => new string[] { "Jug", "Joker", "Jacket", "Jackal" },
-            "K" => new string[] { "Kite", "Kangaroo", "King", "Key" },
-            "L" => new string[] { "Lion", "Lemon", "Lamp", "Leaf" },
-            "M" => new string[] { "Monkey", "Mango", "Moon", "Mushroom" },
-            "N" => new string[] { "Nest", "Net", "Nail", "Notebook" },
-            "O" => new string[] { "Orange", "Owl", "Octopus", "Onion" },
-            "P" => new string[] { "Parrot", "Pumpkin", "Peacock", "Pineapple" },
-            "Q" => new string[] { "Queen", "Quilt", "Quail", "Quiz" },
-            "R" => new string[] { "Rabbit", "Rose", "Rainbow", "Rocket" },
-            "S" => new string[] { "Sun", "Star", "Ship", "Snail" },
-            "T" => new string[] { "Tiger", "Tomato", "Tree", "Turtle" },
-            "U" => new string[] { "Umbrella", "Utensil", "Uniform", "Urn" },
-            "V" => new string[] { "Van", "Vulture", "Violin", "Vase" },
-            "W" => new string[] { "Whale", "Watermelon", "Watch", "Wolf" },
-            "X" => new string[] { "Xylophone", "X-ray", "Xerox", "Xmas" },
-            "Y" => new string[] { "Yak", "Yogurt", "Yarn", "Yellow" },
+            "D" => new  string[] { "Dog", "Doll", "Donkey", "Duck" },
+            "E" => new  string[] { "Elephant", "Egg", "Eye", "Ear" },
+            "F" => new  string[] { "Flag", "Fish", "Fan", "Frog" },
+            "G" => new  string[] { "Girl", "Goat", "Giraff", "Grapes" },
+            "H" => new  string[] { "Hen", "Hat", "House", "Helicopter" },
+            "I" => new  string[] { "Ink", "Ice", "Ice-Cream", "Iron" },
+            "J" => new  string[] { "Jug", "Joker", "Jacket", "Jackal" },
+            "K" => new  string[] { "Kite", "Kangaroo", "King", "Key" },
+            "L" => new  string[] { "Lion", "Lemon", "Lamp", "Leaf" },
+            "M" => new  string[] { "Monkey", "Mango", "Moon", "Mushroom" },
+            "N" => new  string[] { "Nest", "Net", "Nail", "Notebook" },
+            "O" => new  string[] { "Orange", "Owl", "Octopus", "Onion" },
+            "P" => new  string[] { "Parrot", "Pumpkin", "Peacock", "Pineapple" },
+            "Q" => new  string[] { "Queen", "Quilt", "Quail", "Quiz" },
+            "R" => new  string[] { "Rabbit", "Rose", "Rainbow", "Rocket" },
+            "S" => new  string[] { "Sun", "Star", "Ship", "Snail" },
+            "T" => new  string[] { "Tiger", "Tomato", "Tree", "Turtle" },
+            "U" => new  string[] { "Umbrella", "Utensil", "Uniform", "Urn" },
+            "V" => new  string[] { "Van", "Vulture", "Violin", "Vase" },
+            "W" => new  string[] { "Whale", "Watermelon", "Watch", "Wolf" },
+            "X" => new  string[] { "Xylophone", "X-ray", "Xerox", "Xmas" },
+            "Y" => new  string[] { "Yak", "Yogurt", "Yarn", "Yellow" },
             "Z" => new string[] { "Zebra", "Zip", "Zoo", "Zero" },
+
+            // Hindi letters
             "अ" => new string[] { "अनार", "अमरूद", "अजगर", "अखरोट" },
             "आ" => new string[] { "आम", "आलू", "आकाश", "आटा" },
             "इ" => new string[] { "इमली", "इंजीनियर", "इंद्रधनुष", "इकाई" },
-            "ई"=> new string[] { "ईख", "ईंट", "ईमेल", "ईश्वर" },
-            "उ"=> new string[] { "उल्लू", "उड़नखटोला", "उदर", "उपवन" },
-            "ऊ"=> new string[] { "ऊँट", "ऊर्जा", "ऊन", "ऊँचाई"},
-            "ऋ"=> new string[] { "ऋषि", "ऋतु", "ऋण", "ऋचि" },
-            "ए"=> new string[] { "एक", "एड़ी", "एयरपोर्ट", "एंटीना" },
-            "ऐ"=> new string[] { "ऐनक", "ऐड़ी", "ऐश्वर्य", "ऐलान" },
-            "ओ"=> new string[] { "ओखली", "ओस", "ओट", "ओर" },
-            "औ"=> new string[] { "औषधि", "औरत", "औजार", "औद्योगिक" },
-            "अं"=> new string[] { "अंगूर", "अंडा", "अंश", "अंतरिक्ष" },
-            "अः"=> new string[] { "दुःख", "सः", "शः", "स्वः" },
-
-            "क"=> new string[] { "कबूतर", "कमल", "कपड़ा", "काजू" },
+            "ई" => new string[] { "ईख", "ईंट", "ईमेल", "ईश्वर" },
+            "उ" => new string[] { "उल्लू", "उड़नखटोला", "उदर", "उपवन" },
+            "ऊ" => new string[] { "ऊँट", "ऊर्जा", "ऊन", "ऊँचाई" },
+            "ऋ" => new string[] { "ऋषि", "ऋतु", "ऋण", "ऋचि" },
+            "ए" => new string[] { "एक", "एड़ी", "एयरपोर्ट", "एंटीना" },
+            "ऐ" => new string[] { "ऐनक", "ऐड़ी", "ऐश्वर्य", "ऐलान" },
+            "ओ" => new string[] { "ओखली", "ओस", "ओट", "ओर" },
+            "औ" => new string[] { "औषधि", "औरत", "औजार", "औद्योगिक" },
+            "अं" => new string[] { "अंगूर", "अंडा", "अंश", "अंतरिक्ष" },
+            "अः" => new string[] { "दुःख", "सः", "शः", "स्वः" },
+            "क" => new string[] { "कबूतर", "कमल", "कपड़ा", "काजू" },
             "ख"=> new string[] { "खरगोश", "खरबूजा", "खेत", "खिड़की" },
-            "ग"=> new string[] { "गाय", "गिलहरी", "गेंद", "गाजर" },
-            "घ"=> new string[] { "घोड़ा", "घड़ी", "घर", "घंटी" },
-            "ङ"=> new string[] { "अंग", "पिंगला", "चंग", "संगीत" },
-            
+            "ग" => new string[] { "गाय", "गिलहरी", "गेंद", "गाजर" },
+            "घ" => new string[] { "घोड़ा", "घड़ी", "घर", "घंटी" },
+            "ङ" => new string[] { "अंग", "पिंगला", "चंग", "संगीत" },
             "च"=> new string[] { "चिड़िया", "चमचम", "चम्मच", "चरण" },
-            "छ"=> new string[] { "छाता", "छोटा", "छिपकली", "छोटपर्व" },
-            "ज"=> new string[] { "जहाज", "जल", "जंगल", "जूता" },
-            "झ"=> new string[] { "झंडा", "झूला", "झरना", "झाड़ू" },
-            "ञ"=> new string[] { "ज्ञान", "पञ्", "संञ्ज्ञा", "अञ्जन" },
-                       
-            "ट"=> new string[] { "टोपी", "टमाटर", "टाई", "ट्रेन" },
-            "ठ"=> new string[] { "ठेला", "ठंड", "ठंडी", "ठोस" },
-            "ड"=> new string[] { "डमरू", "डाकिया", "डाक", "डिब्बा" },
-            "ढ" =>new string[] { "ढोल", "ढक्कन", "ढाल", "ढूंढ" },
+            "छ" => new string[] { "छाता", "छोटा", "छिपकली", "छोटपर्व" },
+            "ज" => new string[] { "जहाज", "जल", "जंगल", "जूता" },
+            "झ" => new string[] { "झंडा", "झूला", "झरना", "झाड़ू" },
+            "ञ" => new string[] { "ज्ञान", "पञ्", "संञ्ज्ञा", "अञ्जन" },
+            "ट" => new string[] { "टोपी", "टमाटर", "टाई", "ट्रेन" },
+            "ठ" => new string[] { "ठेला", "ठंड", "ठंडी", "ठोस" },
+            "ड" => new string[] { "डमरू", "डाकिया", "डाक", "डिब्बा" },
+            "ढ" => new string[] { "ढोल", "ढक्कन", "ढाल", "ढूंढ" },
             "ण" => new string[] { "वर्ण", "कर्ण", "चरण", "दण्ड" },
-                        
             "त" => new string[] { "तरबूज", "तराजू", "ताला", "तारा" },
             "थ" => new string[] { "थैला", "थाली", "थोड़ा", "थामना" },
             "द" => new string[] { "दवा", "दरवाजा", "दूध", "दीपक" },
             "ध" => new string[] { "धनुष", "धागा", "धूप", "धरती" },
             "न" => new string[] { "नक्शा", "नदी", "नमक", "नाव" },
-                       
             "प" => new string[] { "पंखा", "पतंग", "पानी", "पत्ता" },
             "फ" => new string[] { "फल", "फूल", "फैक्ट्री", "फरिश्ता" },
             "ब" => new string[] { "बकरी", "बच्चा", "बर्फ", "बटन" },
             "भ" => new string[] { "भालू", "भोजन", "भूत", "भारत" },
             "म" => new string[] { "मकड़ी", "मिठाई", "मिर्ची", "मकान" },
-
             "य" => new string[] { "यज्ञ", "यात्रा", "योजना", "यंत्र" },
             "र" => new string[] { "रथ", "रस्सी", "रोटी", "राजा" },
             "ल" => new string[] { "लड़का", "लड्डू", "लाठी", "लालटेन" },
@@ -165,17 +161,23 @@
             "ह" => new string[] { "हाथी", "हवा", "हल", "हंस" },
             "क्ष" => new string[] { "क्षत्रिय", "क्षमा", "क्षय", "क्षेत्र" },
             "त्र" => new string[] { "त्रिशूल", "त्रिकोण", "त्रेता", "त्रास" },
-            "ज्ञ" => new string[] { "ज्ञान", "ज्ञानी", "ज्ञेय", "ज्ञापन" },
+            "ज्ञ"=> new string[] { "ज्ञान", "ज्ञानी", "ज्ञेय", "ज्ञापन" },
+
             _ => Array.Empty<string>()
         };
+
+        bool isEnglish = Letter != null && Letter.ToUpper()[0] >= 'A' && Letter.ToUpper()[0] <= 'Z';
+
+        string basePath = isEnglish
+            ? "_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage"
+            : "_content/First_step_For_little_mind.Shared/Image/Hindi/LetterRelatedImage";
 
         Boxes = items.Select(item => new BoxModel
             {
                 Text = item,
-                ImagePath = $"_content/First_step_For_little_mind.Shared/Image/English/LetterRelatedImage/{item}.jpeg"
+                ImagePath = $"{basePath}/{item}.jpeg"
             }).ToList();
 
-        // Animate one by one
         for (int i = 0; i < Boxes.Count; i++)
         {
             await Task.Delay(2000);
@@ -183,6 +185,8 @@
             StateHasChanged();
         }
     }
+
+
 
     private class BoxModel
     {

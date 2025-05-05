@@ -6,7 +6,7 @@
         @foreach (var item in SelectedList)
         {
             <div class="@GetClass(item)">
-                <a href="/English/@item">
+                <a href="/Letter/@item">
                     <img class="Letter" src="@GetImagePath(item)" alt="@item" />
                 </a>
             </div>
@@ -25,13 +25,13 @@
         .Select(x => ((char)x).ToString())
         .ToList();
 
-    private List<string> HindiSwar = new() { "अ", "आ", "इ", "ई", "उ", "ऊ", "ऋ", "ए", "ऐ", "ओ", "औ", "अं", "अः" };
+    private List<string> HindiSwar = new() { "a", "aa", "i", "ee", "u", "oo", "ri", "e", "ai", "o", "au", "an", "ah" };
 
     private List<string> HindiVyanjan = new()
     { "क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण",
       "त", "थ", "द", "ध", "न", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "श", "ष", "स", "ह", "क्ष", "त्र", "ज्ञ"};
 
-     private List<string> Matra = new() { "A", "Aa", "i", "ii", "u", "uu", "ri", "Ae", "aee", "o", "oo", "ank", "ah" };
+     private List<string> Matra = new() { "a", "aa", "i", "ee", "u", "oo", "ri", "e", "ai", "o", "au", "an", "ah" };
 
     private List<string> SelectedList = new();
 

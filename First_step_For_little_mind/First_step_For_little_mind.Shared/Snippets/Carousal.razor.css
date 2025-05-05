@@ -25,9 +25,7 @@
     height:100%;
 }
 
-.astronout-img {
-    width: 45% !important;
-}
+
 
 .resize-div {
     margin: 5px auto;
@@ -41,8 +39,8 @@
     }
 
     100% {
-        width: 400px;
-        height: 400px;
+        width: 300px;
+        height: 300px;
     }
 }
 .FSLM-Word {
@@ -82,9 +80,7 @@
 .red-div {
     width: 15rem;
     height: 14rem;
-    background-size: 18vw 30vh;
-    background-repeat: no-repeat;
-    background-position: center;
+   
     color: white;
     font-size: 20px;
     display: flex;
