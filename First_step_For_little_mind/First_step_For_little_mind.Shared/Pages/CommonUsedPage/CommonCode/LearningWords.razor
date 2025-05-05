@@ -1,171 +1,262 @@
 ﻿@page "/Learn/{letter}"
 @inject IJSRuntime JS
-@using First_step_For_little_mind.Shared.List;
+@using First_step_For_little_mind.Shared.List
 
 <div class="container-fluid">
-	<div class="container text-center">
+    <div class="container text-center">
+        @if (currentStage == LearnStage.Learning)
+        {
+            <!-- Learning Word Section -->
+            <div class="FSLM-WordImg d-flex justify-content-center align-items-center" style="height: 300px;">
+                <img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" />
+            </div>
 
-		<!-- Image or Quiz Area -->
-		<div class="FSLM-WordImg d-flex justify-content-center align-items-center" style="height: 300px;">
-			@if (currentIndex < selectedWords.Count)
-			{
-				<img src="@GetImagePath(selectedWords[currentIndex])" alt="Image of @selectedWords[currentIndex]" />
-			}
-			else
-			{
-				<!-- Quiz Section -->
-				<div class="container game-Container">
-					<div class="img @(isVibrating ? "vibrate" : "")">
-						<img src="@GetImagePath(CurrentQuiz)" alt="Quiz Word" style="max-width: 80%; max-height: 80%;" />
-					</div>
-					<div class="option">
-						@foreach (var option in CurrentOptions)
-						{
-							<button class="btn-option @GetButtonClass(option)" @onclick="@(() => CheckAnswer(option))" disabled="@hasAnswered">
-								@option
-								@if (hasAnswered)
-								{
-									if (option == CurrentQuiz)
-									{
-										<span> ✅</span>
-									}
-									else if (option == selectedAnswer && option != CurrentQuiz)
-									{
-										<span> ❌</span>
-									}
-								}
-							</button>
-						}
-					</div>
-				</div>
-			}
-		</div>
+            <!-- Word Spelling -->
+            <div class="FSLM-Word mt-3">
+                @foreach (var (ch, index) in selectedWords[currentIndex].Select((c, i) => (c, i)))
+                {
+                    <span class="color-@(@index % 7)">@ch</span>
+                }
+            </div>
 
-		<!-- Word Spelling with Colored Letters -->
-		@if (currentIndex < selectedWords.Count)
-		{
-			<div class="FSLM-Word mt-3">
-				@foreach (var (ch, index) in selectedWords[currentIndex].Select((c, i) => (c, i)))
-				{
-					<span class="color-@(@index % 7)">@ch</span>
-				}
-			</div>
-		}
+            <!-- Navigation Buttons -->
+            <div class="Button mt-4">
+                <button class="btn btn-primary" @onclick="ShowPreviousWord" disabled="@(currentIndex == 0)">Previous</button>
+                <button class="btn btn-primary ms-2" @onclick="ShowNextWord">Next</button>
+            </div>
+        }
+        else if (currentStage == LearnStage.Quiz)
+        {
+            <!-- Quiz Section -->
+            @if (CurrentQuizIndex < selectedQuizWords.Count)
+            {
+                <div class="FSLM-WordImg d-flex justify-content-center align-items-center" style="height: 300px;">
+                    <div class="container game-Container">
+                        <div class="img @(isVibrating ? "vibrate" : "")">
+                            <img src="@GetImagePath(CurrentQuiz)" alt="Quiz Word" style="max-width: 80%; max-height: 80%;" />
+                        </div>
+                        <div class="option">
+                            @foreach (var option in CurrentOptions)
+                            {
+                                <button class="btn-option @GetButtonClass(option)" @onclick="@(() => CheckAnswer(option))" disabled="@hasAnswered">
+                                    @option
+                                    @if (hasAnswered)
+                                    {
+                                        if (option == CurrentQuiz)
+                                        {
+                                            <span> ✅</span>
+                                        }
+                                        else if (option == selectedAnswer && option != CurrentQuiz)
+                                        {
+                                            <span> ❌</span>
+                                        }
+                                    }
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-primary" @onclick="GoToLearning">Word</button>
+                </div>
 
-		<!-- Navigation Buttons -->
-		<div class="Button mt-4">
-			<button class="btn btn-primary" @onclick="ShowPreviousWord" disabled="@(currentIndex == 0)">Previous</button>
-			<button class="btn btn-primary ms-2" @onclick="ShowNextWord">Next</button>
-		</div>
+            }
+        }
+        else if (currentStage == LearnStage.Complete)
+        {
+            <!-- Name the Image Section -->
+            <div class="row">
+                @foreach (var item in SelectedImages)
+                {
+                    var isCorrect = string.Equals(item.UserInput?.Trim(), item.Name, StringComparison.OrdinalIgnoreCase);
 
-	</div>
+                    <div class="col-4">
+                        <img src="@item.ImagePath" alt="@item.Name" />
+
+                        <input type="text"
+                               class="input-box @(ShowResults ? (isCorrect ? "correct" : "wrong") : "")"
+                               @bind="item.UserInput"
+                               placeholder="Enter name..." />
+
+                        @if (ShowResults && !isCorrect)
+                        {
+                            <div class="correct-answer">Correct: @item.Name</div>
+                        }
+                    </div>
+                
+
+                }
+            </div>
+
+            <div class="center-btn mt-4">
+                <button class="btn btn-primary" @onclick="GoToLearning">Word</button>
+                <button class="btn btn-primary " @onclick="SubmitAnswers">Submit</button>
+               
+            </div>
+        }
+    </div>
 </div>
 
 @code {
-	[Parameter]
-	public string? letter { get; set; }
+    [Parameter]
+    public string? letter { get; set; }
 
-	private List<string> selectedWords = new();
-	private int currentIndex = 0;
+    private List<string> selectedWords = new();
+    private int currentIndex = 0;
 
-	private List<string> quizPool = new();
-	private List<string> selectedQuizWords = new();
-	private int CurrentQuizIndex = 0;
-	private string CurrentQuiz => selectedQuizWords[CurrentQuizIndex];
-	private List<string> CurrentOptions = new();
+    private List<string> quizPool = new();
+    private List<string> selectedQuizWords = new();
+    private int CurrentQuizIndex = 0;
+    private string CurrentQuiz => selectedQuizWords[CurrentQuizIndex];
+    private List<string> CurrentOptions = new();
 
-	private bool hasAnswered = false;
-	private string selectedAnswer = string.Empty;
-	private bool isVibrating = false;
+    private bool hasAnswered = false;
+    private string selectedAnswer = string.Empty;
+    private bool isVibrating = false;
 
-	protected override void OnParametersSet()
-	{
-		List<string> sourceList = new();
+    private enum LearnStage
+    {
+        Learning,
+        Quiz,
+        Complete
+    }
 
-		if (letter?.ToLower() == "threeletterword")
-		{
-			sourceList = RequiredList.ThreeLetterWords;
-		}
-		else if (letter?.ToLower() == "fourletterword")
-		{
-			sourceList = RequiredList.FourLetterWords;
-		}
+    private LearnStage currentStage = LearnStage.Learning;
 
-		if (sourceList.Count > 0)
-		{
-			selectedWords = sourceList.OrderBy(x => Guid.NewGuid()).Take(10).ToList();
-			quizPool = sourceList;
-			selectedQuizWords = quizPool.OrderBy(x => Guid.NewGuid()).Take(5).ToList();
-			CurrentQuizIndex = 0;
-			LoadOptions();
-		}
-		else
-		{
-			selectedWords = new() { "Word Not Found" };
-		}
+    protected override void OnParametersSet()
+    {
+        List<string> sourceList = new();
 
-		currentIndex = 0;
-	}
+        if (letter?.ToLower() == "threeletterword")
+        {
+            sourceList = RequiredList.ThreeLetterWords;
+        }
+        else if (letter?.ToLower() == "fourletterword")
+        {
+            sourceList = RequiredList.FourLetterWords;
+        }
 
-	private void ShowNextWord()
-	{
-		if (currentIndex < selectedWords.Count)
-		{
-			currentIndex++;
-		}
-	}
+        if (sourceList.Count > 0)
+        {
+            selectedWords = sourceList.OrderBy(x => Guid.NewGuid()).Take(10).ToList();
+            quizPool = selectedWords;
+            selectedQuizWords = quizPool.OrderBy(x => Guid.NewGuid()).Take(5).ToList();
+            SelectedImages = selectedWords
+             .OrderBy(x => Guid.NewGuid())
+             .Take(6)
+             .Select(word => new ImageItem
+                 {
+                     Name = word,
+                     ImagePath = GetImagePath(word)
+                 }).ToList();
 
-	private void ShowPreviousWord()
-	{
-		if (currentIndex > 0)
-		{
-			currentIndex--;
-		}
-	}
 
-	private string GetImagePath(string word)
-	{
-		return $"_content/First_step_For_little_mind.shared/WordsLearning/{word}.jpg";
-	}
+            currentIndex = 0;
+            CurrentQuizIndex = 0;
+            currentStage = LearnStage.Learning;
+            LoadOptions();
+        }
+        else
+        {
+            selectedWords = new() { "Word Not Found" };
+        }
+    }
 
-	private void LoadOptions()
-	{
-		hasAnswered = false;
-		isVibrating = false;
-		selectedAnswer = string.Empty;
+    private void ShowNextWord()
+    {
+        if (currentStage == LearnStage.Learning)
+        {
+            if (currentIndex < selectedWords.Count - 1)
+            {
+                currentIndex++;
+            }
+            else
+            {
+                currentStage = LearnStage.Quiz;
+                currentIndex = 0;
+            }
+        }
+    }
 
-		var rng = new Random();
-		var incorrect = quizPool.Except(new[] { CurrentQuiz }).OrderBy(x => rng.Next()).Take(2).ToList();
-		CurrentOptions = incorrect.Append(CurrentQuiz).OrderBy(x => rng.Next()).ToList();
-	}
+    private void ShowPreviousWord()
+    {
+        if (currentStage == LearnStage.Learning && currentIndex > 0)
+        {
+            currentIndex--;
+        }
+    }
 
-	private async void CheckAnswer(string option)
-	{
-		if (hasAnswered) return;
-		hasAnswered = true;
-		selectedAnswer = option;
+    private void GoToLearning()
+{
+	currentStage = LearnStage.Learning;
+	currentIndex = 0;
+}
 
-		if (option != CurrentQuiz)
-		{
-			isVibrating = true;
-			await Task.Delay(500);
-			isVibrating = false;
-		}
 
-		await Task.Delay(2000);
-		if (CurrentQuizIndex < selectedQuizWords.Count - 1)
-		{
-			CurrentQuizIndex++;
-			LoadOptions();
-			StateHasChanged();
-		}
-	}
+    private string GetImagePath(string word)
+    {
+        return $"_content/First_step_For_little_mind.shared/WordsLearning/{word}.jpg";
+    }
 
-	private string GetButtonClass(string option)
-	{
-		if (!hasAnswered) return "";
-		if (option == CurrentQuiz) return "correct";
-		if (option == selectedAnswer && option != CurrentQuiz) return "wrong";
-		return "";
-	}
+    private void LoadOptions()
+    {
+        hasAnswered = false;
+        isVibrating = false;
+        selectedAnswer = string.Empty;
+
+        var rng = new Random();
+        var incorrect = quizPool.Except(new[] { CurrentQuiz }).OrderBy(x => rng.Next()).Take(2).ToList();
+        CurrentOptions = incorrect.Append(CurrentQuiz).OrderBy(x => rng.Next()).ToList();
+    }
+
+    private async void CheckAnswer(string option)
+    {
+        if (hasAnswered) return;
+        hasAnswered = true;
+        selectedAnswer = option;
+
+        if (option != CurrentQuiz)
+        {
+            isVibrating = true;
+            await Task.Delay(500);
+            isVibrating = false;
+        }
+
+        await Task.Delay(2000);
+
+        if (CurrentQuizIndex < selectedQuizWords.Count - 1)
+        {
+            CurrentQuizIndex++;
+            LoadOptions();
+            StateHasChanged();
+        }
+        else
+        {
+            currentStage = LearnStage.Complete;
+            StateHasChanged();
+        }
+    }
+
+    private string GetButtonClass(string option)
+    {
+        if (!hasAnswered) return "";
+        if (option == CurrentQuiz) return "correct";
+        if (option == selectedAnswer && option != CurrentQuiz) return "wrong";
+        return "";
+    }
+
+    public class ImageItem
+    {
+        public string ImagePath { get; set; }
+        public string Name { get; set; }
+        public string UserInput { get; set; } = string.Empty;
+    }
+
+    private List<ImageItem> SelectedImages = new();
+    private bool ShowResults = false;
+
+    private void SubmitAnswers()
+    {
+        ShowResults = true;
+    }
 }

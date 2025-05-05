@@ -150,7 +150,7 @@ img {
 /*Tick the correct answer practice css*/
 
 .game-Container {
-    border: 1px solid red;
+/*    border: 1px solid red;*/
     height: 63vh;
     padding: 1px;
     display: flex;
@@ -159,7 +159,7 @@ img {
 }
 
 .img {
-     border: 1px solid black; 
+/*     border: 1px solid black; */
     height: 100%;
     width: 50%;
     display: flex;
@@ -168,7 +168,7 @@ img {
 }
 
 .option {
-     border: 1px solid green; 
+/*     border: 1px solid green; */
     height: 100%;
     width: 50%;
     display: flex;
@@ -182,9 +182,11 @@ img {
     padding: 0.75rem 1.25rem;
     border-radius: 10px;
     font-size: 1rem;
-     border: 2px solid black; 
-    background-color: gray;
-    color: white;
+    /*     border: 2px solid black; */
+    background-image: linear-gradient(to right, #00467F, #A5CC82);
+    font-size: 30px;
+    font-weight: bold;
+    color: Red;
     min-width: 200px;
 }
 
@@ -226,6 +228,66 @@ img {
     100% {
         transform: translateX(0);
     }
+}
+/*name the image*/
+
+.NameTheImage {
+/*    border: 1px solid red;*/
+    padding: 1rem;
+}
+
+.row {
+/*    border: 1px solid black;*/
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-4 {
+/*    border: 1px solid green;*/
+    height: 280px;
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+}
+
+.col-4 img {
+    max-width: 100%;
+    max-height: 120px;
+    margin:20px 1px 20px 1px;
+}
+
+.input-box {
+    margin-top: 10px;
+    width: 80%;
+    padding: 5px;
+    border: 2px solid gray;
+    border-radius: 4px;
+}
+
+.correct {
+    border-color: green !important;
+    background-color: #e0ffe0;
+}
+
+.wrong {
+    border-color: red !important;
+    background-color: #ffe0e0;
+}
+
+.correct-answer {
+    color: red;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+
+
+.center-btn {
+    display: flex;
+    justify-content: center;
 }
 
 
