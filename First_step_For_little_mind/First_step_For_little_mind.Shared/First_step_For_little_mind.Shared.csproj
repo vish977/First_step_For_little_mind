@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\Generalknowledge\WorldAroundUs\" />
     <Folder Include="wwwroot\Image\MatchTheFollowing\" />
   </ItemGroup>
 

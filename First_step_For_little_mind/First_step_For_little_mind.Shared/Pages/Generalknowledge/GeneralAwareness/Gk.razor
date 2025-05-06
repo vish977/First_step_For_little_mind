@@ -1,0 +1,74 @@
+﻿@page "/item/{ItemName}"
+
+<h1>@Title</h1>
+
+<div class="container">
+    <div class="Imgdiv">
+        <img src="" alt="Alternate Text" />
+    </div>
+    <button>Preview</button>
+    <button>Next</button>
+</div>
+
+
+@code {
+
+    [Parameter] public string? ItemName { get; set; }
+
+    private string Title = "Learning Item";
+
+    private List<string> FlowerName = new() { "Rose", "Lotus", "Sunflower", "Marigold", "Daisy", "Tulip", "Poppy", "Daffodil", "Hibiscus", "Daisy", "Jasmine", "Dahlia", "Lily", "Chrysanthemum", "Gulmohar", "Canna Lily", "Blue Jay", "Plumeria", "Night-blooming Jasmine", "Vaijanti Flower", "Rose" };
+
+    private List<string> AnimalName = new()
+    { "Cat", "Dog", "Elephant", "Pig", "Cow", "Bear", "Deer", "Jackal", "Wolf", "Fox", "Rabbit", "Lion", "Tiger", "Monkey", "Buffalo", "Goat", "Leopard", "Zebra", "Sheep", "Camel", "Hippopotamus", "Rhinoceros", "Donkey", "Giraff", "Horse"};
+
+    private List<string> BirdName = new() { "Penguin", "Owl", "Ostrich", "Hummingbird", "Cock ", "Hen", "Emu", "Eagle", "Duck", "Coucal", "Parrot", "Pigeon", "Myna", "Kingfisher", "Robin", "Cuckoo", "Toucan", "Woodpecker", "Sparrow", "Bulbul", "Babbler", "Swan", "Peacock", "Peahen", "Crane"};
+
+    private List<string> FruitNamae = new() { "Apple", "Banana", "Payaya", "Lychee", "Mango ", "Orange", "Lemon", "Watermelon", "Muskmelon", "Pomegranate", "Coconut", "Guava", "Grapes", "Kiwi", "Blackberry", "Pear", "Mulberry", "Custard Apple", "Strawberry", "Starfruit"};
+
+    private List<string> VegetableName = new() { "Mint", "Coriander ", "Tomato", "Capsicum", "Turnip ", "Onion", "Cabbage", "Pointed Gourd", "Spinach", "Radish", "Chili ", "Corn ", "Bottle Gourd", "Lettuce ", "Garlic", "Cucumber", "Bitter Gourd", "Pumpkin", "Broccoli", "Carrot", "Beetroot", "Ladyfinger", "Beans ", "Brinjal", "Avocado ", "Potato", "Cauliflower" };
+
+    private List<string> SelectedList = new();
+
+    protected override void OnParametersSet()
+    {
+        SelectedList = ItemName switch
+        {
+            "FruitsName" => FruitNamae,
+            "VegetablesName" => VegetableName,
+            "FlowersName" => FlowerName,
+            "BirdsName" => BirdName,
+            "AnimalsName" => AnimalName,
+            _ => new List<string>()
+        };
+
+        // Set Title based on selection
+        Title = ItemName switch
+        {
+            "FruitsName" => "Fruits Name",
+            "VegetablesName" => "Vegetables Name",
+            "FlowersName" => "Flowers Name",
+            "BirdsName" => "Birds Name",
+            "AnimalsName" => "Animals Name",
+
+            _ => "Learning Item"
+        };
+    }
+
+
+    private string GetImagePath(string item)
+    {
+        string basePath = "/_content/First_step_For_little_mind.Shared/Image";
+
+        return ItemName switch
+        {
+            "FruitsName" => $"{basePath}/English/a_z_Full_Images/{item}.jpg",
+            "FlowersName" => $"{basePath}/Hindi/Swar/{item}.jpg",
+            "VegetablesName" => $"{basePath}/Hindi/Vyanjan/{item}.jpg",
+            "BirdsName" => $"{basePath}/Hindi/Matra/{item}.jpg",
+            "AnimalsName" => $"{basePath}/Hindi/Matra/{item}.jpg",
+            _ => ""
+        };
+    }
+}
+
