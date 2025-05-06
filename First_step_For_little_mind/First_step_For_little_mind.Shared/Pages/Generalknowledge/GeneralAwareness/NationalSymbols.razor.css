@@ -1,0 +1,90 @@
+﻿/* Base Styles */
+.container-fluid {
+    height: 100vh;
+    background: url("Bg/SimpleBg.jpeg") no-repeat center center;
+    background-size: cover;
+}
+
+.text {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 60px;
+    color: red;
+}
+
+h2 {
+    font-size: 60px;
+    background: linear-gradient(to right, #2A7B9B, #57C785, #EDDD53);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h3 {
+    font-size: 40px;
+    color: orange;
+}
+
+h4 {
+    font-size: 40px;
+    color: blue;
+}
+
+.btn {
+    color: black;
+    background-color: green;
+    text-align: center;
+    width: 150px;
+    height: 70px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+/* 📱 General Responsive for Small Devices */
+@media only screen and (max-width: 600px) {
+    h1, h2 {
+        font-size: 36px;
+    }
+
+    h3, h4 {
+        font-size: 24px;
+    }
+
+    .btn {
+        width: 120px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .container-fluid {
+        background-position: center;
+        background-size: cover;
+    }
+}
+
+/* 🤖 Android Phones in Landscape Mode */
+@media only screen and (max-width: 900px) and (orientation: landscape) {
+    h1, h2 {
+        font-size: 40px;
+    }
+
+    h3, h4 {
+        font-size: 28px;
+    }
+
+    .btn {
+        width: 130px;
+        height: 55px;
+        font-size: 22px;
+    }
+
+    .container-fluid {
+        height: 100vh;
+        background-position: center center;
+        background-size: cover;
+    }
+}

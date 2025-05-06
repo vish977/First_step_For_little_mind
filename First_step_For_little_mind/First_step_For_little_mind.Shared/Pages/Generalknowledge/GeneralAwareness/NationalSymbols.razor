@@ -1,0 +1,77 @@
+﻿@page "/nationalsymbols"
+
+<div class="container-fluid">
+    <div class="container text-center mt-5">
+        @if (showIntro)
+        {
+            <h1 class="text">India is Our Country</h1>
+            <img src="_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge/NationalSymbol/India.png" />
+            
+        }
+        else if (currentIndex < data.Count)
+        {
+            <h3 class="text">@data[currentIndex].Question</h3>
+            <div class="Imgdiv my-4">
+                <img src="@GetImagePath(data[currentIndex].Answer)" alt="@data[currentIndex].Answer" style="max-height: 200px;" />
+            </div>
+            <h4 class="text">@data[currentIndex].Answer</h4>
+            <button class="btn btn-primary mt-3" @onclick="ShowNext">Next</button>
+        }
+        else
+        {
+            <h2 class="text">!! Jai Hind !!</h2>
+            <img src="_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge/NationalSymbol/IndiaFlag.gif" />
+        }
+    </div>
+</div>
+
+@code {
+    private bool showIntro = true;
+    private int currentIndex = 0;
+
+    private List<QA> data = new List<QA>
+    {
+        new QA { Question = "Our National Flag is", Answer = "Tricolor" },
+        new QA { Question = "Our National Bird is", Answer = "Peacock" },
+        new QA { Question = "Our National Animal is", Answer = "Tiger" },
+        new QA { Question = "Our National Fruit is", Answer = "Mango" },
+        new QA { Question = "Our National Tree is", Answer = "Banyan Tree" },
+        new QA { Question = "Our National Flower is", Answer = "Lotus" },
+        new QA { Question = "Our National River is", Answer = "Ganga River" },
+        new QA { Question = "Our National Aquatic Animal is", Answer = "Ganga Dolphin" },
+        new QA { Question = "Our National Emblem is", Answer = "Four Headed Lion" },
+        new QA { Question = "Our National Song is", Answer = "Vande Mataram" },
+        new QA { Question = "Our National Anthem is", Answer = "Jana Gana Mana" },
+        new QA { Question = "Our Independence day on", Answer = "15th August" },
+        new QA { Question = "Our Republic day on", Answer = "26th January" },
+        new QA { Question = "Our National Currency is", Answer = "Rupee" },
+        new QA { Question = "Our National Motto is", Answer = "Satyameva Jayate" },
+
+
+
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(2000);
+        showIntro = false;
+        StateHasChanged();
+    }
+
+    private void ShowNext()
+    {
+        currentIndex++;
+    }
+
+    private string GetImagePath(string answer)
+    {
+        var fileName = answer.Replace(" ", "_") + ".jpeg"; // URL encoding for spaces
+        return $"/_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge/NationalSymbol/{fileName}";
+    }
+
+    public class QA
+    {
+        public string Question { get; set; }
+        public string Answer { get; set; }
+    }
+}

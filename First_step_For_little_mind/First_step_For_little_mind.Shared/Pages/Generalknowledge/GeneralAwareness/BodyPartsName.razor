@@ -1,0 +1,61 @@
+﻿@page "/bodyPartsName"
+
+<style>
+	.container-fluid {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+	}
+
+	.row {
+		display: flex;
+		justify-content: space-around;
+		gap: 7px;
+	}
+
+	.col-3 {
+		padding: 3px;
+		height: 15.6vh;
+		width: 14vw;
+		box-shadow: 0 0 0 1px grey;
+		border-radius: 5px;
+	}
+
+	.singleParts {
+		height: 80%;
+		width: 100%;
+	}
+
+</style>
+
+<div class="container-fluid ">
+	<div class="WholeBodyContainer">
+		<img src="_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge/BodyParts/BodyParts.jpeg" alt="Alternate Text" width="300" />
+	</div>
+	<div class="container">
+		<div class="row">
+			@foreach (var part in BodyParts)
+			{
+				<div class="col-3">
+					<img src="@ImagePath(part)" alt="@part" class="singleParts" />
+					<span>@part</span>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+@code {
+	// List of body parts
+	List<string> BodyParts = new()
+	{
+		"Cheek", "Eye", "Nose", "Ear", "Mouth", "Hand", "Leg",
+		"Foot", "Hair", "Neck", "Shoulder", "Chest", "Eyebrows", "Finger",
+		"Toe", "Knee", "Back", "Waist", "Elbow", "Thumb", "Teeth",
+		"Lips", "Tongue", "Palm", "Stomach", "Heel", "Chin", "Forehead"
+	};
+
+	// Returns image path for a body part
+	string ImagePath(string partName) =>
+		$"_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge/BodyParts/{partName}.jpeg";
+}

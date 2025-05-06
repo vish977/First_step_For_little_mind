@@ -1,0 +1,143 @@
+﻿@page "/color"
+
+<style>
+    .container-fluid {
+        height:100vh;
+        background: url(_content/First_step_For_little_mind.Shared/Bg/SimpleBg.jpeg)no-repeat;
+        background-size:cover;
+    }
+    h1 {
+        text-align:center;
+        color:orangered;
+        font-family:'Times New Roman', Times, serif;
+        font-size:50px;
+        font-weight:bold;
+    }
+    .color-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        align-items:center;
+        padding: 20px;
+        background-color:whitesmoke;
+    }
+
+    .circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .red {
+        background-color: red;
+    }
+
+    .blue {
+        background-color: blue;
+    }
+
+    .green {
+        background-color: green;
+    }
+
+    .orange {
+        background-color: orange;
+        color: black;
+    }
+
+    .purple {
+        background-color: purple;
+    }
+
+    .yellow {
+        background-color: yellow;
+        color: black;
+    }
+
+    .pink {
+        background-color: pink;
+        color: black;
+    }
+
+    .brown {
+        background-color: brown;
+    }
+
+    .gray {
+        background-color: gray;
+    }
+
+    .cyan {
+        background-color: cyan;
+        color: black;
+    }
+
+    .lime {
+        background-color: lime;
+        color: black;
+    }
+
+    .magenta {
+        background-color: magenta;
+    }
+
+    .white {
+        background-color: white;
+        color:black;
+    }
+
+    .black {
+        background-color: black;
+    }
+</style>
+
+<div class="container-fluid">
+    <h1>Colors Name</h1>
+    <div class="color-container">
+        @foreach (var color in Colors)
+        {
+            <div class="circle @color.Class">@color.Name</div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ColorItem> Colors = new()
+    {
+        new ColorItem("Red", "red"),
+        new ColorItem("Blue", "blue"),
+        new ColorItem("Green", "green"),
+        new ColorItem("Orange", "orange"),
+        new ColorItem("Purple", "purple"),
+        new ColorItem("Yellow", "yellow"),
+        new ColorItem("Pink", "pink"),
+        new ColorItem("Brown", "brown"),
+        new ColorItem("Gray", "gray"),
+        new ColorItem("Cyan", "cyan"),
+        new ColorItem("Lime", "lime"),
+        new ColorItem("Magenta", "magenta"),
+        new ColorItem("White", "white"),
+        new ColorItem("Black", "black"),
+    };
+
+    private class ColorItem
+    {
+        public string Name { get; set; }
+        public string Class { get; set; }
+
+        public ColorItem(string name, string @class)
+        {
+            Name = name;
+            Class = @class;
+        }
+    }
+}
+

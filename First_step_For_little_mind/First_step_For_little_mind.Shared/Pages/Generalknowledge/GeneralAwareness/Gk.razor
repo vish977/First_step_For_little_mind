@@ -1,34 +1,58 @@
 ﻿@page "/item/{ItemName}"
 
-<h1>@Title</h1>
+<div class="container-fluid">
+    <h1>@Title</h1>
 
-<div class="container">
-    <div class="Imgdiv">
-        <img src="" alt="Alternate Text" />
+    <div class="container">
+        @if (currentIndex < 10)
+        {
+            <div class="Imgdiv">
+                <img src="@GetImagePath(RandomItems[currentIndex])" alt="@RandomItems[currentIndex]" class="oneImg" />
+                <p class="OneText">@RandomItems[currentIndex]</p>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var item in RandomItems)
+                {
+                    <div class="col-6 col-md-4 col-lg-2 text-center m-2">
+                        <img src="@GetImagePath(item)" alt="@item" class="twoImg" />
+                        <p class="twoText">@item</p>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="">
+            <button @onclick="ShowPrevious" class="btn btn-secondary me-2" disabled="@(!CanGoPrevious)">Previous</button>
+            <button @onclick="ShowNext" class="btn btn-primary" disabled="@(!CanGoNext)">Next</button>
+        </div>
+
     </div>
-    <button>Preview</button>
-    <button>Next</button>
 </div>
 
-
 @code {
-
     [Parameter] public string? ItemName { get; set; }
 
     private string Title = "Learning Item";
-
-    private List<string> FlowerName = new() { "Rose", "Lotus", "Sunflower", "Marigold", "Daisy", "Tulip", "Poppy", "Daffodil", "Hibiscus", "Daisy", "Jasmine", "Dahlia", "Lily", "Chrysanthemum", "Gulmohar", "Canna Lily", "Blue Jay", "Plumeria", "Night-blooming Jasmine", "Vaijanti Flower", "Rose" };
-
-    private List<string> AnimalName = new()
-    { "Cat", "Dog", "Elephant", "Pig", "Cow", "Bear", "Deer", "Jackal", "Wolf", "Fox", "Rabbit", "Lion", "Tiger", "Monkey", "Buffalo", "Goat", "Leopard", "Zebra", "Sheep", "Camel", "Hippopotamus", "Rhinoceros", "Donkey", "Giraff", "Horse"};
-
-    private List<string> BirdName = new() { "Penguin", "Owl", "Ostrich", "Hummingbird", "Cock ", "Hen", "Emu", "Eagle", "Duck", "Coucal", "Parrot", "Pigeon", "Myna", "Kingfisher", "Robin", "Cuckoo", "Toucan", "Woodpecker", "Sparrow", "Bulbul", "Babbler", "Swan", "Peacock", "Peahen", "Crane"};
-
-    private List<string> FruitNamae = new() { "Apple", "Banana", "Payaya", "Lychee", "Mango ", "Orange", "Lemon", "Watermelon", "Muskmelon", "Pomegranate", "Coconut", "Guava", "Grapes", "Kiwi", "Blackberry", "Pear", "Mulberry", "Custard Apple", "Strawberry", "Starfruit"};
-
-    private List<string> VegetableName = new() { "Mint", "Coriander ", "Tomato", "Capsicum", "Turnip ", "Onion", "Cabbage", "Pointed Gourd", "Spinach", "Radish", "Chili ", "Corn ", "Bottle Gourd", "Lettuce ", "Garlic", "Cucumber", "Bitter Gourd", "Pumpkin", "Broccoli", "Carrot", "Beetroot", "Ladyfinger", "Beans ", "Brinjal", "Avocado ", "Potato", "Cauliflower" };
-
     private List<string> SelectedList = new();
+    private List<string> RandomItems = new();
+    private int currentIndex = 0;
+
+    private readonly List<string> FlowerName = new() { "Rose", "Lotus", "Sunflower", "Marigold", "Daisy", "Tulip", "Poppy", "Daffodil", "Hibiscus", "Jasmine", "Dahlia", "Lily", "Chrysanthemum", "Gulmohar", "Canna-Lily", "Blue-Jay", "Plumeria", "Night-blooming-Jasmine", "Vaijanti" };
+
+
+    private readonly List<string> AnimalName = new() { "Cat", "Dog", "Elephant", "Pig", "Cow", "Bear", "Deer", "Jackal", "Wolf", "Fox", "Rabbit", "Lion", "Tiger", "Monkey", "Buffalo", "Goat", "Leopard", "Zebra", "Sheep", "Camel", "Hippopotamus", "Rhinoceros", "Donkey", "Giraff", "Horse" };
+
+
+    private readonly List<string> BirdName = new() { "Penguin", "Owl", "Ostrich", "Hummingbird", "Cock", "Hen", "Emu", "Eagle", "Duck", "Coucal", "Parrot", "Pigeon", "Myna", "Kingfisher", "Robin", "Cuckoo", "Toucan", "Woodpecker", "Sparrow", "Bulbul", "Babbler", "Swan", "Peacock", "Peahen", "Crane" };
+
+
+    private readonly List<string> FruitNamae = new() { "Apple", "Banana", "Papaya", "Lychee", "Mango", "Orange", "Lemon", "Watermelon", "Muskmelon", "Pomegranate", "Coconut", "Guava", "Grapes", "Kiwi", "Blackberry", "Pear", "Mulberry", "Custard-Apple", "Strawberry", "Starfruit" };
+
+
+    private readonly List<string> VegetableName = new() { "Mint", "Coriander", "Tomato", "Capsicum", "Turnip", "Onion", "Cabbage", "Pointed-Gourd", "Spinach", "Radish", "Chili", "Corn", "Bottle-Gourd", "Lettuce", "Garlic", "Cucumber", "Bitter-Gourd", "Pumpkin", "Broccoli", "Carrot", "Beetroot", "Ladyfinger", "Beans", "Brinjal", "Avocado", "Potato", "Cauliflower" };
 
     protected override void OnParametersSet()
     {
@@ -42,7 +66,6 @@
             _ => new List<string>()
         };
 
-        // Set Title based on selection
         Title = ItemName switch
         {
             "FruitsName" => "Fruits Name",
@@ -50,25 +73,47 @@
             "FlowersName" => "Flowers Name",
             "BirdsName" => "Birds Name",
             "AnimalsName" => "Animals Name",
-
             _ => "Learning Item"
         };
+
+        // Pick 10 random items
+        var rnd = new Random();
+        RandomItems = SelectedList.OrderBy(_ => rnd.Next()).Take(10).ToList();
+        currentIndex = 0;
     }
+
+    private void ShowNext()
+    {
+        if (currentIndex < 10)
+        {
+            currentIndex++;
+        }
+    }
+
+    private void ShowPrevious()
+    {
+        if (currentIndex > 0)
+        {
+            currentIndex--;
+        }
+    }
+
+    private bool CanGoPrevious => currentIndex > 0;
+    private bool CanGoNext => currentIndex < 10;
 
 
     private string GetImagePath(string item)
     {
-        string basePath = "/_content/First_step_For_little_mind.Shared/Image";
+        string basePath = "/_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge";
 
         return ItemName switch
         {
-            "FruitsName" => $"{basePath}/English/a_z_Full_Images/{item}.jpg",
-            "FlowersName" => $"{basePath}/Hindi/Swar/{item}.jpg",
-            "VegetablesName" => $"{basePath}/Hindi/Vyanjan/{item}.jpg",
-            "BirdsName" => $"{basePath}/Hindi/Matra/{item}.jpg",
-            "AnimalsName" => $"{basePath}/Hindi/Matra/{item}.jpg",
+            "FruitsName" => $"{basePath}/Fruits/{item}.jpeg",
+            "FlowersName" => $"{basePath}/Flowers/{item}.jpeg",
+            "VegetablesName" => $"{basePath}/Vegetables/{item}.jpeg",
+            "BirdsName" => $"{basePath}/Birds/{item}.jpeg",
+            "AnimalsName" => $"{basePath}/Animals/{item}.jpeg",
             _ => ""
         };
     }
 }
-
