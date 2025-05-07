@@ -3,13 +3,12 @@
 
 <style>
     .container-fluid {
-
         height: 100vh;
-        background: url(_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg)no-repeat;
+        background: url(_content/First_step_For_little_mind.Shared/Bg/BlackBoard.jpg) no-repeat;
         background-size: 100vw 100vh;
     }
+
     .container {
-      
         height: 50vh;
         display: flex;
         flex-direction: row;
@@ -18,7 +17,7 @@
         gap: 15px;
         margin-bottom: 10px;
         position: relative;
-        margin-top:15px
+        margin-top: 15px;
     }
 
     .box-group {
@@ -28,7 +27,7 @@
     }
 
     .box {
-        color:white;
+        color: white;
         width: 20vw;
         height: 30vh;
         border: 2px solid white;
@@ -49,15 +48,14 @@
     }
 
     .symbol {
-        color:white;
+        color: white;
         font-size: 40px;
         font-weight: bold;
-        /* margin-bottom: 4px; */
     }
 
     .number-container {
         height: 10vh;
-        color:white;
+        color: white;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -84,67 +82,72 @@
         padding: 10px 20px;
         font-size: 18px;
         cursor: pointer;
-        background-color:green;
+        background-color: green;
     }
 
     .additionHeading {
-        font-weight:bolder;
-        font-size:50px;
+        font-weight: bolder;
+        font-size: 50px;
         text-align: center;
-        color:green;
+        color: green;
         text-decoration: underline;
         height: 10vh;
     }
 
-    .number{
-        font-size:20px;
-        color:white;
+    .number {
+        font-size: 20px;
+        color: white;
     }
+
     .button {
-        margin-top:6rem;
-        align-items:center;
+        margin-top: 6rem;
+        align-items: center;
         display: flex;
         justify-content: center;
         align-items: center;
-        
     }
 </style>
 
-<div class="container-fluid">
-    <div class="additionHeading">
-       Addition
-    </div>
+@if (showAddition)
+{
+    <div class="container-fluid">
+        <div class="additionHeading">Addition</div>
 
-    <div class="container">
-        <div class="box-group">
-            <div class="box" id="box1"></div>
-            <div class="number">@num1</div>
+        <div class="container">
+            <div class="box-group">
+                <div class="box" id="box1"></div>
+                <div class="number">@num1</div>
+            </div>
+            <div class="symbol">+</div>
+            <div class="box-group">
+                <div class="box" id="box2"></div>
+                <div class="number">@num2</div>
+            </div>
+            <div class="symbol">=</div>
+            <div class="box-group">
+                <div class="box" id="resultBox">@resultText</div>
+            </div>
+
+            <img src="_content/First_step_For_little_mind.Shared/Bg/pointer.png" class="hand" id="hand" alt="Hand Pointer" />
         </div>
-        <div class="symbol">+</div>
-        <div class="box-group">
-            <div class="box" id="box2"></div>
-            <div class="number">@num2</div>
+
+        <div class="number-container">
+            <div>@num1</div>
+            <div class="num-symbol">+</div>
+            <div>@num2</div>
+            <div class="num-symbol">=</div>
+            <div>@resultText</div>
         </div>
-        <div class="symbol">=</div>
-        <div class="box-group">
-            <div class="box" id="resultBox">@resultText</div>
+
+        <div class="button">
+            <button @onclick="StartAnimation">Next</button>
         </div>
-
-        <img src="_content/First_step_For_little_mind.Shared/Bg/pointer.png" class="hand" id="hand" alt="Hand Pointer" />
     </div>
-
-    <div class="number-container">
-        <div>@num1</div>
-        <div class="num-symbol">+</div>
-        <div>@num2</div>
-        <div class="num-symbol">=</div>
-        <div>@resultText</div>
-    </div>
-
-    <div class="button">
-        <button @onclick="StartAnimation">Next</button>
-    </div>
-</div>
+}
+else
+{
+    <Add />
+}
 
 <script>
     window.startAdditionAnimation = (num1, num2, total, dotNetHelper) => {
@@ -190,7 +193,6 @@
             } else {
                 moveHandToElement(resultBox, () => {
                     resultBox.textContent = total;
-                    // Also update Blazor UI
                     dotNetHelper.invokeMethodAsync("SetResultText", total.toString());
                 });
             }
@@ -209,6 +211,9 @@
     private string resultText = "?";
     private DotNetObjectReference<Addition>? objRef;
 
+    private int clickCount = 0;
+    private bool showAddition = true;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -220,6 +225,15 @@
 
     private async Task StartAnimation()
     {
+        clickCount++;
+
+        if (clickCount >= 3)
+        {
+            showAddition = false;
+            // StateHasChanged();
+            return;
+        }
+
         num1 = GetRandomNumber();
         num2 = GetRandomNumber();
         total = num1 + num2;
@@ -232,7 +246,7 @@
     public void SetResultText(string value)
     {
         resultText = value;
-        StateHasChanged(); // Re-render both resultBox and number-container
+        StateHasChanged();
     }
 
     private int GetRandomNumber()

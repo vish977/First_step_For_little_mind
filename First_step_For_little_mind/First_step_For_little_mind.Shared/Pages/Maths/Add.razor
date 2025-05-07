@@ -1,0 +1,173 @@
+﻿
+@inject IJSRuntime JS
+
+<style>
+    .container {
+        border: 1px solid red;
+        height: 80vh;
+        width: 90vw;
+        display: flex;
+        font-family: sans-serif;
+    }
+
+    .dot {
+        border: 1px solid blue;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .num {
+        border: 1px solid green;
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .upperNumdot,
+    .bottomNumdot {
+        height: 50%;
+        border: 1px solid grey;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dot-item {
+        width: 18px;
+        height: 18px;
+        background-color: #4caf50;
+        border-radius: 50%;
+        margin: 6px;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+
+        .dot-item:hover {
+            transform: scale(1.3);
+        }
+
+    .addition-box {
+        text-align: right;
+        font-size: 2rem;
+        line-height: 1.5;
+    }
+
+        .addition-box hr {
+            margin: 0.2em 0;
+        }
+
+        .addition-box input {
+            font-size: 1.5rem;
+            width: 80px;
+            text-align: right;
+            border: none;
+            border-bottom: 2px solid black;
+            outline: none;
+            appearance: none; /* Removes arrow in some browsers */
+            -moz-appearance: textfield; /* Removes arrow in Firefox */
+        }
+
+            .addition-box input::-webkit-outer-spin-button,
+            .addition-box input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+    .result {
+        margin-top: 0.5em;
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="container">
+    <!-- Left Dots -->
+    <div class="dot di">
+        <div class="upperNumdot">
+            @for (int i = 1; i <= Num1; i++)
+            {
+                <div class="dot-item" @onmouseover="() => PlaySound(i)"></div>
+            }
+        </div>
+        <div class="bottomNumdot">
+            @for (int i = 1; i <= Num2; i++)
+            {
+                <div class="dot-item" @onmouseover="() => PlaySound(i)"></div>
+            }
+        </div>
+    </div>
+
+    <!-- Right Addition -->
+    <div class="num di">
+        <div class="addition-box">
+            <div>@Num1</div>
+            <div>+ @Num2</div>
+            <hr />
+            <input type="text" @bind="UserAnswerText" @bind:event="oninput" />
+            <div class="result" style="color:@ResultColor">@ResultMessage</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function playAudio(path) {
+      const audio = new Audio(path);
+      audio.play();
+    }
+</script>
+
+@code {
+    private int Num1;
+    private int Num2;
+    private string _userAnswerText = "";
+    private string ResultMessage = "";
+    private string ResultColor = "";
+
+    private string UserAnswerText
+    {
+        get => _userAnswerText;
+        set
+        {
+            _userAnswerText = value;
+            CheckAnswer();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        var rnd = new Random();
+        Num1 = rnd.Next(0, 10);
+        Num2 = rnd.Next(0, 10);
+    }
+
+    private void CheckAnswer()
+    {
+        if (int.TryParse(UserAnswerText, out int userAnswer))
+        {
+            if (userAnswer == Num1 + Num2)
+            {
+                ResultMessage = "✅ Correct!";
+                ResultColor = "green";
+            }
+            else
+            {
+                ResultMessage = "❌ Try Again!";
+                ResultColor = "red";
+            }
+        }
+        else
+        {
+            ResultMessage = "";
+        }
+    }
+
+    private async Task PlaySound(int number)
+    {
+        await JS.InvokeVoidAsync("playAudio", $"sounds/{number}.mp3");
+    }
+
+}
