@@ -54,6 +54,7 @@
 
     private readonly List<string> VegetableName = new() { "Mint", "Coriander", "Tomato", "Capsicum", "Turnip", "Onion", "Cabbage", "Pointed-Gourd", "Spinach", "Radish", "Chili", "Corn", "Bottle-Gourd", "Lettuce", "Garlic", "Cucumber", "Bitter-Gourd", "Pumpkin", "Broccoli", "Carrot", "Beetroot", "Ladyfinger", "Beans", "Brinjal", "Avocado", "Potato", "Cauliflower" };
 
+    private readonly List<string> Neighbour = new() { "Barber", "Carpenter", "Cobbler", "Doctor", "Driver", "Electrician", "Mechanic", "Painter", "Plumber", "Tailor", "Teacher", "Watchman" };
     protected override void OnParametersSet()
     {
         SelectedList = ItemName switch
@@ -63,6 +64,7 @@
             "FlowersName" => FlowerName,
             "BirdsName" => BirdName,
             "AnimalsName" => AnimalName,
+            "Neighbour" => Neighbour,
             _ => new List<string>()
         };
 
@@ -73,6 +75,7 @@
             "FlowersName" => "Flowers Name",
             "BirdsName" => "Birds Name",
             "AnimalsName" => "Animals Name",
+            "Neighbour" => "Our Neighbours",
             _ => "Learning Item"
         };
 
@@ -113,6 +116,7 @@
             "VegetablesName" => $"{basePath}/Vegetables/{item}.jpeg",
             "BirdsName" => $"{basePath}/Birds/{item}.jpeg",
             "AnimalsName" => $"{basePath}/Animals/{item}.jpeg",
+            "Neighbour" => $"{basePath}/Neighbour/{item}.jpeg",
             _ => ""
         };
     }

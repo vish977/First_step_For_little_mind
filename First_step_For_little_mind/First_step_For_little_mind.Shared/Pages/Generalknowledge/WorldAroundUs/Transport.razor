@@ -1,0 +1,106 @@
+﻿@page "/transport"
+@using System
+
+@code {
+    private List<string> landTransportList = new()
+    {
+        "Car", "Bus", "Tractor", "Train", "Motarcycle", "Bicycle"
+    };
+
+    private List<string> waterTransportList = new()
+    {
+        "Boat", "Ship", "Submarine", "Yacht", "Canoe", "Sailboat" 
+    };
+
+    private List<string> airTransportList = new()
+    {
+        "Aeroplane", "Helicopter", "HotAirBalloon", "Jet", "Rocket", "Airship"
+    };
+
+    private List<string> selectedLand = new();
+    private List<string> selectedWater = new();
+    private List<string> selectedAir = new();
+
+    protected override void OnInitialized()
+    {
+        selectedLand = GetRandomItems(landTransportList);
+        selectedWater = GetRandomItems(waterTransportList);
+        selectedAir = GetRandomItems(airTransportList);
+    }
+
+    private List<string> GetRandomItems(List<string> source)
+    {
+        return source.OrderBy(_ => Guid.NewGuid()).Take(4).ToList();
+    }
+
+    private string GetImagePath(string category, string name)
+    {
+        return $"_content/First_step_For_little_mind.Shared/Image/GeneralKnowledge/Transport/{category}/{name}.jpeg";
+    }
+}
+
+<div class="container-fluid text-center">
+
+    <h2>Land Transport</h2>
+    <div class="row mb-4">
+        @foreach (var name in selectedLand)
+        {
+            <div class="col-3 mb-3">
+                <img src="@GetImagePath("land", name)" class="img-fluid border rounded" alt="@name" />
+                <p>@name</p>
+            </div>
+        }
+    </div>
+
+    <h2>Water Transport</h2>
+    <div class="row mb-4">
+        @foreach (var name in selectedWater)
+        {
+            <div class="col-3 mb-3">
+                <img src="@GetImagePath("water", name)" class="img-fluid border rounded" alt="@name" />
+                <p>@name</p>
+            </div>
+        }
+    </div>
+
+    <h2>Air Transport</h2>
+    <div class="row mb-4">
+        @foreach (var name in selectedAir)
+        {
+            <div class="col-3 mb-3">
+                <img src="@GetImagePath("air", name)" class="img-fluid border rounded" alt="@name" />
+                <p>@FormatName(name)</p>
+            </div>
+        }
+    </div>
+
+</div>
+
+@code {
+    // Format "HotAirBalloon" to "Hot Air Balloon" for display
+    private string FormatName(string name)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(name, "([A-Z])", " $1").Trim();
+    }
+}
+
+<style>
+    h2 {
+        font-family:'Times New Roman', Times, serif;
+        font-weight:bold;
+        /* margin-top: 30px; */
+        color: orangered;
+    }
+
+    img {
+        max-height: 150px;
+        background-color: #f9f9f9;
+        padding: 5px;
+    }
+
+    p {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #34495e;
+    }
+</style>
