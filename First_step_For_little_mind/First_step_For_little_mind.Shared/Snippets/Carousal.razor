@@ -85,8 +85,6 @@
         Letter = RawLetter?.Split("_")[0];
         Folder = RawLetter?.Split("_")[1];
 
-        Console.WriteLine("Letter & Folder", Letter, Folder);
-
         var items = RawLetter switch 
         {
             "A_English" => new string[] { "Apple", "Aeroplane", "Ant", "Astronout" },

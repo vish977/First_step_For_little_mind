@@ -1,59 +1,43 @@
-﻿@page "/Poem/{PoemName}"
+﻿@page "/Video/{Category}/{TopicName}"
 @inject IJSRuntime JS
 
 <style>
-    .Video-Container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw;
-        background-color: #f9f9f9;
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: black;
+        overflow: hidden;
     }
 
-    #poemVideo {
-        height: 70vh;
-        width: 80vw;
-        /* border: 2px solid #ccc; */
-        border-radius: 10px;
+    video {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        display: block;
     }
 </style>
 
-<div class="Video-Container">
-    @if (!string.IsNullOrEmpty(PoemName))
-    {
-        <video id="poemVideo" controls autoplay muted>
-            <source src="_content/First_step_For_little_mind.Shared/video/Poem/@(PoemName).mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-        </video>
-    }
-    else
-    {
-        <p>No poem selected.</p>
-    }
-</div>
-
-<script>
-    window.enterVideoFullscreen = function () {
-        const video = document.getElementById("poemVideo");
-        if (video && video.requestFullscreen) {
-            video.requestFullscreen().catch(err => {
-                console.warn("Fullscreen failed:", err);
-            });
-        }
-    };
-</script>
-
+@if (!string.IsNullOrEmpty(VideoPath))
+{
+    <video src="@VideoPath" controls autoplay></video>
+}
+else
+{
+    <p style="color: white;">Video not found for category: @Category and topic: @TopicName</p>
+}
 
 @code {
-    [Parameter]
-    public string? PoemName { get; set; }
+    [Parameter] public string? Category { get; set; }
+    [Parameter] public string? TopicName { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private string? VideoPath;
+
+    protected override void OnParametersSet()
     {
-        if (firstRender && !string.IsNullOrEmpty(PoemName))
+        if (!string.IsNullOrEmpty(Category) && !string.IsNullOrEmpty(TopicName))
         {
-            await JS.InvokeVoidAsync("enterVideoFullscreen");
+            VideoPath = $"_content/First_step_For_little_mind.Shared/video/{Category}/{TopicName}.mp4";
         }
     }
 }
