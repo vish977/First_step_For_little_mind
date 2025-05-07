@@ -1,16 +1,74 @@
 ﻿@page "/traffic"
-
+@inject IJSRuntime JS
 
 <div class="container-fluid">
-	<div class="highway"></div>
-	<div class="city"></div>
-	<div class="car">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/Car.png" alt="Alternate Text" />
-	</div>
+    <div class="highway"></div>
+    <div class="city"></div>
 
-	<div class="trafficlight">
-		<img src="_content/First_step_For_little_mind.Shared/Bg/traffic.png" alt="Alternate Text" />
-		
-	</div>
-	
+    <div class="car">
+        <img src="_content/First_step_For_little_mind.Shared/Bg/Car.png" alt="Car" />
+    </div>
+
+    <div class="trafficlight">
+        <div class="light red" id="red"></div>
+        <div class="light yellow" id="yellow"></div>
+        <div class="light green" id="green"></div>
+        <div class="arrow" id="arrow"></div>
+    </div>
 </div>
+
+
+<script>
+    window.initTrafficLight = () => {
+        const lights = ['red', 'yellow', 'green'];
+        let current = 0;
+
+        const arrow = document.getElementById('arrow');
+        const highway = document.querySelector('.highway');
+        const city = document.querySelector('.city');
+
+        const positions = {
+            red: 10,
+            yellow: 145,
+            green: 280
+        };
+
+        function updateLights() {
+            lights.forEach(id => document.getElementById(id).classList.remove('active'));
+            let active = lights[current];
+            document.getElementById(active).classList.add('active');
+
+            arrow.style.top = positions[active] + 'px';
+
+            if (active === 'red') {
+                highway.style.animationPlayState = 'paused';
+                city.style.animationPlayState = 'paused';
+            } else if (active === 'yellow') {
+                highway.style.animationDuration = '10s';
+                city.style.animationDuration = '40s';
+                highway.style.animationPlayState = 'running';
+                city.style.animationPlayState = 'running';
+            } else if (active === 'green') {
+                highway.style.animationDuration = '5s';
+                city.style.animationDuration = '20s';
+                highway.style.animationPlayState = 'running';
+                city.style.animationPlayState = 'running';
+            }
+
+            current = (current + 1) % lights.length;
+        }
+
+        updateLights();
+        setInterval(updateLights, 5000);
+    };
+</script>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initTrafficLight");
+        }
+    }
+}
